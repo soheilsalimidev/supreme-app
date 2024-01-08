@@ -1,9 +1,10 @@
 {
   "build": {
-    "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build",
+    "beforeDevCommand": "trunk serve",
+    "beforeBuildCommand": "trunk build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "web2app",
@@ -12,12 +13,20 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "fs": {
+        "scope": [
+          "$RESOURCE/*"
+        ]
+      },
       "shell": {
         "all": false,
         "open": true
       }
     },
     "bundle": {
+      "resources": [
+        "./resources/*"
+      ],
       "active": true,
       "targets": "all",
       "identifier": "com.tauri.dev",
