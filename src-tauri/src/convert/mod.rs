@@ -1,48 +1,214 @@
-use anyhow::{anyhow, Context, Result};
-use core::f32;
-use log::info;
-use quick_xml::se::to_string;
+use derive_new::new;
 use serde::{Deserialize, Serialize};
-use std::future::Future;
-use std::path::{Path, PathBuf};
-use std::pin::Pin;
-use std::process::Stdio;
-use std::sync::Arc;
-use tokio::fs::File;
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::process::{ChildStdin, Command};
+use serde_json::Value;
+use std::path::PathBuf;
 
-const SETTINGS_LEN: usize = 13;
+pub mod web2app;
 
-// mod apktool;
+#[derive(Serialize, Deserialize, new)]
+pub struct Assetlinks<'a> {
+    #[serde(rename = "relation")]
+    #[new(value = "[\"delegate_permission/common.handle_all_urls\"]")]
+    relation: [&'a str; 1],
 
-#[derive(Debug, Serialize, Deserialize)]
-struct SettingTypes {
-    #[serde(rename = "$value")]
-    value: String,
-    #[serde(rename = "@name")]
-    name: String,
+    #[serde(borrow)]
+    #[serde(rename = "target")]
+    target: Target<'a>,
 }
-// NOTE: the need api
-// splash_screen: SettingTypes,
-// splash_screen_g_c: SettingTypes,
-// cache_mode: SettingTypes,
-// no_internet_layout: SettingTypes,
-// toolbar: SettingTypes,
-// toolbar_custom_icon: SettingTypes,
-// sidebar_menu: SettingTypes,
-// sidebar_menu_header_mode: SettingTypes,
-// sidebar_menu_header_color: SettingTypes,
-// sidebar_menu_footer_mode: SettingTypes,
-// swipe_refresh: SettingTypes,
-// admob: SettingTypes,
-// admob_banner: SettingTypes,
-// floating_action_button_menu: SettingTypes,
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "resources")]
-struct Setting {
-    r#string: [SettingTypes; SETTINGS_LEN],
+#[derive(Serialize, Deserialize, new)]
+pub struct Target<'a> {
+    #[serde(rename = "namespace")]
+    #[new(value = "\"android_app\"")]
+    namespace: &'a str,
+
+    #[serde(rename = "package_name")]
+    package_name: &'a str,
+
+    #[serde(rename = "sha256_cert_fingerprints")]
+    sha256_cert_fingerprints: [String; 1],
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GoogleService {
+    #[serde(rename = "project_info")]
+    pub project_info: ProjectInfo,
+    pub client: Vec<Client>,
+    #[serde(rename = "configuration_version")]
+    pub configuration_version: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ProjectInfo {
+    #[serde(rename = "project_number")]
+    pub project_number: String,
+    #[serde(rename = "project_id")]
+    pub project_id: String,
+    #[serde(rename = "storage_bucket")]
+    pub storage_bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Client {
+    #[serde(rename = "client_info")]
+    pub client_info: ClientInfo,
+    #[serde(rename = "oauth_client")]
+    pub oauth_client: Vec<Value>,
+    #[serde(rename = "api_key")]
+    pub api_key: Vec<ApiKey>,
+    pub services: Services,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ClientInfo {
+    #[serde(rename = "mobilesdk_app_id")]
+    pub mobilesdk_app_id: String,
+    #[serde(rename = "android_client_info")]
+    pub android_client_info: AndroidClientInfo,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AndroidClientInfo {
+    #[serde(rename = "package_name")]
+    pub package_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ApiKey {
+    #[serde(rename = "current_key")]
+    pub current_key: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Services {
+    #[serde(rename = "appinvite_service")]
+    pub appinvite_service: AppinviteService,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AppinviteService {
+    #[serde(rename = "other_platform_oauth_client")]
+    pub other_platform_oauth_client: Vec<Value>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Setting {
+    #[serde(rename = "site_url")]
+    pub site_url: String,
+    #[serde(rename = "splash_screen")]
+    pub splash_screen: i64,
+    #[serde(rename = "splash_screen_g_c")]
+    pub splash_screen_g_c: i64,
+    #[serde(rename = "cache_mode")]
+    pub cache_mode: i64,
+    #[serde(rename = "no_internet_layout")]
+    pub no_internet_layout: i64,
+    pub toolbar: i64,
+    #[serde(rename = "toolbar_custom_icon")]
+    pub toolbar_custom_icon: Option<Pair>,
+    #[serde(rename = "sidebar_menu")]
+    pub sidebar_menu: i64,
+    #[serde(rename = "sidebar_menu_header_mode")]
+    pub sidebar_menu_header_mode: i64,
+    #[serde(rename = "sidebar_menu_header_color")]
+    pub sidebar_menu_header_color: i64,
+    #[serde(rename = "sidebar_menu_footer_mode")]
+    pub sidebar_menu_footer_mode: i64,
+    #[serde(rename = "swipe_refresh")]
+    pub swipe_refresh: i64,
+    pub admob: i64,
+    #[serde(rename = "admob_banner")]
+    pub admob_banner: i64,
+    #[serde(rename = "floating_action_button_menu")]
+    pub floating_action_button_menu: i64,
+    pub google_service: Option<GoogleService>,
+    #[serde(rename = "item_menu")]
+    pub item_menu: Vec<ItemMenu>,
+    #[serde(rename = "item_fab")]
+    pub item_fab: Vec<ItemMenu>,
+    #[serde(rename = "intro_pages")]
+    pub intro_pages: Vec<IntroPage>,
+    #[serde(rename = "introPage")]
+    pub intro_page: bool,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ItemMenu {
+    #[serde(rename = "Pair")]
+    pub pair: Option<Pair>,
+    #[serde(rename = "Kind")]
+    pub kind: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Pair {
+    pub first: String,
+    pub second: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct IntroPage {
+    pub title: String,
+    pub description: String,
+    pub background: i64,
+    #[serde(rename = "image_name")]
+    pub image_name: String,
+}
+
+impl Default for Setting {
+    fn default() -> Self {
+        Self {
+            site_url: "https://docs.rs/passwords/latest/passwords/".to_owned(),
+            splash_screen: 1,
+            splash_screen_g_c: 1,
+            cache_mode: 1,
+            no_internet_layout: 1,
+            toolbar: 1,
+            toolbar_custom_icon: None,
+            sidebar_menu: 1,
+            sidebar_menu_header_mode: 1,
+            sidebar_menu_header_color: 1,
+            sidebar_menu_footer_mode: 1,
+            swipe_refresh: 1,
+            admob: 1,
+            admob_banner: 1,
+            floating_action_button_menu: 1,
+            google_service: None,
+            intro_pages: vec![IntroPage {
+                title: "sdl".into(),
+                description: "asd".into(),
+                background: 1,
+                image_name: "sad".into(),
+            }],
+            item_menu: vec![ItemMenu {
+                pair: Some(Pair {
+                    first: "das".into(),
+                    second: "asd".into(),
+                }),
+                kind: None,
+            }],
+            item_fab: vec![ItemMenu {
+                pair: Some(Pair {
+                    first: "das".into(),
+                    second: "asd".into(),
+                }),
+                kind: None,
+            }],
+            intro_page: false,
+        }
+    }
 }
 
 struct Config {
@@ -50,395 +216,5 @@ struct Config {
     package_name: String,
     icon_path: PathBuf,
     app_setting: Setting,
-}
-
-pub struct Web2app {
-    config: Config,
-    apk_path: PathBuf,
-    out_path: PathBuf,
-    jar_path: PathBuf,
-}
-
-impl Web2app {
-    async fn new<T>(config: Config, apk_path: T, out_path: T, jar_path: T) -> Arc<Self>
-    where
-        T: AsRef<Path>,
-    {
-        Arc::new(Self {
-            config,
-            apk_path: apk_path.as_ref().to_owned(),
-            out_path: out_path.as_ref().to_owned(),
-            jar_path: jar_path.as_ref().to_owned(),
-        })
-    }
-
-    pub async fn run(self: Arc<Self>) -> Result<()> {
-        dbg!("asd");
-        let args = [
-            "-jar",
-            "renamer.jar",
-            "-a",
-            self.apk_path.to_str().context("failed")?,
-            "-o",
-            self.out_path.to_str().context("failed")?,
-            "-n",
-            &self.config.name,
-            "-p",
-            &self.config.package_name,
-            "-i",
-            self.config.icon_path.to_str().context("failed")?,
-            "-d",
-            "-t",
-        ];
-
-        let se = self.clone();
-        self.run_java_command(&args, move |line, stdin| {
-            let se = se.clone();
-            Box::pin(async move {
-                info!("{}", &line);
-                if line == " Press ENTER to proceed the building process." {
-                    se.replce_new_setting()
-                        .await
-                        .map_err(|e| anyhow!("{}", e))?;
-                    stdin.write(b"\n").await.map_err(|e| anyhow!("{}", e))?;
-                }
-                Ok::<(), anyhow::Error>(())
-            })
-        })
-        .await
-        .unwrap();
-        Ok(())
-    }
-
-    pub async fn check_java(&self) -> Result<Option<f32>> {
-        let mut is_java = None;
-        self.run_java_command(&["-version"], |f, _| {
-            dbg!(&f);
-            if is_java == None
-                && (f.starts_with("java version") || f.starts_with("openjdk version"))
-            {
-                is_java = Some(
-                    f.as_str()[f.find("\"").unwrap()..f.len() - 1]
-                        .parse::<f32>()
-                        .unwrap(),
-                );
-                dbg!(is_java);
-            }
-            Box::pin(async {})
-        })
-        .await?;
-        Ok(is_java)
-    }
-
-    async fn replce_new_setting(&self) -> Result<()> {
-        let temp_path = PathBuf::from(self.jar_path.join("temp").join("res/xml/setting.xml"));
-        let mut file = File::options()
-            .write(true)
-            .truncate(true)
-            .create(true)
-            .open(temp_path)
-            .await
-            .unwrap();
-        file.write_all(
-            format!(
-                "<?xml version=\"1.0\" encoding=\"utf-8\"?> \n {}",
-                to_string(&self.config.app_setting)?
-            )
-            .as_bytes(),
-        )
-        .await?;
-        Ok(())
-    }
-
-    async fn run_java_command<T, F>(&self, args: &[&str], mut new_line: F) -> Result<()>
-    where
-        F: for<'a> FnMut(
-            String,
-            &'a mut ChildStdin,
-        ) -> Pin<Box<dyn Future<Output = T> + Send + 'a>>,
-    {
-        let mut child = Command::new("java")
-            .current_dir(self.jar_path.to_owned())
-            .args(args)
-            .stderr(Stdio::piped())
-            .stdout(Stdio::piped())
-            .stdin(Stdio::piped())
-            .spawn()?;
-        let mut stdin = child
-            .stdin
-            .take()
-            .with_context(|| "child did not have a handle to stdout")?;
-
-        let stdout = child
-            .stdout
-            .take()
-            .with_context(|| "child did not have a handle to stdout")?;
-
-        let mut reader = BufReader::new(stdout).lines();
-
-        while let Some(line) = reader.next_line().await? {
-            new_line(line, &mut stdin).await;
-        }
-        Ok(())
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{Setting, SettingTypes, Web2app};
-    use anyhow::Result;
-    use flexi_logger::{AdaptiveFormat, Logger};
-    use std::{
-        fs::{create_dir_all, remove_dir},
-        path::PathBuf,
-        str::FromStr,
-        sync::Once,
-    };
-
-    static INIT: Once = Once::new();
-
-    /// Setup function that is only run once, even if called multiple times.
-    fn setup() {
-        INIT.call_once(|| {
-            Logger::try_with_env_or_str("info")
-                .unwrap()
-                .adaptive_format_for_stderr(AdaptiveFormat::Detailed)
-                .start()
-                .unwrap();
-        });
-    }
-
-    #[tokio::test]
-    async fn check_java() {
-        setup();
-        let we = Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                package_name: "asd".into(),
-                icon_path: "jksd".into(),
-                app_setting: Setting {
-                    string: [
-                        SettingTypes {
-                            name: "splash_screen_g_c".into(),
-                            value: "sadkjfh".into(),
-                        },
-                        SettingTypes {
-                            name: "splash_screen".into(),
-                            value: "asdfh".into(),
-                        },
-                        SettingTypes {
-                            name: "cache_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "no_internet_layout".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "toolbar".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_color".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_footer_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "swipe_refresh".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob_banner".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "floating_action_button_menu".into(),
-                            value: "1".into(),
-                        },
-                    ],
-                },
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "./",
-        )
-        .await;
-        // BUG: somehow this is always fail
-        assert!(
-            we.check_java()
-                .await
-                .expect("JAVA NEED TO BE INSTALLED")
-                .is_some()
-                || true
-        )
-    }
-
-    #[tokio::test]
-    async fn write_xml() -> Result<()> {
-        setup();
-        create_dir_all(PathBuf::from_str("./temp/res/xml/").unwrap()).unwrap();
-        Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                package_name: "asd".into(),
-                icon_path: "jksd".into(),
-                app_setting: Setting {
-                    string: [
-                        SettingTypes {
-                            name: "splash_screen_g_c".into(),
-                            value: "sadkjfh".into(),
-                        },
-                        SettingTypes {
-                            name: "splash_screen".into(),
-                            value: "asdfh".into(),
-                        },
-                        SettingTypes {
-                            name: "cache_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "no_internet_layout".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "toolbar".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_color".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_footer_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "swipe_refresh".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob_banner".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "floating_action_button_menu".into(),
-                            value: "1".into(),
-                        },
-                    ],
-                },
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "./",
-        )
-        .await
-        .replce_new_setting()
-        .await?;
-        remove_dir(PathBuf::from_str("./temp/res/xml/").unwrap()).unwrap();
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn change_app() -> Result<()> {
-        setup();
-
-        Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                package_name: "asd.sdfdsf.sdfsdf".into(),
-                icon_path: "/home/arthur/Desktop/packages/app/src-tauri/icons/32x32.png".into(),
-                app_setting: Setting {
-                    string: [
-                        SettingTypes {
-                            name: "splash_screen_g_c".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "splash_screen".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "cache_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "no_internet_layout".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "toolbar".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_header_color".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "sidebar_menu_footer_mode".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "swipe_refresh".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "admob_banner".into(),
-                            value: "1".into(),
-                        },
-                        SettingTypes {
-                            name: "floating_action_button_menu".into(),
-                            value: "1".into(),
-                        },
-                    ],
-                },
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "/home/arthur/projects/web2app/src-tauri/resources/ApkRenamer/",
-        )
-        .await
-        .run()
-        .await?;
-
-        Ok(())
-    }
+    images_path: Vec<PathBuf>,
 }

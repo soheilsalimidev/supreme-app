@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="no_internet_connection">No internet connection found.   Check your internet connection or try again.</string>
+    <string name="whooops">W h o o o p s !</string>
+    <string name="try_again">Try again</string>
+    <string name="home_page">Home</string>
+    <string name="about_us">About us</string>
+    <string name="rate_us">Rate us</string>
+    <string name="content_us">Content us</string>
+    <string name="share_app">Share app</string>
+    <string name="exit">Exit</string>
+    <string name="checkOutTheApp">Check out the App at: </string>
+    <string name="no_sms_app">No SMS app found.</string>
+    <string name="no_email_client_found">No email client found.</string>
+    <string name="Downloading">Downloading</string>
+    <string name="download_started">Download started</string>
+    <string name="download_completed">Download Completed</string>
+    <string name="missing_permission">Missing permission</string>
+    <string name="missing_permission_meg">Missing permission may cause some lags in app. \n please grant it. </string>
+    <string name="ok">OK</string>
+    <string name="says">says</string>
+    <string name="version">Version</string>
+
+    <string name="site_url" tools:ignore="MissingTranslation">iapp.com</string>
+    <string name="app_name" tools:ignore="MissingTranslation">I App</string>
+    <string name="image_of_splash_screen" translatable="false">image of splash screen</string>
+    <string name="a_powerful_app_with_all_customizations" translatable="false">a powerful app with all customizations</string>
+    <string name="menu_footer_text" translatable="false">make with</string>
+
+
+</resources>

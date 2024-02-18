@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.plugin.serialization'
+}
+
+android {
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.app.webapp"
+        minSdkVersion 22
+        //noinspection OldTargetApi
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    namespace 'com.app.webapp'
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "com.airbnb.android:lottie:3.7.2"
+    implementation "com.mikepenz:materialdrawer:8.4.2"
+    implementation "androidx.annotation:annotation:1.7.1"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.afollestad.material-dialogs:core:3.2.1'
+    implementation 'com.nambimobile.widgets:expandable-fab:1.1.1'
+    implementation 'com.github.AppIntro:AppIntro:6.1.0'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2"
+}

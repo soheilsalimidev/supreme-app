@@ -63,6 +63,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "080e9890a082662b09c1ad45f567faeeb47f22b5fb23895fbe1e651e718e25ca"
 
 [[package]]
+name = "async-recursion"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5fd55a5ba1179988837d24ab4c7cc8ed6efdeff578ede0416b4225a5fca35bd0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
+]
+
+[[package]]
 name = "atk"
 version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -550,6 +561,17 @@ checksum = "b42b6fa04a440b495c8b04d0e71b707c585f83cb9cb28cf8cd0d976c315e31b4"
 dependencies = [
  "powerfmt",
  "serde",
+]
+
+[[package]]
+name = "derive-new"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d150dea618e920167e5973d70ae6ece4385b7164e0d799fe7c122dd0a5d912ad"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
 ]
 
 [[package]]
@@ -1753,6 +1775,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "os_pipe"
+version = "1.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ae859aa07428ca9a929b936690f8b12dc5f11dd8c6992a18ca93919f28bc177"
+dependencies = [
+ "libc",
+ "windows-sys 0.48.0",
+]
+
+[[package]]
 name = "overload"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1804,6 +1836,15 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-targets 0.48.5",
+]
+
+[[package]]
+name = "passwords"
+version = "3.1.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11407193a7c2bd14ec6b0ec3394da6fdcf7a4d5dcbc8c3cc38dfb17802c8d59c"
+dependencies = [
+ "random-pick",
 ]
 
 [[package]]
@@ -2071,8 +2112,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1004a344b30a54e2ee58d66a71b32d2db2feb0a31f9a2d302bf0536f15de2a33"
 dependencies = [
  "memchr",
- "serde",
- "tokio",
 ]
 
 [[package]]
@@ -2163,6 +2202,37 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "16abd0c1b639e9eb4d7c50c0b8100b0d0f849be2349829c740fe8e6eb4816429"
 dependencies = [
  "rand_core 0.5.1",
+]
+
+[[package]]
+name = "random-number"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a3da5cbb4c27c5150c03a54a7e4745437cd90f9e329ae657c0b889a144bb7be"
+dependencies = [
+ "proc-macro-hack",
+ "rand 0.8.5",
+ "random-number-macro-impl",
+]
+
+[[package]]
+name = "random-number-macro-impl"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b86292cf41ccfc96c5de7165c1c53d5b4ac540c5bab9d1857acbe9eba5f1a0b"
+dependencies = [
+ "proc-macro-hack",
+ "quote",
+ "syn 2.0.48",
+]
+
+[[package]]
+name = "random-pick"
+version = "1.2.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c179499072da789afe44127d5f4aa6012de2c2f96ef759990196b37387a2a0f8"
+dependencies = [
+ "random-number",
 ]
 
 [[package]]
@@ -2464,6 +2534,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "shared_child"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0d94659ad3c2137fef23ae75b03d5241d633f8acded53d672decfa0e6e0caef"
+dependencies = [
+ "libc",
+ "winapi",
+]
+
+[[package]]
 name = "signal-hook-registry"
 version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2729,6 +2809,7 @@ dependencies = [
  "objc",
  "once_cell",
  "open",
+ "os_pipe",
  "percent-encoding",
  "rand 0.8.5",
  "raw-window-handle",
@@ -2738,6 +2819,7 @@ dependencies = [
  "serde_json",
  "serde_repr",
  "serialize-to-javascript",
+ "shared_child",
  "state",
  "tar",
  "tauri-macros",
@@ -3351,9 +3433,12 @@ name = "web2app"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "async-recursion",
+ "derive-new",
  "flexi_logger",
+ "futures-util",
  "log",
- "quick-xml",
+ "passwords",
  "serde",
  "serde_json",
  "tauri",

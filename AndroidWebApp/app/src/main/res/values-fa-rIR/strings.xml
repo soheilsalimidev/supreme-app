@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_internet_connection">دستگاه به اینترنت متصل نیست. \n اتصال به اینترنت خود را چک کنید.</string>
+    <string name="whooops">اووووپس</string>
+    <string name="try_again">تلاش دوباره</string>
+    <string name="home_page">خانه</string>
+    <string name="about_us">درباره ما</string>
+    <string name="rate_us">امتیاز دادن به ما</string>
+    <string name="content_us">تماس با ما</string>
+    <string name="share_app">اشتراک گذاری اپ</string>
+    <string name="exit">خروج</string>
+    <string name="checkOutTheApp">ننگاهی به اپ بیندازید:</string>
+    <string name="no_sms_app">برنامه ای برای ارسال پیامک یافت نشد</string>
+    <string name="no_email_client_found">برنامه ای برای ارسال ایمیل یافت نشد</string>
+    <string name="Downloading">در حال دانلود</string>
+    <string name="download_started">دانلود شروع شد</string>
+    <string name="download_completed">دانلود تمام شذ</string>
+    <string name="missing_permission">مجوز های داده نشده</string>
+    <string name="missing_permission_meg">ندادن این مجوز ها باعث برخی نا کار امدی ها در برنامه می شود. لطفا انها را قبول کنید</string>
+    <string name="ok">اوکی</string>
+    <string name="says">می گوید</string>
+    <string name="version">نسخه</string>
+</resources>

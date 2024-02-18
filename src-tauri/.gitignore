@@ -3,5 +3,5 @@
 /target/
 ./resources/ApkRenamer/temp/
 ./temp
-out.apk
+out/
 

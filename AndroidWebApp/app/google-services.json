@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "12373909040",
+    "project_id": "web2app-e09c5",
+    "storage_bucket": "web2app-e09c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12373909040:android:3968eac440202a4afa17f5",
+        "android_client_info": {
+          "package_name": "com.app.webapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlnnkIlK1Vp4cQPh7Z2D2VfoNgYR53NXk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

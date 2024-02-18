@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+
+            <data android:scheme="*" />
+        </intent>
+    </queries>
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WebApp"
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup"
+        tools:targetApi="m">
+        <activity android:name=".activities.AboutUsActivity" />
+        <activity
+            android:name=".activities.WebActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:host="@string/site_url" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="@string/site_url" />
+            </intent-filter>
+
+
+        </activity>
+
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
+        <!--            android:value="ca-app-pub-4467163011960707~9295649638" />-->
+
+        <!--        <provider-->
+        <!--            android:name="com.google.firebase.provider.FirebaseInitProvider"-->
+        <!--            android:authorities="${applicationId}.firebaseinitprovider"-->
+        <!--            tools:node="remove"-->
+        <!--            />-->
+
+        <activity android:name=".activities.IntroActivity" />
+    </application>
+
+</manifest>
