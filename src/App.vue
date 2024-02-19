@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-full">
-    <Popover as="header" class="pb-24 bg-indigo-600" v-slot="{ open }">
+    <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div
           class="relative py-5 flex items-center justify-center lg:justify-between"
@@ -14,153 +14,26 @@
           </div>
 
           <div>
-            <input type="checkbox" class="sr-only" id="darkmode-toggle" @change="toggleDark()" :value="isDark"/>
-            <label for="darkmode-toggle" class="toggle">
-              <span>Toggle dark mode</span>
-            </label>
-          </div>
-        </div>
-        <div
-          class="hidden lg:block border-t border-white border-opacity-20 py-5"
-        >
-          <div class="grid grid-cols-3 gap-8 items-center">
-            <div class="col-span-2">
-              <nav class="flex space-x-4">
-                <a
-                  v-for="item in navigationStore.navigation"
-                  :key="item.name"
-                  :href="item.href"
-                  :class="[
-                    item.current ? 'text-white' : 'text-indigo-100',
-                    'text-sm font-medium rounded-md bg-white dark:bg-slate-800 bg-opacity-0 px-3 py-2 hover:bg-opacity-10 dark:hover:bg-opacity-40',
-                  ]"
-                  :aria-current="item.current ? 'page' : undefined"
-                >
-                  {{ item.name }}
-                </a>
-              </nav>
+            <div
+              class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
+            >
+              <input
+                type="checkbox"
+                name="toggle"
+                id="toggle"
+                @change="toggleDark()"
+                :value="isDark"
+                class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
+              />
+              <label
+                for="toggle"
+                class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
+              ></label>
             </div>
           </div>
         </div>
       </div>
-
-      <TransitionRoot as="template" :show="open">
-        <div class="lg:hidden">
-          <TransitionChild
-            as="template"
-            enter="duration-150 ease-out"
-            enter-from="opacity-0"
-            enter-to="opacity-100"
-            leave="duration-150 ease-in"
-            leave-from="opacity-100"
-            leave-to="opacity-0"
-          >
-            <PopoverOverlay class="z-20 fixed inset-0 bg-black bg-opacity-25" />
-          </TransitionChild>
-
-          <TransitionChild
-            as="template"
-            enter="duration-150 ease-out"
-            enter-from="opacity-0 scale-95"
-            enter-to="opacity-100 scale-100"
-            leave="duration-150 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-95"
-          >
-            <PopoverPanel
-              focus
-              class="z-30 absolute top-0 inset-x-0 max-w-3xl mx-auto w-full p-2 transition transform origin-top"
-            >
-              <div
-                class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-slate-800 divide-y divide-gray-200"
-              >
-                <div class="pt-3 pb-2">
-                  <div class="flex items-center justify-between px-4">
-                    <div>
-                      <img
-                        class="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                        alt="Workflow"
-                      />
-                    </div>
-                    <div class="-mr-2">
-                      <PopoverButton
-                        class="bg-white dark:bg-slate-800 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                      >
-                        <span class="sr-only">Close menu</span>
-                        <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                      </PopoverButton>
-                    </div>
-                  </div>
-                  <div class="mt-3 px-2 space-y-1">
-                    <a
-                      href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >Home</a
-                    >
-                    <a
-                      href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >Profile</a
-                    >
-                    <a
-                      href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >Resources</a
-                    >
-                    <a
-                      href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >Company Directory</a
-                    >
-                    <a
-                      href="#"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >Openings</a
-                    >
-                  </div>
-                </div>
-                <div class="pt-4 pb-2">
-                  <div class="flex items-center px-5">
-                    <div class="flex-shrink-0">
-                      <img
-                        class="h-10 w-10 rounded-full"
-                        :src="user.imageUrl"
-                        alt=""
-                      />
-                    </div>
-                    <div class="ml-3 min-w-0 flex-1">
-                      <div class="text-base font-medium text-gray-800 truncate">
-                        {{ user.name }}
-                      </div>
-                      <div class="text-sm font-medium text-gray-500 truncate">
-                        {{ user.email }}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      class="ml-auto flex-shrink-0 bg-white dark:bg-slate-800 p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      <span class="sr-only">View notifications</span>
-                      <BellIcon class="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div class="mt-3 px-2 space-y-1">
-                    <a
-                      v-for="item in userNavigation"
-                      :key="item.name"
-                      :href="item.href"
-                      class="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800"
-                      >{{ item.name }}</a
-                    >
-                  </div>
-                </div>
-              </div>
-            </PopoverPanel>
-          </TransitionChild>
-        </div>
-      </TransitionRoot>
-    </Popover>
+    </header>
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 class="sr-only">Page title</h1>
@@ -184,9 +57,7 @@
           <div class="grid grid-cols-1 gap-4">
             <section aria-labelledby="section-2-title">
               <h2 class="sr-only" id="section-2-title">Section title</h2>
-              <div
-                class="rounded-lg bg-white dark:bg-slate-800 overflow-hidden shadow"
-              >
+              <div class="rounded-lg bg-transparent overflow-hidden">
                 <div class="p-6">
                   <frame />
                 </div>
@@ -209,74 +80,99 @@
       </div>
     </footer>
   </div>
+
+  <NotificationGroup group="generic">
+    <div
+      class="fixed inset-0 flex items-end justify-start p-6 px-4 py-6 pointer-events-none"
+    >
+      <div class="w-full max-w-sm">
+        <Notification
+          v-slot="{ notifications }"
+          enter="transform ease-out duration-300 transition"
+          enter-from="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-4"
+          enter-to="translate-y-0 opacity-100 sm:translate-x-0"
+          leave="transition ease-in duration-500"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+          move="transition duration-500"
+          move-delay="delay-300"
+        >
+          <div v-for="notification in notifications" :key="notification.id">
+            <div
+              v-if="notification.type === 'info'"
+              class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
+            >
+              <div class="flex items-center justify-center w-12 bg-blue-500">
+                <svg
+                  class="w-6 h-6 text-white fill-current"
+                  viewBox="0 0 40 40"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
+                  />
+                </svg>
+              </div>
+
+              <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                  <span class="font-semibold text-blue-500">{{
+                    notification.title
+                  }}</span>
+                  <p class="text-sm text-gray-600">{{ notification.text }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
+              v-if="notification.type === 'warning'"
+            >
+              <div class="flex items-center justify-center w-12 bg-yellow-500">
+                <svg
+                  class="w-6 h-6 text-white fill-current"
+                  viewBox="0 0 40 40"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
+                  />
+                </svg>
+              </div>
+
+              <div class="px-4 py-2 -mx-3">
+                <div class="mx-3">
+                  <span class="font-semibold text-yellow-500">{{
+                    notification.title
+                  }}</span>
+                  <p class="text-sm text-gray-600">{{ notification.text }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Notification>
+      </div>
+    </div>
+  </NotificationGroup>
 </template>
 
 <script setup lang="ts">
 import LineMdHeart from "~icons/line-md/heart";
-import { BellIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import icon from "@/assets/vue.svg";
-import { useNavigationStore } from "@/stores/navigation";
-import { useDark, useToggle } from '@vueuse/core'
-
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
-const navigationStore = useNavigationStore();
+import { useDark, useToggle } from "@vueuse/core";
+import { Notification, NotificationGroup } from "notiwind";
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 </script>
 
 <style scoped>
-.toggle {
-  font-size: 1rem; /* 👈 change this to scale */
-  border: 0.125em solid currentColor;
-  border-radius: 2em;
-  cursor: pointer;
-  display: block;
-  height: 2em;
-  position: relative;
-  width: 3.75em;
+.toggle-checkbox:checked {
+  right: 0;
+  border: none;
+  background-color: rgb(129 124 214);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' className='h-10 w-10' fill='%23FFF' viewBox='0 0 24 24' stroke='rgb(129 124 214)' > <path strokeLinecap='round' strokeLinejoin='round' d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' /> </svg>");
 }
-.toggle span {
-  background-color: currentColor;
-  border-radius: 2em;
-  display: block;
-  height: 1.5em;
-  left: 0.25em;
-  overflow: hidden;
-  position: absolute;
-  top: 0.16em;
-  text-indent: -9999px;
-  transition: left 0.25s;
-  width: 1.5em;
-  z-index: 2;
-}
-
-.toggle::before,
-.toggle::after {
-  content: "";
-  display: block;
-  border-radius: 1em;
-  position: absolute;
-  z-index: 1;
-}
-
-.toggle::after {
-  box-shadow: 0.25em 0.25em #5901d8;
-  height: 1.125em;
-  right: 0.9em;
-  top: 0.125em;
-  width: 1.125em;
-}
-
-.toggle::before {
-  background-color: #ffc409;
-  height: 0.625em;
-  outline: 0.25em dotted #ffc409;
-  outline-offset: 0.125em;
-  left: 0.7em;
-  top: 0.7em;
-  width: 0.625em;
-}
-
-input:checked ~ .toggle span {
-  left: 1.9em;
+.toggle-checkbox:checked + .toggle-label {
+  background-color: rgb(76 73 188);
 }
 </style>

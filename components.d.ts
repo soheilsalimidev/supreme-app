@@ -7,12 +7,14 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppInfo: typeof import('./src/components/steps/appInfo.vue')['default']
     Frame: typeof import('./src/components/frame.vue')['default']
     Popover: typeof import('@headlessui/vue')['Popover']
     PopoverButton: typeof import('@headlessui/vue')['PopoverButton']
     PopoverOverlay: typeof import('@headlessui/vue')['PopoverOverlay']
     PopoverPanel: typeof import('@headlessui/vue')['PopoverPanel']
     Steps: typeof import('./src/components/steps.vue')['default']
+    TextInput: typeof import('./src/components/Inputs/textInput.vue')['default']
     TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
   }
