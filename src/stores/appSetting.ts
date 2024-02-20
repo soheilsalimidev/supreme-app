@@ -8,8 +8,10 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     icon_path: "",
     app_setting: {
       site_url: "",
-      splash_screen: 0,
-      splash_screen_g_c: 0,
+      splash_screen: {
+        type:0,
+      },
+      splash_screen_g_c: "",
       cache_mode: 0,
       no_internet_layout: 0,
       toolbar: 0,
@@ -27,7 +29,12 @@ export const useAppSettingStore = defineStore("appSetting", () => {
       item_fab: [],
       intro_pages: [],
     },
-    images_path: [],
+    images_path: [
+      {
+        key: "splash",
+        file: undefined,
+      },
+    ],
   });
 
   const get_logo = computed(() => {
@@ -45,13 +52,16 @@ export interface AppInfo {
   package_name: string;
   icon_path: string | File[];
   app_setting: Setting;
-  images_path: string[];
+  images_path: { key: string; file: File }[];
 }
 
 export interface Setting {
   site_url: string;
-  splash_screen: number;
-  splash_screen_g_c: number;
+  splash_screen: {
+    type: number;
+    splash_screen_g_c?: string;
+    image_path?: string;
+  };
   cache_mode: number;
   no_internet_layout: number;
   toolbar: number;

@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@animxyz/core": "^0.6.6",
     "@animxyz/vue3": "^0.6.7",
     "@headlessui/vue": "^1.7.19",
     "@heroicons/vue": "^2.1.1",
@@ -19,7 +20,8 @@
     "@vueuse/core": "^10.7.2",
     "notiwind": "^2.0.2",
     "pinia": "^2.1.7",
-    "vue": "^3.4.5"
+    "vue": "^3.4.5",
+    "vue3-colorpicker": "^2.2.3"
   },
   "devDependencies": {
     "@iconify-json/line-md": "^1.1.36",
