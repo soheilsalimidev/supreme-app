@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppInfo: typeof import('./src/components/steps/appInfo.vue')['default']
+    AppSetting: typeof import('./src/components/steps/appSetting.vue')['default']
     Frame: typeof import('./src/components/frame.vue')['default']
     Popover: typeof import('@headlessui/vue')['Popover']
     PopoverButton: typeof import('@headlessui/vue')['PopoverButton']

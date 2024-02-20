@@ -49,7 +49,12 @@
               class="hidden"
               ref="fileInput"
               accept=".jpg,.jpeg,.png"
-              @change=" onDrop(( $event.target as  HTMLInputElement)!.files as unknown as File[])"
+              @change="
+                onDrop(
+                  ($event.target as HTMLInputElement)!
+                    .files as unknown as File[],
+                )
+              "
             />
           </label>
           <div class="flex flex-wrap justify-start flex-col" v-else>
@@ -96,7 +101,7 @@ import { useDropZone } from "@vueuse/core";
 import { notify } from "notiwind";
 import { useNavigationStore } from "@/stores/navigation";
 
-const { steps } = storeToRefs(useNavigationStore());
+const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
 const dropZoneRef = ref<HTMLDivElement>();
 const { appInfo, get_logo } = storeToRefs(useAppSettingStore());
 
@@ -170,9 +175,10 @@ async function getImageDimensions(file: File) {
 }
 
 const next = async () => {
-  if (await v$.value.$validate()) {
-    steps.value[0].status = "complete";
-    steps.value[1].status = "current";
-  }
+  // if (await v$.value.$validate()) {
+  steps.value[0].status = "complete";
+  steps.value[1].status = "current";
+  activeTabIndex.value++;
+  // }
 };
 </script>

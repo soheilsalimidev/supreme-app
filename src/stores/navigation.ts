@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import appInfo from "@/components/steps/appInfo.vue";
+import appSetting from "@/components/steps/appSetting.vue";
 
 export const useNavigationStore = defineStore("navigation", () => {
   const components = {
     appInfo,
+    appSetting,
   };
 
+  const activeTabIndex = ref(1);
   const steps = ref<
     {
       name: string;
@@ -16,7 +19,7 @@ export const useNavigationStore = defineStore("navigation", () => {
     }[]
   >([
     { name: "app info", id: 1, status: "current", component: "appInfo" },
-    { name: "Step 2", id: 2, status: "upcoming", component: "appInfo" },
+    { name: "Step 2", id: 2, status: "upcoming", component: "appSetting" },
     { name: "Step 3", id: 3, status: "upcoming", component: "appInfo" },
     { name: "Step 4", id: 4, status: "upcoming", component: "appInfo" },
     { name: "Step 5", id: 5, status: "upcoming", component: "appInfo" },
@@ -29,5 +32,5 @@ export const useNavigationStore = defineStore("navigation", () => {
       ],
   );
 
-  return { steps,activeComponent };
+  return { steps, activeComponent, activeTabIndex };
 });

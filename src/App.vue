@@ -5,7 +5,6 @@
         <div
           class="relative py-5 flex items-center justify-center lg:justify-between"
         >
-          <!-- Logo -->
           <div class="absolute left-0 flex-shrink-0 lg:static">
             <a href="#">
               <span class="sr-only">Logo</span>
