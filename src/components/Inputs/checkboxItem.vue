@@ -6,7 +6,10 @@
   >
     <div
       class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-200"
-      :class="[open ? 'ring-2 ring-indigo-500 max-h-[30rem] mx-0' : 'max-h-20 mx-5']"
+      :class="[
+        open ? 'ring-2 ring-indigo-500 max-h-[30rem]' : 'max-h-22 mx-5',
+        open && disableCheckbox ? 'mx-0' : 'mx-5',
+      ]"
     >
       <DisclosureButton class="py-2" as="div">
         <div
@@ -36,7 +39,7 @@
             />
           </div>
         </div>
-        <p class="mt-2 text-sm text-red-600" v-if="error">
+        <p class="mt-2 text-sm text-red-600" v-if="error && !open">
           {{ error }}
         </p>
       </DisclosureButton>
