@@ -29,7 +29,7 @@
           type="file"
           class="hidden"
           ref="fileInput"
-          accept=".jpg,.jpeg,.png"
+          :accept="accept.join(',')"
           @change="
             onDrop(
               ($event.target as HTMLInputElement)!.files as unknown as File[],
@@ -72,32 +72,38 @@ let props = withDefaults(
   defineProps<{
     label: string;
     error?: string;
+    accept?: string[];
     filterWarningText?: string;
     filterWarningTitle?: string;
     filterCondition?: (width: number, height: number) => boolean;
   }>(),
-  { filterCondition: () => true },
+  { filterCondition: () => true, accept: () => ["image/jpeg", "image/png"] },
 );
 const modelValue = defineModel();
 const dropZoneRef = ref<HTMLDivElement>();
 let preview = ref("");
 const onDrop = async (files: File[] | null) => {
   if (files) {
-    const { width, height, url } = await getImageDimensions(files[0]);
-    if (props.filterCondition(width, height)) {
-      modelValue.value = files;
-      preview.value = url;
+    if (props.accept.some((type) => type.includes("image"))) {
+      const { width, height, url } = await getImageDimensions(files[0]);
+      if (props.filterCondition(width, height)) {
+        modelValue.value = files;
+        preview.value = url;
+        return;
+      }
     } else {
-      notify(
-        {
-          group: "generic",
-          title: props.filterWarningTitle,
-          text: props.filterWarningText,
-          type: "warning",
-        },
-        5000,
-      );
+      preview.value = files[0].name;
+      return;
     }
+    notify(
+      {
+        group: "generic",
+        title: props.filterWarningTitle,
+        text: props.filterWarningText,
+        type: "warning",
+      },
+      5000,
+    );
   }
 };
 
@@ -117,6 +123,6 @@ async function getImageDimensions(file: File) {
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
   onDrop,
-  dataTypes: ["image/jpeg", "image/png"],
+  dataTypes: props.accept,
 });
 </script>

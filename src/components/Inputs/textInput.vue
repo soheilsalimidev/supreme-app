@@ -5,7 +5,8 @@
     >
       <label
         :for="label"
-        class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-sm font-medium text-gray-900 dark:bg-slate-800 dark:text-slate-400"
+        class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-sm font-medium text-gray-900 dark:text-slate-400 dark:bg-slate-800"
+        :class="labelClass"
         >{{ label }}</label
       >
       <input
@@ -15,8 +16,9 @@
         :id="label"
         :disabled="disabled"
         :class="[
-          error ??
+          error &&
             'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500',
+          inputClass,
         ]"
         class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 dark:text-slate-400 dark:bg-slate-800 text-lg"
         v-model="modelValue"
@@ -47,11 +49,14 @@ defineProps<{
   perfix?: string;
   disabled?: boolean;
   error?: string;
+  labelClass?: string;
+  inputClass?: string;
+  value?: string;
 }>();
 
 defineEmits<{
   blur: [];
 }>();
 
-const modelValue = defineModel<string>();
+const modelValue = defineModel<string>({});
 </script>

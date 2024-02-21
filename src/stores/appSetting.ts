@@ -9,12 +9,18 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     app_setting: {
       site_url: "",
       splash_screen: {
-        type:0,
+        type: 0,
       },
-      splash_screen_g_c: "",
       cache_mode: 0,
-      no_internet_layout: 0,
-      toolbar: 0,
+      no_internet_layout: {
+        type: 1,
+      },
+      toolbar: {
+        type: 0,
+      },
+      toolbar_custom_icon: {
+        enable: false,
+      },
       sidebar_menu: 0,
       sidebar_menu_header_mode: 0,
       sidebar_menu_header_color: 0,
@@ -52,7 +58,7 @@ export interface AppInfo {
   package_name: string;
   icon_path: string | File[];
   app_setting: Setting;
-  images_path: { key: string; file: File }[];
+  images_path: { key: string; file?: File }[];
 }
 
 export interface Setting {
@@ -63,9 +69,16 @@ export interface Setting {
     image_path?: string;
   };
   cache_mode: number;
-  no_internet_layout: number;
-  toolbar: number;
-  toolbar_custom_icon?: ToolbarCustomIcon;
+  no_internet_layout: {
+    type: number;
+    lottieFile?: File;
+    image?: File;
+  };
+  toolbar: {
+    type: number;
+    text?: string;
+  };
+  toolbar_custom_icon: ToolbarCustomIcon;
   sidebar_menu: number;
   sidebar_menu_header_mode: number;
   sidebar_menu_header_color: number;
@@ -82,8 +95,9 @@ export interface Setting {
 }
 
 export interface ToolbarCustomIcon {
-  first: string;
-  second: string;
+  enable: boolean;
+  first?: File;
+  second?: string;
 }
 
 export interface ItemMenu {

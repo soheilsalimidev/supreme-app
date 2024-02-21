@@ -173,7 +173,6 @@ const rules = {
 const v$ = useVuelidate(rules, appInfo);
 
 const next = async () => {
-  console.log(await v$.value.$validate());
   if (await v$.value.$validate()) {
     steps.value[1].status = "complete";
     steps.value[2].status = "current";

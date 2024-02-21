@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-full">
+  <div class="min-h-full ">
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div
@@ -43,7 +43,7 @@
             <section aria-labelledby="section-1-title">
               <h2 class="sr-only" id="section-1-title">Section title</h2>
               <div
-                class="rounded-lg bg-white dark:bg-slate-800 overflow-hidden shadow"
+                class="rounded-lg bg-white dark:bg-slate-800 shadow"
               >
                 <div class="p-6">
                   <steps />

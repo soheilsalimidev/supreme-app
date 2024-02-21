@@ -77,7 +77,7 @@
     </nav>
 
     <div
-      class="mt-8 block"
+      class="mt-14 block w-full h-[31rem] p-4 overflow-scroll"
       xyz="fade appear-short-100% origin-top ease-in-out duration-7 delay-1.5"
       v-xyz="tabDirectionXyz"
     >

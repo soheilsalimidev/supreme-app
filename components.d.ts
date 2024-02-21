@@ -9,6 +9,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppInfo: typeof import('./src/components/steps/appInfo.vue')['default']
     AppSetting: typeof import('./src/components/steps/appSetting.vue')['default']
+    CheckboxItem: typeof import('./src/components/Inputs/checkboxItem.vue')['default']
+    Disclosure: typeof import('@headlessui/vue')['Disclosure']
+    DisclosureButton: typeof import('@headlessui/vue')['DisclosureButton']
+    DisclosurePanel: typeof import('@headlessui/vue')['DisclosurePanel']
     FileSelect: typeof import('./src/components/Inputs/fileSelect.vue')['default']
     Frame: typeof import('./src/components/frame.vue')['default']
     Popover: typeof import('@headlessui/vue')['Popover']
@@ -24,5 +28,8 @@ declare module 'vue' {
     TextInput: typeof import('./src/components/Inputs/textInput.vue')['default']
     TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
+    WebpageSetting: typeof import('./src/components/steps/webpageSetting.vue')['default']
+    WebPageSetting: typeof import('./src/components/steps/webPageSetting.vue')['default']
+    WebpPageSetting: typeof import('./src/components/steps/webpPageSetting.vue')['default']
   }
 }
