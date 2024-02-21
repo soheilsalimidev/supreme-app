@@ -3,12 +3,16 @@ import { ref, computed } from "vue";
 import appInfo from "@/components/steps/appInfo.vue";
 import splashScreeenSetting from "@/components/steps/splashScreeenSetting.vue";
 import webPageSetting from "@/components/steps/webPageSetting.vue";
+import compile from "@/components/steps/compile.vue";
+import introPage from "@/components/steps/introPage.vue";
 
 export const useNavigationStore = defineStore("navigation", () => {
   const components = {
     appInfo,
     splashScreeenSetting,
     webPageSetting,
+    compile,
+    introPage,
   };
 
   const activeTabIndex = ref(1);
@@ -30,11 +34,11 @@ export const useNavigationStore = defineStore("navigation", () => {
     {
       name: "web page settings",
       id: 3,
-      status: "current",
+      status: "complete",
       component: "webPageSetting",
     },
-    { name: "Step 4", id: 4, status: "upcoming", component: "appInfo" },
-    { name: "Step 5", id: 5, status: "upcoming", component: "appInfo" },
+    { name: "Step 4", id: 4, status: "complete", component: "introPage" },
+    { name: "Step 5", id: 5, status: "current", component: "compile" },
   ]);
 
   const activeComponent = computed(

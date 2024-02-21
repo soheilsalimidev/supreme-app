@@ -17,34 +17,25 @@
           <p class="pointer-none text-gray-500" v-else>
             <span class="text-sm">Drag and drop</span> files here <br />
             or
-            <a
-              class="text-indigo-600 hover:underline"
-              @click="($refs.fileInput! as HTMLInputElement).click()"
+            <a class="text-indigo-600 hover:underline" @click="selectFile"
               >select a file</a
             >
             from your computer
           </p>
         </div>
-        <input
-          type="file"
-          class="hidden"
-          ref="fileInput"
-          :accept="accept.join(',')"
-          @change="
-            onDrop(
-              ($event.target as HTMLInputElement)!.files as unknown as File[],
-            )
-          "
-        />
       </label>
       <div class="flex flex-wrap justify-start flex-col" v-else>
-        <div class="w-6/12 sm:w-4/12 px-4">
+        <div
+          class="w-6/12 sm:w-4/12 px-4"
+          v-if="accept.some((type) => type.includes('png'))"
+        >
           <img
             :src="preview"
             alt="logo"
             class="shadow rounded-full max-w-full h-auto align-middle border-none"
           />
         </div>
+        <span v-else class="text-start dark:text-slate-200">{{ preview }}</span>
         <button
           class="mt-2 w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="
@@ -67,6 +58,9 @@
 import { useDropZone } from "@vueuse/core";
 import { notify } from "notiwind";
 import { ref } from "vue";
+import { listen } from "@tauri-apps/api/event";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { open } from "@tauri-apps/api/dialog";
 
 let props = withDefaults(
   defineProps<{
@@ -77,22 +71,47 @@ let props = withDefaults(
     filterWarningTitle?: string;
     filterCondition?: (width: number, height: number) => boolean;
   }>(),
-  { filterCondition: () => true, accept: () => ["image/jpeg", "image/png"] },
+  { filterCondition: () => true, accept: () => ["jpeg", "png", "jpg"] },
 );
+
+listen<string[]>("tauri://file-drop", (event) => onDrop(event.payload));
+
 const modelValue = defineModel();
 const dropZoneRef = ref<HTMLDivElement>();
 let preview = ref("");
-const onDrop = async (files: File[] | null) => {
+
+const getUrlFileType = (url: string) => {
+  const u = new URL(url);
+  const ext = u.pathname.split(".").pop();
+  return !ext || ext === "/" ? undefined : ext.toLowerCase();
+};
+
+const onDrop = async (files: string[] | null) => {
   if (files) {
-    if (props.accept.some((type) => type.includes("image"))) {
-      const { width, height, url } = await getImageDimensions(files[0]);
+    const fileUrl = convertFileSrc(files[0]);
+    const ext = getUrlFileType(fileUrl);
+    if (!ext || !props.accept.find((type) => type.includes(ext))) {
+      notify(
+        {
+          group: "generic",
+          title: "wrong format",
+          text: "please drop currect format",
+          type: "warning",
+        },
+        5000,
+      );
+      return;
+    }
+
+    if (props.accept.some((type) => type.includes("png"))) {
+      const { width, height, url } = await getImageDimensions(fileUrl);
       if (props.filterCondition(width, height)) {
-        modelValue.value = files;
+        modelValue.value = files[0];
         preview.value = url;
         return;
       }
     } else {
-      preview.value = files[0].name;
+      preview.value = new URL(fileUrl).pathname.split("%2").pop() ?? "";
       return;
     }
     notify(
@@ -107,9 +126,22 @@ const onDrop = async (files: File[] | null) => {
   }
 };
 
-async function getImageDimensions(file: File) {
+const selectFile = async () => {
+  const selected = (await open({
+    multiple: false,
+    filters: [
+      {
+        name: "",
+        extensions: props.accept,
+      },
+    ],
+  })) as string;
+  console.log(selected);
+  onDrop([selected]);
+};
+
+async function getImageDimensions(url: string) {
   let img = new Image();
-  const url = URL.createObjectURL(file);
   img.src = url;
   await img.decode();
   let width = img.width;
@@ -122,7 +154,7 @@ async function getImageDimensions(file: File) {
 }
 
 const { isOverDropZone } = useDropZone(dropZoneRef, {
-  onDrop,
+  // onDrop,
   dataTypes: props.accept,
 });
 </script>

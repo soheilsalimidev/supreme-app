@@ -17,7 +17,7 @@ declare module 'vue' {
     FileSelect: typeof import('./src/components/Inputs/fileSelect.vue')['default']
     Float: typeof import('@headlessui-float/vue')['Float']
     Frame: typeof import('./src/components/frame.vue')['default']
-    IntroPage: typeof import('./src/components/steps/IntroPage.vue')['default']
+    IntroPage: typeof import('./src/components/steps/introPage.vue')['default']
     ListItemMaker: typeof import('./src/components/ListItemMaker.vue')['default']
     Menu: typeof import('@headlessui/vue')['Menu']
     MenuButton: typeof import('@headlessui/vue')['MenuButton']

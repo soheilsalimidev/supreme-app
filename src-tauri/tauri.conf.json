@@ -13,6 +13,16 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "dialog": {
+        "open": true,
+        "save": true
+      },
+      "protocol": {
+        "asset": true,
+        "assetScope": [
+          "**"
+        ]
+      },
       "fs": {
         "scope": [
           "$RESOURCE/*"
@@ -27,7 +37,7 @@
       "resources": [
         "./resources/*"
       ],
-       "externalBin": [
+      "externalBin": [
         "./binaries/zipalign"
       ],
       "active": true,
@@ -42,7 +52,7 @@
       ]
     },
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost"
     },
     "windows": [
       {

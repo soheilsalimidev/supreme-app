@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useSlots } from "vue";
+import { useSlots } from "vue";
 
 const slots = useSlots();
 const modelValue = defineModel<boolean | undefined>();

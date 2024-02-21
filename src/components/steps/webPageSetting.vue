@@ -48,7 +48,7 @@
         >
           <fileSelect
             label="select your lottie file"
-            :accept="['application/JSON']"
+            :accept="['json']"
             v-model="appInfo.app_setting.no_internet_layout.lottieFile"
           ></fileSelect>
         </div>

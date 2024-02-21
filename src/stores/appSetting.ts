@@ -7,42 +7,42 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     package_name: "",
     icon_path: "",
     app_setting: {
-        site_url: "",
-        splash_screen: {
-            type: 0,
+      site_url: "",
+      splash_screen: {
+        type: 0,
+      },
+      cache_mode: 0,
+      no_internet_layout: {
+        type: 1,
+      },
+      toolbar: {
+        type: 0,
+      },
+      toolbar_custom_icon: {
+        enable: false,
+      },
+      swipe_refresh: false,
+      sidebar_menu: {
+        enable: false,
+        sidebar_menu_header: {
+          type: 0,
         },
-        cache_mode: 0,
-        no_internet_layout: {
-            type: 1,
+        sidebar_menu_footer: {
+          type: 0,
         },
-        toolbar: {
-            type: 0,
-        },
-        toolbar_custom_icon: {
-            enable: false,
-        },
-        swipe_refresh: false,
-        sidebar_menu: {
-            enable: false,
-            sidebar_menu_header: {
-                type: 0,
-            },
-            sidebar_menu_footer: {
-                type: 0,
-            },
-            item_menu: [],
-        },
-        admob: 0,
-        admob_banner: 0,
-        floating_action_button: {
-            enable: false,
-            item_fab: [],
-        },
-        googleService: undefined,
-        introPage: {
-            enable: false,
-            pages: []
-        }
+        item_menu: [],
+      },
+      admob: 0,
+      admob_banner: 0,
+      floating_action_button: {
+        enable: false,
+        item_fab: [],
+      },
+      googleService: undefined,
+      introPage: {
+        enable: false,
+        pages: [],
+      },
     },
     images_path: [
       {
@@ -52,22 +52,15 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     ],
   });
 
-  const get_logo = computed(() => {
-    if (appInfo.value.icon_path) {
-      return URL.createObjectURL((appInfo.value.icon_path as File[])[0]);
-    }
-    return "";
-  });
-
-  return { appInfo, get_logo };
+  return { appInfo };
 });
 
 export interface AppInfo {
   name: string;
   package_name: string;
-  icon_path: string | File[];
+  icon_path: string;
   app_setting: Setting;
-  images_path: { key: string; file?: File }[];
+  images_path: { key: string; file?: string }[];
 }
 
 export interface Setting {
@@ -80,8 +73,8 @@ export interface Setting {
   cache_mode: number;
   no_internet_layout: {
     type: number;
-    lottieFile?: File;
-    image?: File;
+    lottieFile?: string;
+    image?: string;
   };
   toolbar: {
     type: number;
@@ -116,7 +109,7 @@ export interface Setting {
 
 export interface ToolbarCustomIcon {
   enable: boolean;
-  first?: File;
+  first?: string;
   second?: string;
 }
 
