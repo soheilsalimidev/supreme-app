@@ -9,9 +9,12 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
+    "types": [
+      "unplugin-icons/types/vue",
+    ],
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*"
       ],
     },
     /* Bundler mode */
@@ -31,7 +34,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "components.d.ts"
   ],
   "references": [
     {

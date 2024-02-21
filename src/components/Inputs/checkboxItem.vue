@@ -5,10 +5,10 @@
     @click="slots.default ? (modelValue = true) : (modelValue = !modelValue)"
   >
     <div
-      class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-200"
+      class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-300"
       :class="[
-        open ? 'ring-2 ring-indigo-500 max-h-[30rem]' : 'max-h-22 mx-5',
-        open && disableCheckbox ? 'mx-0' : 'mx-5',
+        open ? 'ring-2 ring-indigo-500 max-h-[55rem]' : 'max-h-22 mx-5',
+        open && (disableCheckbox || slots.default) ? 'mx-3' : 'mx-7',
       ]"
     >
       <DisclosureButton class="py-2" as="div">
@@ -51,7 +51,7 @@
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-        <DisclosurePanel>
+        <DisclosurePanel class="p-4">
           <slot />
         </DisclosurePanel>
       </transition>

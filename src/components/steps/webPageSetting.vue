@@ -16,77 +16,24 @@
       </template>
 
       <template #default>
-        <fieldset>
-          <legend class="sr-only">no internet layout</legend>
-          <div class="space-y-5">
-            <div
-              v-for="cacheMode in cacheModes"
-              :key="cacheMode.value"
-              class="relative flex items-start"
-            >
-              <div class="flex items-center h-5">
-                <input
-                  v-model="appInfo.app_setting.no_internet_layout.type"
-                  :id="cacheMode.title.toString()"
-                  :aria-describedby="`${cacheMode.value}-description`"
-                  name="noNet"
-                  type="radio"
-                  :value="cacheMode.value"
-                  :checked="cacheMode.value === 1"
-                  class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label
-                  :for="cacheMode.title.toString()"
-                  class="font-medium text-gray-700 dark:text-slate-300"
-                  >{{ cacheMode.title }}</label
-                >
-                <p :id="`${cacheMode.value}-description`" class="text-gray-500">
-                  {{ cacheMode.description }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </fieldset>
+        <radioList
+          :items="cacheModes"
+          :default-value="1"
+          label="sidebar_menu_header_color"
+          v-model="appInfo.app_setting.no_internet_layout.type"
+        ></radioList>
       </template>
     </checkboxItem>
     <checkboxItem label="no_internet_layout" disableCheckbox>
       <template #description> There are multi layout of no Internet</template>
       <template #default>
-        <fieldset>
-          <legend class="sr-only">no internet layout</legend>
-          <div class="space-y-5">
-            <div
-              v-for="noNet in noNetLayouts"
-              :key="noNet.value"
-              class="relative flex items-start"
-            >
-              <div class="flex items-center h-5">
-                <input
-                  v-model="appInfo.app_setting.no_internet_layout.type"
-                  :id="noNet.title.toString()"
-                  :aria-describedby="`${noNet.value}-description`"
-                  name="noNet"
-                  type="radio"
-                  :value="noNet.value"
-                  :checked="noNet.value === 1"
-                  class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label
-                  :for="noNet.title.toString()"
-                  class="font-medium text-gray-700 dark:text-slate-300"
-                  >{{ noNet.title }}</label
-                >
-                <p :id="`${noNet.value}-description`" class="text-gray-500">
-                  {{ noNet.description }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </fieldset>
+        <radioList
+          :items="noNetLayouts"
+          :default-value="1"
+          label="no internet layout"
+          v-model="appInfo.app_setting.no_internet_layout.type"
+        ></radioList>
+
         <div
           v-if="appInfo.app_setting.no_internet_layout.type === 1"
           class="mt-2"
@@ -137,44 +84,13 @@
     >
       <template #description> You can have different type of toolbar </template>
       <template #default>
-        <fieldset>
-          <legend class="sr-only">
-            You can have different type of toolbar
-          </legend>
-          <div class="space-y-5">
-            <div
-              v-for="toolbarMode in toolbarsModes"
-              :key="toolbarMode.value"
-              class="relative flex items-start"
-            >
-              <div class="flex items-center h-5">
-                <input
-                  v-model="appInfo.app_setting.toolbar.type"
-                  :id="toolbarMode.title.toString()"
-                  :aria-describedby="`${toolbarMode.value}-description`"
-                  name="noNet"
-                  type="radio"
-                  :value="toolbarMode.value"
-                  :checked="toolbarMode.value === 0"
-                  class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                />
-              </div>
-              <div class="ml-3 text-sm">
-                <label
-                  :for="toolbarMode.title.toString()"
-                  class="font-medium text-gray-700 dark:text-slate-300"
-                  >{{ toolbarMode.title }}</label
-                >
-                <p
-                  :id="`${toolbarMode.value}-description`"
-                  class="text-gray-500"
-                >
-                  {{ toolbarMode.description }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </fieldset>
+        <radioList
+          :items="toolbarsModes"
+          :default-value="0"
+          label="You can have different type of toolbar"
+          v-model="appInfo.app_setting.toolbar.type"
+        ></radioList>
+
         <div v-if="appInfo.app_setting.toolbar.type === 1" class="mt-4">
           <textInput
             label="the text to be dispalyed"
@@ -232,6 +148,98 @@
         </div>
       </template>
     </checkboxItem>
+    <checkboxItem
+      label="sidebar_menu"
+      v-model="appInfo.app_setting.sidebar_menu.enable"
+      :error="
+        v$.app_setting.sidebar_menu.$errors.map((e) => e.$message).join(',')
+      "
+    >
+      <template #description>
+        you can have sidebar menu (if you want to have menu its better to have
+        toolbar too)
+      </template>
+      <template #default>
+        <div class="flex flex-col gap-6">
+          <h2 class="dark:text-white text-lg">sidebar_menu_header_color</h2>
+          <radioList
+            :items="sidebarMenuHeaderModes"
+            :default-value="0"
+            label="sidebar_menu_header_color"
+            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_header.type"
+          ></radioList>
+
+          <div
+            v-if="
+              appInfo.app_setting.sidebar_menu.sidebar_menu_header.type === 1
+            "
+          >
+            <color-picker
+              v-model:gradientColor="
+                appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
+              "
+              lang="En"
+              :theme="isDark ? 'black' : 'white'"
+              useType="gradient"
+            />
+            <p class="mt-2 text-sm text-red-600">
+              {{
+                v$.app_setting.sidebar_menu.sidebar_menu_header.color.$errors
+                  .map((e) => e.$message)
+                  .join(",")
+              }}
+            </p>
+          </div>
+          <h2 class="dark:text-white text-lg">sidebar_menu_footer</h2>
+          <radioList
+            :items="sidebarMenuFooterModes"
+            :default-value="0"
+            label="you can change footer on slider"
+            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type"
+          ></radioList>
+          <div>
+            <textInput
+              label="the text to be dispalyed"
+              placeholder="my amazing app"
+              labelClass="dark:!bg-slate-700"
+              inputClass="dark:!bg-slate-700"
+              :error="
+                v$.app_setting.sidebar_menu.sidebar_menu_footer.text.$errors
+                  .map((e) => e.$message)
+                  .join(',')
+              "
+              v-model="
+                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
+              "
+            ></textInput>
+          </div>
+          <h2 class="dark:text-white text-lg">items</h2>
+          <ListItemMaker
+            v-model="appInfo.app_setting.sidebar_menu.item_menu"
+          ></ListItemMaker>
+        </div>
+      </template>
+    </checkboxItem>
+
+    <checkboxItem
+      label="floating_action_button"
+      v-model="appInfo.app_setting.floating_action_button.enable"
+      :error="
+        v$.app_setting.floating_action_button.$errors
+          .map((e) => e.$message)
+          .join(',')
+      "
+    >
+      <template #description> floating action button menu </template>
+      <template #default>
+        <div class="flex flex-col gap-6">
+          <h2 class="dark:text-white text-lg">items</h2>
+          <ListItemMaker
+            v-model="appInfo.app_setting.floating_action_button.item_fab"
+          ></ListItemMaker>
+        </div>
+      </template>
+    </checkboxItem>
     <div class="px-4 py-3 text-right sm:px-6 mt-auto">
       <button
         class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -250,6 +258,99 @@ import { ExclamationTriangleIcon } from "@heroicons/vue/24/solid";
 import useVuelidate from "@vuelidate/core";
 import { requiredIf } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
+import { useDark } from "@vueuse/core";
+
+const isDark = useDark();
+
+const { appInfo } = storeToRefs(useAppSettingStore());
+const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
+
+const rules = {
+  app_setting: {
+    toolbar: {
+      text: {
+        req: requiredIf(() => appInfo.value.app_setting.toolbar.type === 1),
+      },
+    },
+    toolbar_custom_icon: {
+      first: {
+        req: requiredIf(
+          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
+        ),
+      },
+      second: {
+        req: requiredIf(
+          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
+        ),
+      },
+    },
+    floating_action_button: {
+      item_fab: {
+        req: requiredIf(
+          () => appInfo.value.app_setting.floating_action_button.enable,
+        ),
+      },
+    },
+    sidebar_menu: {
+      sidebar_menu_header: {
+        color: {
+          req: requiredIf(
+            () =>
+              appInfo.value.app_setting.sidebar_menu.sidebar_menu_header
+                .type === 1,
+          ),
+        },
+      },
+      sidebar_menu_footer: {
+        text: {
+          req: requiredIf(
+            () =>
+              appInfo.value.app_setting.sidebar_menu.sidebar_menu_footer
+                .type === 1,
+          ),
+        },
+      },
+    },
+  },
+};
+
+const v$ = useVuelidate(rules, appInfo);
+
+const next = async () => {
+  if (await v$.value.$validate()) {
+    steps.value[2].status = "complete";
+    steps.value[3].status = "current";
+    activeTabIndex.value++;
+  }
+};
+
+const sidebarMenuFooterModes = [
+  {
+    title: "no footer",
+    description: "",
+    value: 0,
+  },
+  {
+    title: "with footer",
+    description: "",
+    value: 1,
+  },
+];
+
+const sidebarMenuHeaderModes = [
+  {
+    title: "no header",
+    description: "",
+    value: 0,
+  },
+  {
+    title: "header with gradient",
+    description: "",
+    value: 1,
+  },
+];
 
 const noNetLayouts = [
   {
@@ -291,39 +392,4 @@ const cacheModes = [
     value: 2,
   },
 ];
-
-const { appInfo } = storeToRefs(useAppSettingStore());
-const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
-
-const rules = {
-  app_setting: {
-    toolbar: {
-      text: {
-        req: requiredIf(() => appInfo.value.app_setting.toolbar.type === 1),
-      },
-    },
-    toolbar_custom_icon: {
-      first: {
-        req: requiredIf(
-          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
-        ),
-      },
-      second: {
-        req: requiredIf(
-          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
-        ),
-      },
-    },
-  },
-};
-
-const v$ = useVuelidate(rules, appInfo);
-
-const next = async () => {
-  if (await v$.value.$validate()) {
-    steps.value[2].status = "complete";
-    steps.value[3].status = "current";
-    activeTabIndex.value++;
-  }
-};
 </script>

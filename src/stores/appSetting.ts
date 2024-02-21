@@ -21,18 +21,25 @@ export const useAppSettingStore = defineStore("appSetting", () => {
       toolbar_custom_icon: {
         enable: false,
       },
-      sidebar_menu: 0,
-      sidebar_menu_header_mode: 0,
-      sidebar_menu_header_color: 0,
-      sidebar_menu_footer_mode: 0,
-      swipe_refresh: 0,
+      swipe_refresh: false,
+      sidebar_menu: {
+        enable: false,
+        sidebar_menu_header: {
+          type: 0,
+        },
+        sidebar_menu_footer: {
+          type: 0,
+        },
+        item_menu: [],
+      },
       admob: 0,
       introPage: false,
       admob_banner: 0,
-      floating_action_button_menu: 0,
+      floating_action_button: {
+        enable: false,
+        item_fab: [],
+      },
       googleService: undefined,
-      item_menu: [],
-      item_fab: [],
       intro_pages: [],
     },
     images_path: [
@@ -79,18 +86,27 @@ export interface Setting {
     text?: string;
   };
   toolbar_custom_icon: ToolbarCustomIcon;
-  sidebar_menu: number;
-  sidebar_menu_header_mode: number;
-  sidebar_menu_header_color: number;
-  sidebar_menu_footer_mode: number;
-  swipe_refresh: number;
+  sidebar_menu: {
+    enable: boolean;
+    sidebar_menu_header: {
+      type: 0 | 1;
+      color?: string;
+    };
+    sidebar_menu_footer: {
+      type: 0 | 1;
+      text?: string;
+    };
+    item_menu: ItemMenu[];
+  };
+  swipe_refresh: boolean;
   admob: number;
   introPage: boolean;
   admob_banner: number;
-  floating_action_button_menu: number;
+  floating_action_button: {
+    enable: boolean;
+    item_fab?: ItemMenu[];
+  };
   googleService: any;
-  item_menu: ItemMenu[];
-  item_fab: ItemMenu[];
   intro_pages: IntroPage[];
 }
 
