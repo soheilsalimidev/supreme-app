@@ -4,9 +4,9 @@
     @click="slots.default ? (modelValue = true) : (modelValue = !modelValue)"
   >
     <div
-      class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-300"
+      class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-500"
       :class="[
-        open ? 'ring-2 ring-indigo-500 max-h-[55rem]' : 'max-h-22 mx-5',
+        open ? 'ring-2 ring-indigo-500 max-h-[55rem]' : 'max-h-24 mx-5',
         open && (disableCheckbox || slots.default) ? 'mx-3' : 'mx-7',
       ]"
     >
@@ -47,7 +47,7 @@
         </p>
       </DisclosureButton>
       <transition
-        enter-active-class="transition duration-100 ease-out delay-100"
+        enter-active-class="transition duration-200 ease-out delay-400"
         enter-from-class="transform scale-95 opacity-0"
         enter-to-class="transform scale-100 opacity-100"
         leave-active-class="transition duration-75 ease-out"
