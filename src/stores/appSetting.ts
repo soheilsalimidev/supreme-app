@@ -7,40 +7,42 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     package_name: "",
     icon_path: "",
     app_setting: {
-      site_url: "",
-      splash_screen: {
-        type: 0,
-      },
-      cache_mode: 0,
-      no_internet_layout: {
-        type: 1,
-      },
-      toolbar: {
-        type: 0,
-      },
-      toolbar_custom_icon: {
-        enable: false,
-      },
-      swipe_refresh: false,
-      sidebar_menu: {
-        enable: false,
-        sidebar_menu_header: {
-          type: 0,
+        site_url: "",
+        splash_screen: {
+            type: 0,
         },
-        sidebar_menu_footer: {
-          type: 0,
+        cache_mode: 0,
+        no_internet_layout: {
+            type: 1,
         },
-        item_menu: [],
-      },
-      admob: 0,
-      introPage: false,
-      admob_banner: 0,
-      floating_action_button: {
-        enable: false,
-        item_fab: [],
-      },
-      googleService: undefined,
-      intro_pages: [],
+        toolbar: {
+            type: 0,
+        },
+        toolbar_custom_icon: {
+            enable: false,
+        },
+        swipe_refresh: false,
+        sidebar_menu: {
+            enable: false,
+            sidebar_menu_header: {
+                type: 0,
+            },
+            sidebar_menu_footer: {
+                type: 0,
+            },
+            item_menu: [],
+        },
+        admob: 0,
+        admob_banner: 0,
+        floating_action_button: {
+            enable: false,
+            item_fab: [],
+        },
+        googleService: undefined,
+        introPage: {
+            enable: false,
+            pages: []
+        }
     },
     images_path: [
       {
@@ -100,14 +102,16 @@ export interface Setting {
   };
   swipe_refresh: boolean;
   admob: number;
-  introPage: boolean;
   admob_banner: number;
+  googleService: any;
   floating_action_button: {
     enable: boolean;
     item_fab?: ItemMenu[];
   };
-  googleService: any;
-  intro_pages: IntroPage[];
+  introPage: {
+    enable: boolean;
+    pages: IntroPage[];
+  };
 }
 
 export interface ToolbarCustomIcon {

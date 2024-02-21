@@ -1,6 +1,5 @@
 <template>
   <Disclosure
-    v-slot="{ open }"
     as="div"
     @click="slots.default ? (modelValue = true) : (modelValue = !modelValue)"
   >
@@ -11,7 +10,11 @@
         open && (disableCheckbox || slots.default) ? 'mx-3' : 'mx-7',
       ]"
     >
-      <DisclosureButton class="py-2" as="div">
+      <DisclosureButton
+        class="py-2"
+        as="div"
+        @click="slots.default ? (open = !open) : ''"
+      >
         <div
           class="items-start relative flex"
           :class="[modelValue ? 'border-transparent' : 'border-gray-300']"
@@ -51,7 +54,7 @@
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-        <DisclosurePanel class="p-4">
+        <DisclosurePanel class="p-4" v-if="open" static>
           <slot />
         </DisclosurePanel>
       </transition>
@@ -60,10 +63,12 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from "vue";
+import { ref, useSlots } from "vue";
 
 const slots = useSlots();
 const modelValue = defineModel<boolean | undefined>();
+const open = defineModel<boolean>("open", { default: false });
+
 withDefaults(
   defineProps<{
     label: string;

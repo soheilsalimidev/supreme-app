@@ -1,6 +1,8 @@
 <template>
   <div class="flex gap-4 flex-col w-full overflow-scroll">
     <checkboxItem
+      :open="items[0]"
+      @update:open="openNew(0)"
       label="swipe_refresh"
       v-model="appInfo.app_setting.swipe_refresh"
     >
@@ -8,8 +10,9 @@
     </checkboxItem>
     <checkboxItem
       label="cache_mode"
-      v-model="appInfo.app_setting.cache_mode"
       disableCheckbox
+      :open="items[1]"
+      @update:open="openNew(1)"
     >
       <template #description>
         There are multi type of cacheMode you can select
@@ -20,11 +23,16 @@
           :items="cacheModes"
           :default-value="1"
           label="sidebar_menu_header_color"
-          v-model="appInfo.app_setting.no_internet_layout.type"
+          v-model="appInfo.app_setting.cache_mode"
         ></radioList>
       </template>
     </checkboxItem>
-    <checkboxItem label="no_internet_layout" disableCheckbox>
+    <checkboxItem
+      label="no_internet_layout"
+      disableCheckbox
+      @update:open="openNew(2)"
+      :open="items[2]"
+    >
       <template #description> There are multi layout of no Internet</template>
       <template #default>
         <radioList
@@ -80,6 +88,8 @@
     <checkboxItem
       label="toolbar"
       disableCheckbox
+      @update:open="openNew(3)"
+      :open="items[3]"
       :error="v$.app_setting.toolbar.$errors.map((e) => e.$message).join(',')"
     >
       <template #description> You can have different type of toolbar </template>
@@ -109,7 +119,9 @@
       </template>
     </checkboxItem>
     <checkboxItem
+      :open="items[4]"
       label="toolbar_custom_icon"
+      @update:open="openNew(4)"
       v-model="appInfo.app_setting.toolbar_custom_icon.enable"
       :error="
         v$.app_setting.toolbar_custom_icon.$errors
@@ -150,6 +162,8 @@
     </checkboxItem>
     <checkboxItem
       label="sidebar_menu"
+      :open="items[5]"
+      @update:open="openNew(5)"
       v-model="appInfo.app_setting.sidebar_menu.enable"
       :error="
         v$.app_setting.sidebar_menu.$errors.map((e) => e.$message).join(',')
@@ -220,10 +234,11 @@
         </div>
       </template>
     </checkboxItem>
-
     <checkboxItem
+      :open="items[6]"
       label="floating_action_button"
       v-model="appInfo.app_setting.floating_action_button.enable"
+      @update:open="openNew(6)"
       :error="
         v$.app_setting.floating_action_button.$errors
           .map((e) => e.$message)
@@ -261,11 +276,23 @@ import { storeToRefs } from "pinia";
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 import { useDark } from "@vueuse/core";
+import { ref } from "vue";
+
+const items = ref([false, false, false, false, false, false, false]);
 
 const isDark = useDark();
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
+
+const openNew = (index: number) => {
+  if (items.value[index]) {
+    items.value[index] = false;
+  } else {
+    items.value.forEach((_ , index) => (items.value[index] = false));
+    items.value[index] = true;
+  }
+};
 
 const rules = {
   app_setting: {
