@@ -38,10 +38,7 @@
         <span v-else class="text-start dark:text-slate-200">{{ preview }}</span>
         <button
           class="mt-2 w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          @click="
-            modelValue = undefined;
-            preview = '';
-          "
+          @click="modelValue = undefined"
         >
           reset
         </button>
@@ -57,14 +54,18 @@
 <script setup lang="ts">
 import { useDropZone } from "@vueuse/core";
 import { notify } from "notiwind";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { listen } from "@tauri-apps/api/event";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
+import { useAppSettingStore } from "@/stores/appSetting";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
 let props = withDefaults(
   defineProps<{
     label: string;
+    key: string;
     error?: string;
     accept?: string[];
     filterWarningText?: string;
@@ -76,9 +77,19 @@ let props = withDefaults(
 
 listen<string[]>("tauri://file-drop", (event) => onDrop(event.payload));
 
-const modelValue = defineModel();
+const modelValue = defineModel<string>();
 const dropZoneRef = ref<HTMLDivElement>();
-let preview = ref("");
+
+const preview = computed(() => {
+  if (modelValue.value) {
+    const fileUrl = convertFileSrc(modelValue.value);
+    if (["png", "jpg", "jpeg"].includes(getUrlFileType(fileUrl) ?? "")) {
+      return fileUrl;
+    } else {
+      return fileUrl.split("/").pop();
+    }
+  }
+});
 
 const getUrlFileType = (url: string) => {
   const u = new URL(url);
@@ -104,27 +115,39 @@ const onDrop = async (files: string[] | null) => {
     }
 
     if (props.accept.some((type) => type.includes("png"))) {
-      const { width, height, url } = await getImageDimensions(fileUrl);
+      const { width, height } = await getImageDimensions(fileUrl);
       if (props.filterCondition(width, height)) {
         modelValue.value = files[0];
-        preview.value = url;
         return;
+      } else {
+        notify(
+          {
+            group: "generic",
+            title: props.filterWarningTitle,
+            text: props.filterWarningText,
+            type: "warning",
+          },
+          5000,
+        );
       }
     } else {
-      preview.value = new URL(fileUrl).pathname.split("%2").pop() ?? "";
       return;
     }
-    notify(
-      {
-        group: "generic",
-        title: props.filterWarningTitle,
-        text: props.filterWarningText,
-        type: "warning",
-      },
-      5000,
-    );
   }
 };
+
+const { appInfo } = storeToRefs(useAppSettingStore());
+watch(modelValue, () => {
+  const path = appInfo.value.paths.find((path) => path.key === props.key);
+  if (path) {
+    path.file = modelValue.value ?? "";
+  } else {
+    appInfo.value.paths.push({
+      key: props.key,
+      file: modelValue.value ?? "",
+    });
+  }
+});
 
 const selectFile = async () => {
   const selected = (await open({

@@ -47,6 +47,7 @@
           class="mt-2"
         >
           <fileSelect
+            key="loading.json"
             label="select your lottie file"
             :accept="['json']"
             v-model="appInfo.app_setting.no_internet_layout.lottieFile"
@@ -57,6 +58,7 @@
           class="mt-2"
         >
           <fileSelect
+            key="no_internet.json"
             label="select your image"
             v-model="appInfo.app_setting.no_internet_layout.image"
           ></fileSelect>
@@ -135,6 +137,7 @@
       <template #default>
         <div class="gap-6 flex flex-col">
           <fileSelect
+            key="toolbar_icon.png"
             :error="
               v$.app_setting.toolbar_custom_icon.first.$errors
                 .map((e) => e.$message)
@@ -348,7 +351,7 @@ const v$ = useVuelidate(rules, appInfo);
 const next = async () => {
   if (await v$.value.$validate()) {
     steps.value[2].status = "complete";
-    steps.value[3].status = "current";
+    steps.value[4].status = "current";
     activeTabIndex.value++;
   }
 };

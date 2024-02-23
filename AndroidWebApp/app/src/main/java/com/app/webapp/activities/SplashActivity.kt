@@ -1,9 +1,11 @@
 package com.app.webapp.activities
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,9 +21,9 @@ class SplashActivity : AppCompatActivity() {
         val webActivityIntent = Intent(this, WebActivity::class.java)
         val sharedPref = getSharedPreferences("shared", MODE_PRIVATE)
 
-        if (!sharedPref.getBoolean("isIntroShowed", false) && config.configType.introPage) startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+        if (!sharedPref.getBoolean("isIntroShowed", false) && config.configType.introPage.enable) startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
         else {
-            when (config.configType.splash_screen) {
+            when (config.configType.splashScreen.type) {
                 1 -> {
                     setContentView(R.layout.splash_simpel)
                     timer(webActivityIntent)
@@ -54,13 +56,7 @@ class SplashActivity : AppCompatActivity() {
                 }
                 4 -> {
                     setContentView(R.layout.splash_simpel)
-                    findViewById<ConstraintLayout>(R.id.splash_simpel_root).setBackgroundResource(when (config.configType.splash_screen_g_c) {
-                        1 -> R.drawable.bg_gradient_slide1
-                        2 -> R.drawable.bg_gradient_slide2
-                        3 -> R.drawable.bg_gradient_slide3
-                        4 -> R.drawable.bg_gradient_slide4
-                        else -> R.drawable.bg_gradient_slide5
-                    })
+                    findViewById<ConstraintLayout>(R.id.splash_simpel_root).setBackgroundResource(R.drawable.bg_gradient_splash)
                     timer(webActivityIntent)
                 }
                 else -> {
@@ -71,6 +67,11 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
+ //   fun View.gradient(radius: Float, vararg colors: Int) {
+        //"radial-gradient(circle, rgba(235, 65, 101, 1) 0%, rgba(207, 147, 217, 1) 99%)"
+        //"linear-gradient(106deg, rgba(235, 65, 101, 1) 0%, rgba(207, 147, 217, 1) 99%)"
+     //   background = GradientDrawable().apply { cornerRadius = radius ; colors = [] }
+ //   }
     private fun timer(intent: Intent) {
         val timer = object : CountDownTimer(5000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}

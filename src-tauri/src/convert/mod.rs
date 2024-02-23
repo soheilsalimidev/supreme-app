@@ -101,53 +101,112 @@ pub struct AppinviteService {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Setting {
+pub struct AppSetting {
     #[serde(rename = "site_url")]
     pub site_url: String,
+    #[serde(rename = "aboutUs")]
+    about_us: AboutUS,
     #[serde(rename = "splash_screen")]
-    pub splash_screen: i64,
-    #[serde(rename = "splash_screen_g_c")]
-    pub splash_screen_g_c: i64,
+    pub splash_screen: SplashScreen,
     #[serde(rename = "cache_mode")]
     pub cache_mode: i64,
     #[serde(rename = "no_internet_layout")]
-    pub no_internet_layout: i64,
-    pub toolbar: i64,
+    pub no_internet_layout: NoInternetLayout,
+    pub toolbar: Toolbar,
     #[serde(rename = "toolbar_custom_icon")]
-    pub toolbar_custom_icon: Option<Pair>,
-    #[serde(rename = "sidebar_menu")]
-    pub sidebar_menu: i64,
-    #[serde(rename = "sidebar_menu_header_mode")]
-    pub sidebar_menu_header_mode: i64,
-    #[serde(rename = "sidebar_menu_header_color")]
-    pub sidebar_menu_header_color: i64,
-    #[serde(rename = "sidebar_menu_footer_mode")]
-    pub sidebar_menu_footer_mode: i64,
+    pub toolbar_custom_icon: ToolbarCustomIcon,
     #[serde(rename = "swipe_refresh")]
-    pub swipe_refresh: i64,
+    pub swipe_refresh: bool,
+    #[serde(rename = "sidebar_menu")]
+    pub sidebar_menu: SidebarMenu,
     pub admob: i64,
     #[serde(rename = "admob_banner")]
     pub admob_banner: i64,
-    #[serde(rename = "floating_action_button_menu")]
-    pub floating_action_button_menu: i64,
-    pub google_service: Option<GoogleService>,
+    #[serde(rename = "floating_action_button")]
+    pub floating_action_button: FloatingActionButton,
+    pub intro_page: IntroPage,
+    google_service: Option<GoogleService>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AboutUS {
+    #[serde(rename = "enable")]
+    pub enable: bool,
+    #[serde(rename = "text")]
+    pub text: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SplashScreen {
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    #[serde(rename = "splash_screen_g_c")]
+    pub splash_screen_g_c: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NoInternetLayout {
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    #[serde(rename = "lottieFile")]
+    lottie_file: Option<String>,
+    image: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Toolbar {
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    pub text: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ToolbarCustomIcon {
+    pub enable: bool,
+    pub first: Option<String>,
+    pub second: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SidebarMenu {
+    pub enable: bool,
+    #[serde(rename = "sidebar_menu_header")]
+    pub sidebar_menu_header: SidebarMenuHeader,
+    #[serde(rename = "sidebar_menu_footer")]
+    pub sidebar_menu_footer: SidebarMenuFooter,
     #[serde(rename = "item_menu")]
     pub item_menu: Vec<ItemMenu>,
-    #[serde(rename = "item_fab")]
-    pub item_fab: Vec<ItemMenu>,
-    #[serde(rename = "intro_pages")]
-    pub intro_pages: Vec<IntroPage>,
-    #[serde(rename = "introPage")]
-    pub intro_page: bool,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SidebarMenuHeader {
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    color: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SidebarMenuFooter {
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    pub text: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ItemMenu {
-    #[serde(rename = "Pair")]
-    pub pair: Option<Pair>,
     #[serde(rename = "Kind")]
     pub kind: Option<i64>,
+    #[serde(rename = "Pair")]
+    pub pair: Option<Pair>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -159,62 +218,115 @@ pub struct Pair {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct IntroPage {
-    pub title: String,
-    pub description: String,
-    pub background: i64,
-    #[serde(rename = "image_name")]
-    pub image_name: String,
+pub struct FloatingActionButton {
+    pub enable: bool,
+    #[serde(rename = "item_fab")]
+    pub item_fab: Vec<ItemMenu>,
 }
 
-impl Default for Setting {
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct IntroPage {
+    pub enable: bool,
+    pub pages: Vec<Value>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImagesPath {
+    pub key: String,
+}
+
+impl Default for AppSetting {
     fn default() -> Self {
         Self {
             site_url: "https://docs.rs/passwords/latest/passwords/".to_owned(),
-            splash_screen: 1,
-            splash_screen_g_c: 1,
+            splash_screen: SplashScreen {
+                type_field: 1,
+                splash_screen_g_c: None,
+            },
             cache_mode: 1,
-            no_internet_layout: 1,
-            toolbar: 1,
-            toolbar_custom_icon: None,
-            sidebar_menu: 1,
-            sidebar_menu_header_mode: 1,
-            sidebar_menu_header_color: 1,
-            sidebar_menu_footer_mode: 1,
-            swipe_refresh: 1,
+            no_internet_layout: NoInternetLayout {
+                type_field: 0,
+                lottie_file: None,
+                image: None,
+            },
+            toolbar: Toolbar {
+                type_field: 1,
+                text: None,
+            },
+            toolbar_custom_icon: ToolbarCustomIcon {
+                enable: false,
+                first: None,
+                second: None,
+            },
+            sidebar_menu: SidebarMenu {
+                enable: false,
+                sidebar_menu_header: SidebarMenuHeader {
+                    type_field: 0,
+                    color: None,
+                },
+                sidebar_menu_footer: SidebarMenuFooter {
+                    type_field: 0,
+                    text: None,
+                },
+                item_menu: vec![
+                    ItemMenu {
+                        kind: Some(1),
+                        pair: None,
+                    },
+                    ItemMenu {
+                        kind: None,
+                        pair: Some(Pair {
+                            first: "asd".into(),
+                            second: "sad".into(),
+                        }),
+                    },
+                ],
+            },
+            swipe_refresh: true,
             admob: 1,
             admob_banner: 1,
-            floating_action_button_menu: 1,
             google_service: None,
-            intro_pages: vec![IntroPage {
-                title: "sdl".into(),
-                description: "asd".into(),
-                background: 1,
-                image_name: "sad".into(),
-            }],
-            item_menu: vec![ItemMenu {
-                pair: Some(Pair {
-                    first: "das".into(),
-                    second: "asd".into(),
-                }),
-                kind: None,
-            }],
-            item_fab: vec![ItemMenu {
-                pair: Some(Pair {
-                    first: "das".into(),
-                    second: "asd".into(),
-                }),
-                kind: None,
-            }],
-            intro_page: false,
+            intro_page: IntroPage {
+                enable: false,
+                pages: vec![],
+            },
+            floating_action_button: FloatingActionButton {
+                enable: false,
+                item_fab: vec![
+                    ItemMenu {
+                        kind: Some(1),
+                        pair: None,
+                    },
+                    ItemMenu {
+                        kind: None,
+                        pair: Some(Pair {
+                            first: "asd".into(),
+                            second: "sad".into(),
+                        }),
+                    },
+                ],
+            },
+            about_us: AboutUS {
+                enable: false,
+                text: None,
+            },
         }
     }
 }
 
-struct Config {
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub(super) struct Config {
     name: String,
     package_name: String,
     icon_path: PathBuf,
-    app_setting: Setting,
-    images_path: Vec<PathBuf>,
+    app_setting: AppSetting,
+    paths: Vec<Paths>,
+}
+
+#[derive(Default, Debug, Serialize, Deserialize)]
+struct Paths {
+    name: String,
+    path: String,
 }

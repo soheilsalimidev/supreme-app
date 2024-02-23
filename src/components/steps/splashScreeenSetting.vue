@@ -69,6 +69,7 @@
       <div v-if="appInfo.app_setting.splash_screen.type === 2">
         <fileSelect
           label="image"
+          key="splash_bg.jpg"
           v-model="appInfo.app_setting.splash_screen.image_path"
           :error="
             v$.app_setting.splash_screen.image_path.$errors

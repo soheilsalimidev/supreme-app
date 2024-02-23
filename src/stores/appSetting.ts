@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { ref, watch } from "vue";
 
 export const useAppSettingStore = defineStore("appSetting", () => {
   const appInfo = ref<AppInfo>({
@@ -43,14 +43,15 @@ export const useAppSettingStore = defineStore("appSetting", () => {
         enable: false,
         pages: [],
       },
-    },
-    images_path: [
-      {
-        key: "splash",
-        file: undefined,
+      aboutUs: {
+        enable: false,
+        text: "",
       },
-    ],
+    },
+    paths: [],
   });
+
+  watch(appInfo, () => console.log(appInfo.value));
 
   return { appInfo };
 });
@@ -60,11 +61,15 @@ export interface AppInfo {
   package_name: string;
   icon_path: string;
   app_setting: Setting;
-  images_path: { key: string; file?: string }[];
+  paths: { name: string; path: string }[];
 }
 
 export interface Setting {
   site_url: string;
+  aboutUs: {
+    enable: boolean;
+    text: string;
+  };
   splash_screen: {
     type: number;
     splash_screen_g_c?: string;
@@ -99,7 +104,7 @@ export interface Setting {
   googleService: any;
   floating_action_button: {
     enable: boolean;
-    item_fab?: ItemMenu[];
+    item_fab: ItemMenu[];
   };
   introPage: {
     enable: boolean;

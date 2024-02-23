@@ -1,5 +1,6 @@
 use anyhow::{anyhow, Context, Result};
 use async_recursion::async_recursion;
+use colors_transform::Rgb;
 use core::f32;
 use futures_util::StreamExt;
 use log::{error, info};
@@ -33,7 +34,7 @@ pub struct Web2app {
 }
 
 impl Web2app {
-    async fn new<T>(config: Config, apk_path: T, out_path: T, jar_path: T) -> Arc<Self>
+    pub async fn new<T>(config: Config, apk_path: T, out_path: T, jar_path: T) -> Arc<Self>
     where
         T: AsRef<Path>,
     {
@@ -60,7 +61,25 @@ impl Web2app {
         })
     }
 
-    pub async fn decode(self: Arc<Self>) -> Result<()> {
+    pub async fn run(self: Arc<Self>) -> Result<()> {
+        self.clone().decode().await?;
+        let mut set = JoinSet::new();
+        set.spawn(self.clone().change_android_manifest());
+        set.spawn(self.clone().change_folders_name());
+        set.spawn(self.clone().change_name_string_xml());
+        set.spawn(self.clone().move_resourses());
+        set.spawn(self.clone().create_gridinat_colors());
+        while let Some(res) = set.join_next().await {
+            res??;
+        }
+        self.encode().await?;
+        self.alignzip().await?;
+        self.sign_apk().await?;
+
+        Ok(())
+    }
+
+    async fn decode(self: Arc<Self>) -> Result<()> {
         let args = [
             "-jar",
             "apktool.jar",
@@ -71,26 +90,19 @@ impl Web2app {
             "-f",
         ];
 
-        // run_java_command(&args, &self.jar_path, move |line, _| {
-        //     Box::pin(async move {
-        //         info!("{}", &line);
-        //         Ok::<(), anyhow::Error>(())
-        //     })
-        // })
-        // .await?;
-        // self.change_android_manifest().await?;
-        // self.change_folders_name().await.unwrap();
-        // self.change_name_string_xml().await.unwrap();
-        // self.move_images_and_logo().await.unwrap();
-        // self.encode().await?;
-        // self.alignzip().await?;
-        // self.sign_apk().await?;
+        run_java_command(&args, &self.jar_path, move |line, _| {
+            Box::pin(async move {
+                info!("{}", &line);
+                Ok::<(), anyhow::Error>(())
+            })
+        })
+        .await?;
         info!("{:?}", self.gen_assetis_link().await?);
 
         Ok(())
     }
 
-    async fn change_android_manifest(&self) -> Result<()> {
+    async fn change_android_manifest(self: Arc<Self>) -> Result<()> {
         let mut manifest = File::options()
             .write(true)
             .read(true)
@@ -113,7 +125,7 @@ impl Web2app {
         Ok(())
     }
 
-    async fn change_folders_name(&self) -> Result<()> {
+    async fn change_folders_name(self: Arc<Self>) -> Result<()> {
         let mut set = JoinSet::new();
         let path = Arc::new(self.out_path.to_owned());
         let name = Arc::new(self.config.name.to_owned());
@@ -197,7 +209,7 @@ impl Web2app {
         Ok(())
     }
 
-    async fn change_name_string_xml(&self) -> Result<()> {
+    async fn change_name_string_xml(self: Arc<Self>) -> Result<()> {
         let mut file = File::options()
             .write(true)
             .read(true)
@@ -299,58 +311,22 @@ impl Web2app {
         Ok(())
     }
 
-    async fn replce_new_setting(&self) -> Result<()> {
-        let mut file = File::options()
-            .write(true)
-            .truncate(true)
-            .create(true)
-            .open(PathBuf::from(self.out_path.join("res/raw/setting.json")))
-            .await?;
-        file.write_all(serde_json::to_string(&self.config.app_setting)?.as_bytes())
-            .await?;
-        Ok(())
-    }
-
-    pub async fn check_java(&self) -> Result<Option<f32>> {
-        let mut is_java = None;
-        run_java_command(&["-version"], &self.jar_path, |f, _| {
-            if is_java == None
-                && (f.starts_with("java version") || f.starts_with("openjdk version"))
-            {
-                is_java = Some(
-                    f.as_str()[f.find("\"").unwrap()..f.len() - 1]
-                        .parse::<f32>()
-                        .unwrap(),
-                );
-            }
-            Box::pin(async {})
-        })
-        .await?;
-        Ok(is_java)
-    }
-
-    async fn move_images_and_logo(&self) -> Result<()> {
-        let dest = Arc::new(self.out_path.join("res/drawable"));
-        fs::copy(
-            &self.config.icon_path,
-            dest.join(&format!(
-                "logo.{}",
-                self.config
-                    .icon_path
-                    .extension()
-                    .context("")?
-                    .to_str()
-                    .context("")?
-            )),
-        )
-        .await?;
-        futures_util::stream::iter(self.config.images_path.iter())
+    async fn move_resourses(self: Arc<Self>) -> Result<()> {
+        let dest = Arc::new(self.out_path.join("res"));
+        futures_util::stream::iter(self.config.paths.iter())
             .for_each(|f| {
                 let dest = dest.clone();
                 async move {
-                    fs::copy(f, dest.join(f.file_name().unwrap()))
-                        .await
-                        .unwrap();
+                    fs::copy(
+                        &f.path,
+                        if f.name.ends_with("png") || f.name.ends_with("jpg") {
+                            dest.join("drawable").join(&f.name)
+                        } else {
+                            dest.join("raw").join(&f.name)
+                        },
+                    )
+                    .await
+                    .unwrap();
                 }
             })
             .await;
@@ -381,6 +357,108 @@ impl Web2app {
             })
         })
         .await?;
+        Ok(())
+    }
+
+    async fn create_gridinat_colors(self: Arc<Self>) -> Result<()> {
+        let extract_values = |css_gridaint: &str| -> (String, Vec<String>) {
+            let mut count = 0;
+            let splited = css_gridaint
+                .char_indices()
+                .skip(16)
+                .take_while(|f| {
+                    if f.1 == ')' {
+                        if count == 2 {
+                            false
+                        } else {
+                            count += 1;
+                            true
+                        }
+                    } else {
+                        true
+                    }
+                })
+                .map(|f| f.1)
+                .collect::<String>();
+            let mut splited = splited.split(",");
+            let kind = splited.nth(0).unwrap();
+            let rest = splited.collect::<String>();
+
+            let colors = rest
+                .splitn(2, "%")
+                .map(|text| {
+                    println!("{:?}", text);
+                    text.char_indices()
+                        .skip_while(|f| f.1 != '(')
+                        .skip(1)
+                        .take_while(|f| f.1 != ')')
+                        .map(|f| f.1)
+                        .collect::<String>()
+                })
+                .map(|f| {
+                    let rgba_vec = f.split(" ").map(|f| f.parse().unwrap()).collect::<Vec<_>>();
+                    Rgb::from(rgba_vec[0], rgba_vec[1], rgba_vec[2]).to_css_hex_string()
+                })
+                .collect::<Vec<String>>();
+            (kind.replace("deg", ""), colors)
+        };
+
+        let replace_file = |path: PathBuf, str: String| async move {
+            let gir = extract_values(&str);
+            let mut file = File::options().write(true).read(true).open(path).await?;
+            let mut gridaint = String::new();
+            file.read_to_string(&mut gridaint).await?;
+            file.rewind().await?;
+            let kind_replace = (
+                if gir.0.parse::<u32>().is_ok() {
+                    "315"
+                } else {
+                    "linear"
+                },
+                gir.0
+                    .parse::<u32>()
+                    .map_or_else(|_| "radial".to_owned(), |f| f.to_string()),
+            );
+            file.write_all(
+                &gridaint
+                    .replace(kind_replace.0, &kind_replace.1)
+                    .replace("#4568DC", &gir.1[0])
+                    .replace("#B06AB3", &gir.1[1])
+                    .as_bytes(),
+            )
+            .await?;
+            Ok::<(), anyhow::Error>(())
+        };
+
+        if self.config.app_setting.splash_screen.type_field == 3 {
+            replace_file(
+                self.out_path.join("drawable/bg_gradient_splash.xml"),
+                self.config
+                    .app_setting
+                    .splash_screen
+                    .splash_screen_g_c
+                    .clone()
+                    .or(Some("linear-gradient(106deg, rgba(235, 65, 101, 1) 0%, rgba(207, 147, 217, 1) 99%)".to_owned())).unwrap(),
+            )
+            .await?;
+        }
+
+        if self
+            .config
+            .app_setting
+            .sidebar_menu
+            .sidebar_menu_header
+            .type_field
+            == 1
+        {
+            replace_file(
+                self.out_path.join("drawable/bg_gradient_menu_header.xml"),
+                    self.config.app_setting.sidebar_menu.sidebar_menu_header.color
+                    .clone()
+                    .or(Some("linear-gradient(106deg, rgba(235, 65, 101, 1) 0%, rgba(207, 147, 217, 1) 99%)".to_owned())).unwrap(),
+            )
+            .await?;
+        }
         Ok(())
     }
 
@@ -483,6 +561,22 @@ impl Web2app {
     }
 }
 
+pub async fn check_java(jar_path: &Path) -> Result<Option<f32>> {
+    let mut is_java = None;
+    run_java_command(&["-version"], &jar_path, |f, _| {
+        if is_java == None && (f.starts_with("java version") || f.starts_with("openjdk version")) {
+            is_java = Some(
+                f.as_str()[f.find("\"").unwrap()..f.len() - 1]
+                    .parse::<f32>()
+                    .unwrap(),
+            );
+        }
+        Box::pin(async {})
+    })
+    .await?;
+    Ok(is_java)
+}
+
 async fn run_java_command<T, F>(args: &[&str], working_dir: &Path, mut new_line: F) -> Result<()>
 where
     F: for<'a> FnMut(String, &'a mut ChildStdin) -> Pin<Box<dyn Future<Output = T> + Send + 'a>>,
@@ -575,16 +669,12 @@ async fn find_java() -> Result<PathBuf> {
 
 #[cfg(test)]
 mod tests {
-    use crate::convert::{web2app::Web2app, Setting};
+    use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
+    use colors_transform::Rgb;
     use flexi_logger::{AdaptiveFormat, Logger};
-    use log::info;
-    use std::{
-        fs::{create_dir_all, remove_dir},
-        path::PathBuf,
-        str::FromStr,
-        sync::Once,
-    };
+    use serde_json::from_str;
+    use std::{path::PathBuf, sync::Once};
 
     static INIT: Once = Once::new();
 
@@ -601,100 +691,70 @@ mod tests {
 
     #[tokio::test]
     async fn gen_key() {
-        setup();
-        let we = Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                package_name: "asd".into(),
-                icon_path: "jksd".into(),
-                app_setting: Setting {
-                    ..Default::default()
-                },
-                images_path: vec![],
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "./",
-        )
-        .await;
+        // setup();
+        // Web2app::new(
+        //     super::Config {
+        //         name: "sdaf".into(),
+        //         package_name: "asd".into(),
+        //         icon_path: "jksd".into(),
+        //         app_setting: AppSetting {
+        //             ..Default::default()
+        //         },
+        //     },
+        //     "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
+        //     "/home/arthur/projects/web2app/src-tauri/out.apk",
+        //     "./",
+        // )
+        // .await;
         // info!("{:?}", we.gen_keys().await.unwrap());
     }
 
     #[tokio::test]
-    async fn check_java() {
-        setup();
-        let we = Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                package_name: "asd".into(),
-                icon_path: "jksd".into(),
-                images_path: vec![],
-                app_setting: Setting {
-                    ..Default::default()
-                },
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "./",
-        )
-        .await;
-        // BUG: somehow this is always fail
-        assert!(
-            we.check_java()
-                .await
-                .expect("JAVA NEED TO BE INSTALLED")
-                .is_some()
-                || true
-        )
-    }
+    async fn testtt() -> Result<()> {
+        let extract_values = |css_gridaint: String| -> (String, Vec<String>) {
+            let mut count = 0;
+            let splited = css_gridaint
+                .char_indices()
+                .skip(16)
+                .take_while(|f| {
+                    if f.1 == ')' {
+                        if count == 2 {
+                            false
+                        } else {
+                            count += 1;
+                            true
+                        }
+                    } else {
+                        true
+                    }
+                })
+                .map(|f| f.1)
+                .collect::<String>();
+            let mut splited = splited.split(",");
+            let kind = splited.nth(0).unwrap();
+            let rest = splited.collect::<String>();
 
-    #[tokio::test]
-    async fn write_xml() -> Result<()> {
-        setup();
-        create_dir_all(PathBuf::from_str("./temp/res/xml/").unwrap()).unwrap();
-        Web2app::new(
-            super::Config {
-                name: "sdaf".into(),
-                images_path: vec![],
-                package_name: "asd".into(),
-                icon_path: "jksd".into(),
-                app_setting: Setting {
-                    ..Default::default()
-                },
-            },
-            "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-            "/home/arthur/projects/web2app/src-tauri/out.apk",
-            "./",
-        )
-        .await
-        .replce_new_setting()
-        .await?;
-        remove_dir(PathBuf::from_str("./temp/res/raw/").unwrap()).unwrap();
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn sign_apk() -> Result<()> {
-        setup();
-        let d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        Web2app::new(
-            super::Config {
-                name: "giigle".into(),
-                images_path: vec![],
-                package_name: "com.here.we.go".into(),
-                icon_path: "/home/arthur/Desktop/packages/app/src-tauri/icons/32x32.png".into(),
-                app_setting: Setting {
-                    ..Default::default()
-                },
-            },
-            d.join("../AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk")
-                .canonicalize()?,
-            d.join("out.apk"),
-            d.join("resources/ApkRenamer/"),
-        )
-        .await
-        .sign_apk()
-        .await?;
+            let colors = rest
+                .splitn(2, "%")
+                .map(|text| {
+                    println!("{:?}", text);
+                    text.char_indices()
+                        .skip_while(|f| f.1 != '(')
+                        .skip(1)
+                        .take_while(|f| f.1 != ')')
+                        .map(|f| f.1)
+                        .collect::<String>()
+                })
+                .map(|f| {
+                    let rgba_vec = f
+                        .split(" ")
+                        .map(|f| from_str::<f32>(f).unwrap())
+                        .collect::<Vec<_>>();
+                    Rgb::from(rgba_vec[0], rgba_vec[1], rgba_vec[2]).to_css_hex_string()
+                })
+                .collect::<Vec<String>>();
+            (kind.into(), colors)
+        };
 
         Ok(())
     }
@@ -706,12 +766,12 @@ mod tests {
         Web2app::new(
             super::Config {
                 name: "giigle".into(),
-                images_path: vec![],
                 package_name: "com.here.we.go".into(),
                 icon_path: "/home/arthur/Desktop/packages/app/src-tauri/icons/128x128.png".into(),
-                app_setting: Setting {
+                app_setting: AppSetting {
                     ..Default::default()
                 },
+                paths: vec![],
             },
             d.join("../AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk")
                 .canonicalize()?,
@@ -719,7 +779,7 @@ mod tests {
             d.join("resources/"),
         )
         .await
-        .decode()
+        .run()
         .await?;
 
         Ok(())

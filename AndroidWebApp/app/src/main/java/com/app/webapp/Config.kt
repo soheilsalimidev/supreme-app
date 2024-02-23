@@ -1,5 +1,5 @@
 package com.app.webapp
-//<?xml version="1.0" encoding="utf-8"?>
+/* <?xml version="1.0" encoding="utf-8"?>
 //<resources>
 //    <item name="site_url" type="string">www.google.com</item>
 //    <item name="aboutUs" type="string">aboutUSTEXT</item>
@@ -69,88 +69,10 @@ package com.app.webapp
 //<!--    if you need it write  "true" if not write "false"-->
 //    <item name="floating_action_button_menu" type="integer">1</item>
 //</resources>
-
-import android.annotation.SuppressLint
-import android.content.Context
-import kotlinx.serialization.json.Json
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.Reader
-
-
-open class Config(private val context: Context) {
-
-    public var configType: dataType;
-    @kotlinx.serialization.Serializable
-    data class dataType(
-        val admob: Int,
-        val admob_banner: Int,
-        val cache_mode: Int,
-        val floating_action_button_menu: Int,
-        val no_internet_layout: Int,
-        val sidebar_menu: Int,
-        val sidebar_menu_footer_mode: Int,
-        val sidebar_menu_header_color: Int,
-        val sidebar_menu_header_mode: Int,
-        val site_url: String,
-        val splash_screen: Int,
-        val splash_screen_g_c: Int,
-        val swipe_refresh: Int,
-        val toolbar: Int,
-        val toolbar_custom_icon: Pair<String , String>? = null,
-        val about_us: String? = null,
-        val item_menu: List<MenuItem>,
-        val item_fab:List<MenuItem>,
-        val intro_pages: List<IntroPage>,
-        val introPage: Boolean
-    )
-    @kotlinx.serialization.Serializable
-data class MenuItem(
-    val Kind: Int? = null,
-    val Pair: Pair<String,String>? = null
-)
-    @kotlinx.serialization.Serializable
-data class IntroPage(
-    val background: Int,
-    val description: String,
-    val image_name: String,
-    val title: String
-) {
-    fun background_grident(): Int {
-        return when (this.background) {
-            1 -> R.drawable.bg_gradient_slide1
-            2 -> R.drawable.bg_gradient_slide2
-            3 -> R.drawable.bg_gradient_slide3
-            4 -> R.drawable.bg_gradient_slide4
-            else -> R.drawable.bg_gradient_slide5
-        }
-    }
-}
-
-    init {
-       // val gson = Gson()
-        val raw: InputStream = context.resources.openRawResource(R.raw.setting)
-        val rd: Reader = BufferedReader(InputStreamReader(raw))
-        configType = Json{
-            ignoreUnknownKeys = true
-        }.decodeFromString(rd.readText())
-        rd.close()
-    }
-
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        @Volatile
-        private var INSTANCE: Config? = null
-        fun getInstance(context: Context): Config =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Config(context).also { INSTANCE = it }
-            }
-        /*
-    intro Page
-    if you need it write "true" if not write "false"
- */
+/*
+intro Page
+if you need it write "true" if not write "false"
+*/
 
 //        const val introPage: Boolean = false
 
@@ -212,8 +134,174 @@ data class IntroPage(
 //       */
 //        val itemFab =
 //            arrayListOf(1, 2, Pair("FAG", "https://github.com/nambicompany/expandable-fab"))
-//
+*/
 
+import android.annotation.SuppressLint
+import android.content.Context
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.json.Json
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.Reader
+
+
+open class Config(context: Context) {
+
+    var configType: DataType;
+
+    @kotlinx.serialization.Serializable
+    data class DataType(
+        @SerialName("site_url")
+        val siteUrl: String,
+        @SerialName("splash_screen")
+        val splashScreen: SplashScreen,
+        @SerialName("cache_mode")
+        val cacheMode: Int,
+        @SerialName("no_internet_layout")
+        val noInternetLayout: NoInternetLayout,
+        val toolbar: Toolbar,
+        @SerialName("toolbar_custom_icon")
+        val toolbarCustomIcon: ToolbarCustomIcon,
+        @SerialName("swipe_refresh")
+        val swipeRefresh: Boolean,
+        @SerialName("sidebar_menu")
+        val sidebarMenu: SidebarMenu,
+        val admob: Int,
+        @SerialName("admob_banner")
+        val admobBanner: Int,
+        @SerialName("floating_action_button")
+        val floatingActionButton: FloatingActionButton,
+        val introPage: IntroPage,
+        val aboutUs:AboutUs
+    )
+
+    @kotlinx.serialization.Serializable
+    data class AboutUs(
+        val enable: Boolean,
+
+        val text: String?,
+    )
+
+    @kotlinx.serialization.Serializable
+    data class SplashScreen(
+        val type: Int,
+        @SerialName("splash_screen_g_c")
+        val splashScreenGC: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class NoInternetLayout(
+        val type: Int,
+        val lottieFile: String?,
+        val image: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class Toolbar(
+        val type: Int,
+        val text: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class ToolbarCustomIcon(
+        val enable: Boolean,
+        val first: String?,
+        val second: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class SidebarMenu(
+        val enable: Boolean,
+        @SerialName("sidebar_menu_header")
+        val sidebarMenuHeader: SidebarMenuHeader,
+        @SerialName("sidebar_menu_footer")
+        val sidebarMenuFooter: SidebarMenuFooter,
+        @SerialName("item_menu")
+        val itemMenu: List<ItemMenu>,
+    )
+    @kotlinx.serialization.Serializable
+    data class SidebarMenuHeader(
+        val type: Int,
+        val color: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class SidebarMenuFooter(
+        val type: Int,
+        val text: String?,
+    )
+    @kotlinx.serialization.Serializable
+    data class ItemMenu(
+        @SerialName("Kind")
+        val kind: Int?,
+        @SerialName("Pair")
+        val pair: Pair?,
+    )
+    @kotlinx.serialization.Serializable
+    data class Pair(
+        val first: String,
+        val second: String,
+    )
+    @kotlinx.serialization.Serializable
+    data class FloatingActionButton(
+        val enable: Boolean,
+        @SerialName("item_fab")
+        val itemFab: List<ItemFab>,
+    )
+    @kotlinx.serialization.Serializable
+    data class ItemFab(
+        @SerialName("Kind")
+        val kind: Int?,
+        @SerialName("Pair")
+        val pair: Pair2?,
+    )
+    @kotlinx.serialization.Serializable
+    data class Pair2(
+        val first: String,
+        val second: String,
+    )
+
+    @kotlinx.serialization.Serializable
+    data class IntroPage(
+        val enable: Boolean,
+        val pages: List<IntroPages?>,
+    ) {
+
+    }
+
+
+    @kotlinx.serialization.Serializable
+data class IntroPages(
+    val background: Int,
+    val description: String,
+    val image_name: String,
+    val title: String
+) {
+    fun background_grident(): Int {
+        return when (this.background) {
+            1 -> R.drawable.bg_gradient_slide1
+            2 -> R.drawable.bg_gradient_slide2
+            3 -> R.drawable.bg_gradient_slide3
+            4 -> R.drawable.bg_gradient_slide4
+            else -> R.drawable.bg_gradient_slide5
+        }
+    }
+}
+
+    init {
+        val raw: InputStream = context.resources.openRawResource(R.raw.setting)
+        val rd: Reader = BufferedReader(InputStreamReader(raw))
+        configType = Json{
+            ignoreUnknownKeys = true
+        }.decodeFromString(rd.readText())
+        rd.close()
+    }
+
+
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var INSTANCE: Config? = null
+        fun getInstance(context: Context): Config =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Config(context).also { INSTANCE = it }
+            }
     }
 
 }

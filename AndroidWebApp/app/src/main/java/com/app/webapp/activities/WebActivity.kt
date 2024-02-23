@@ -44,14 +44,20 @@ class WebActivity : AppCompatActivity() {
     private var uploadMessage: ValueCallback<Array<Uri?>?>? = null
 //    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val data: Intent = result.data!!
-        if (uploadMessage != null) {
-            uploadMessage!!.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result.resultCode, data))
-            uploadMessage = null
+    val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data: Intent = result.data!!
+            if (uploadMessage != null) {
+                uploadMessage!!.onReceiveValue(
+                    WebChromeClient.FileChooserParams.parseResult(
+                        result.resultCode,
+                        data
+                    )
+                )
+                uploadMessage = null
+            }
         }
-    }
-    private lateinit var config:Config
+    private lateinit var config: Config
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWebBinding.inflate(layoutInflater)
@@ -59,7 +65,7 @@ class WebActivity : AppCompatActivity() {
         config = Config.getInstance(this);
         val data: String? = intent?.data?.host
         Log.i("TAG", "onCreate: $data")
-        binding.webView.loadUrl((data ?: config.configType.site_url).toString())
+        binding.webView.loadUrl((data ?: config.configType.siteUrl).toString())
 
         layoutSetting()
 
@@ -101,15 +107,15 @@ class WebActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun layoutSetting() {
 
-        if (config.configType.toolbar == 1) {
+        if (config.configType.toolbar.type == 1) {
 //            binding.topAppBar.visibility = View.VISIBLE
 //            setSupportActionBar(binding.toolbar)
         } else binding.customToolbar.visibility = View.VISIBLE
 
 
-        if (config.configType.sidebar_menu == 1) menuSetup()
+        if (config.configType.sidebarMenu.enable) menuSetup()
 
-        if (config.configType.swipe_refresh  == 0) binding.swipeRefreshLayout.isEnabled = false
+        if (config.configType.swipeRefresh) binding.swipeRefreshLayout.isEnabled = false
         else binding.swipeRefreshLayout.setOnRefreshListener {
             binding.webView.reload()
         }
@@ -121,16 +127,17 @@ class WebActivity : AppCompatActivity() {
 //            }
 //        }
 
-        if (config.configType.floating_action_button_menu == 1) {
+        if (config.configType.floatingActionButton.enable) {
             binding.fabLayout.visibility = View.VISIBLE
-            config.configType.item_fab.forEach { item ->
+            config.configType.floatingActionButton.itemFab.forEach { item ->
                 val fab = FabOption(this)
                 fab.label.translationXPx = (-100).toFloat()
-                when (item.Kind) {
+                when (item.kind) {
                     1 -> {
                         fab.label.labelText = getString(R.string.home_page)
                         fab.fabOptionIcon = getDrawable(R.drawable.ic_baseline_home_24)
                     }
+
                     2 -> {
                         fab.label.labelText = getString(R.string.about_us)
                         fab.fabOptionIcon = getDrawable(R.drawable.ic_baseline_groups_24)
@@ -138,6 +145,7 @@ class WebActivity : AppCompatActivity() {
                             startActivity(Intent(this@WebActivity, AboutUsActivity::class.java))
                         }
                     }
+
                     3 -> {
                         fab.label.labelText = getString(R.string.rate_us)
                         fab.fabOptionIcon = getDrawable(R.drawable.ic_baseline_star_rate_24)
@@ -148,23 +156,33 @@ class WebActivity : AppCompatActivity() {
                             try {
                                 startActivity(goToMarket)
                             } catch (e: ActivityNotFoundException) {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
+                                startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                                    )
+                                )
                             }
                         }
                     }
+
                     4 -> {
                         fab.label.labelText = getString(R.string.share_app)
                         fab.fabOptionIcon = getDrawable(R.drawable.ic_baseline_share_24)
                         fab.setOnClickListener {
                             val sendIntent = Intent()
                             sendIntent.action = Intent.ACTION_SEND
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.checkOutTheApp) + config.configType.site_url)
+                            sendIntent.putExtra(
+                                Intent.EXTRA_TEXT,
+                                getString(R.string.checkOutTheApp) + config.configType.siteUrl
+                            )
                             sendIntent.type = "text/plain"
                             startActivity(sendIntent)
                         }
                     }
+
                     else -> {
-                        val pair = item.Pair
+                        val pair = item.pair
                         fab.label.labelText = pair?.first
                         fab.fabOptionIcon = getDrawable(R.drawable.ic_baseline_extension_24)
                         fab.setOnClickListener {
@@ -180,33 +198,63 @@ class WebActivity : AppCompatActivity() {
 
     private fun menuSetup() {
 
-        config.configType.item_menu.forEach { item ->
-            when (item.Kind) {
+        config.configType.sidebarMenu.itemMenu.forEach { item ->
+            when (item.kind) {
                 1 -> binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                    nameRes = R.string.home_page; identifier = (item.Kind).toLong(); iconRes = R.drawable.ic_baseline_home_24
-                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                    nameRes = R.string.home_page; identifier = (item.kind).toLong(); iconRes =
+                    R.drawable.ic_baseline_home_24
+                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                        this@WebActivity,
+                        R.font.iransansmobile
+                    ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
+
                 2 -> binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                    nameRes = R.string.about_us; identifier = (item .Kind).toLong(); iconRes = R.drawable.ic_baseline_groups_24
-                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                    nameRes = R.string.about_us; identifier = (item.kind).toLong(); iconRes =
+                    R.drawable.ic_baseline_groups_24
+                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                        this@WebActivity,
+                        R.font.iransansmobile
+                    ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
+
                 3 -> binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                    nameRes = R.string.rate_us; identifier = (item .Kind).toLong(); iconRes = R.drawable.ic_baseline_star_rate_24
-                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                    nameRes = R.string.rate_us; identifier = (item.kind).toLong(); iconRes =
+                    R.drawable.ic_baseline_star_rate_24
+                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                        this@WebActivity,
+                        R.font.iransansmobile
+                    ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
+
                 4 -> binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                    nameRes = R.string.share_app; identifier = (item.Kind).toLong(); iconRes = R.drawable.ic_baseline_share_24
-                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                    nameRes = R.string.share_app; identifier = (item.kind).toLong(); iconRes =
+                    R.drawable.ic_baseline_share_24
+                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                        this@WebActivity,
+                        R.font.iransansmobile
+                    ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
+
                 5 -> binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                    nameRes = R.string.exit; identifier = (item .Kind).toLong(); iconRes = R.drawable.ic_baseline_exit_to_app_24
-                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                    nameRes = R.string.exit; identifier = (item.kind).toLong(); iconRes =
+                    R.drawable.ic_baseline_exit_to_app_24
+                    typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                        this@WebActivity,
+                        R.font.iransansmobile
+                    ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
+
                 else -> {
-                    val pair = item.Pair
+                    val pair = item.pair
                     binding.slider.itemAdapter.add(PrimaryDrawerItem().apply {
-                        nameText = pair?.first.toString(); iconRes = R.drawable.ic_baseline_extension_24
-                        typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+                        nameText = pair?.first.toString(); iconRes =
+                        R.drawable.ic_baseline_extension_24
+                        typeface =
+                            if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                                this@WebActivity,
+                                R.font.iransansmobile
+                            ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                         onDrawerItemClickListener = { _, _, _ ->
                             binding.webView.loadUrl(pair?.second.toString())
                             true
@@ -218,22 +266,23 @@ class WebActivity : AppCompatActivity() {
 
         binding.slider.selectedItemIdentifier = 1
 
-        if (config.configType.sidebar_menu_header_mode == 1) {
-            val sliderHeaderBinding: SliderHeaderBinding = SliderHeaderBinding.inflate(layoutInflater)
-            sliderHeaderBinding.background.setBackgroundResource(when (config.configType.sidebar_menu_header_color) {
-                1 -> R.drawable.bg_gradient_slide1
-                2 -> R.drawable.bg_gradient_slide2
-                3 -> R.drawable.bg_gradient_slide3
-                4 -> R.drawable.bg_gradient_slide4
-                else -> R.drawable.bg_gradient_slide5
-            })
+        if (config.configType.sidebarMenu.sidebarMenuHeader.type == 1) {
+            val sliderHeaderBinding: SliderHeaderBinding =
+                SliderHeaderBinding.inflate(layoutInflater)
+            sliderHeaderBinding.background.setBackgroundResource(
+                R.drawable.bg_gradient_menu_header
+            )
             binding.slider.headerView = sliderHeaderBinding.root
         }
 
-        if (config.configType.sidebar_menu_footer_mode == 1) binding.slider.addStickyFooterItem(PrimaryDrawerItem().apply {
-            nameRes = R.string.menu_footer_text
-            typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(this@WebActivity, R.font.iransansmobile) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
-        })
+        if (config.configType.sidebarMenu.sidebarMenuFooter.type == 1) binding.slider.addStickyFooterItem(
+            PrimaryDrawerItem().apply {
+                nameRes = R.string.menu_footer_text
+                typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
+                    this@WebActivity,
+                    R.font.iransansmobile
+                ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
+            })
         binding.slider.onDrawerItemClickListener = { _, _, itemPosition ->
             when (itemPosition) {
                 2 -> startActivity(Intent(this@WebActivity, AboutUsActivity::class.java))
@@ -244,13 +293,22 @@ class WebActivity : AppCompatActivity() {
                     try {
                         startActivity(goToMarket)
                     } catch (e: ActivityNotFoundException) {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                            )
+                        )
                     }
                 }
+
                 4 -> {
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.checkOutTheApp) + config.configType.site_url)
+                    sendIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        getString(R.string.checkOutTheApp) + config.configType.siteUrl
+                    )
                     sendIntent.type = "text/plain"
                     startActivity(sendIntent)
                 }
@@ -278,7 +336,8 @@ class WebActivity : AppCompatActivity() {
         webSettings.displayZoomControls = false
         webSettings.useWideViewPort = true
         webSettings.javaScriptEnabled = true
-        webSettings.cacheMode = if (config.configType.cache_mode == 1) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_CACHE_ELSE_NETWORK
+        webSettings.cacheMode =
+            if (config.configType.cacheMode == 1) WebSettings.LOAD_DEFAULT else WebSettings.LOAD_CACHE_ELSE_NETWORK
         webSettings.setGeolocationEnabled(true)
         webSettings.allowFileAccess = true
         webSettings.allowContentAccess = true
@@ -298,7 +357,11 @@ class WebActivity : AppCompatActivity() {
     private fun handleWebChromeClient() {
         binding.webView.webChromeClient = object : WebChromeClient() {
 
-            override fun onShowFileChooser(mWebView: WebView?, filePathCallback: ValueCallback<Array<Uri?>?>, fileChooserParams: FileChooserParams): Boolean {
+            override fun onShowFileChooser(
+                mWebView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri?>?>,
+                fileChooserParams: FileChooserParams
+            ): Boolean {
                 if (uploadMessage != null) {
                     uploadMessage!!.onReceiveValue(null)
                     uploadMessage = null
@@ -316,11 +379,19 @@ class WebActivity : AppCompatActivity() {
                 Log.i("TAG", "onPermissionRequest: " + request.toString())
             }
 
-            override fun onGeolocationPermissionsShowPrompt(origin: String?, callback: GeolocationPermissions.Callback) {
+            override fun onGeolocationPermissionsShowPrompt(
+                origin: String?,
+                callback: GeolocationPermissions.Callback
+            ) {
                 callback.invoke(origin, true, false)
             }
 
-            override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+            override fun onJsAlert(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
                 MaterialDialog(this@WebActivity).show {
                     title(text = getString(R.string.app_name) + " " + getString(R.string.says) + ":")
                     message(text = message)
@@ -345,18 +416,41 @@ class WebActivity : AppCompatActivity() {
     }
 
     private fun locationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission_group.LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            1
+        )
     }
 
     private fun cameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 2)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 2)
     }
 
     private fun microphonePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 3)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        ) ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 3)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) MaterialDialog(this).show {
             title(R.string.missing_permission)
@@ -366,14 +460,9 @@ class WebActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        //if (config.configType.toolbar_custom_icon != null && config.configType.toolbar == 1) menu?.add(0, 0, 0, "")?.setIcon(config.configType.toolbar_custom_icon.first)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+//TODO:add this
+//        if (config.configType.toolbarCustomIcon.enable) menu?.add(0, 0, 0, "")?.setIcon(config.configType.toolbarCustomIcon.first)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       // if (config.configType.toolbar_custom_icon != null) binding.webView.loadUrl(Config.toolbar_custom_icon.second)
-        return super.onOptionsItemSelected(item)
     }
 
 }

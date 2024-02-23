@@ -16,16 +16,25 @@ class IntroActivity : AppIntro() {
         super.onCreate(savedInstanceState)
 
         var i = 0
-        Config.getInstance(this).configType.intro_pages.forEach { item ->
+        Config.getInstance(this).configType.introPage.pages.forEach { item ->
             i++
+            if (item != null) {
+                val resId = this.resources.getIdentifier(
+                    item.image_name,
+                    "drawable",
+                    this.packageName
+                )
+                    .toLong()
 
-            val resId = this.resources.getIdentifier(
-                item.image_name,
-                "drawable",
-                this.packageName
-            )
-                .toLong()
-            addSlide(AppIntroFragment.newInstance(title = item.title, description = item.description, imageDrawable = resId.toInt(), backgroundDrawable = item.background_grident()))
+                addSlide(
+                    AppIntroFragment.newInstance(
+                        title = item.title,
+                        description = item.description,
+                        imageDrawable = resId.toInt(),
+                        backgroundDrawable = item.background_grident()
+                    )
+                )
+            }
         }
 
 
@@ -35,7 +44,13 @@ class IntroActivity : AppIntro() {
             apply()
         }
 
-        setTransformer(AppIntroPageTransformerType.Parallax(titleParallaxFactor = 1.0, imageParallaxFactor = -1.0, descriptionParallaxFactor = 2.0))
+        setTransformer(
+            AppIntroPageTransformerType.Parallax(
+                titleParallaxFactor = 1.0,
+                imageParallaxFactor = -1.0,
+                descriptionParallaxFactor = 2.0
+            )
+        )
 
     }
 

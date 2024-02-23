@@ -32,6 +32,7 @@
 
     <fileSelect
       label="App icon"
+      key="logo.png"
       v-model="appInfo.icon_path"
       :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
       :filterCondition="

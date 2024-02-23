@@ -1,10 +1,20 @@
 <template>
   <div class="grid grid-cols-2 gap-4">
     <div
-      v-for="(item, index) in modelValue.toSorted((item) => (item.Kind ? 0 : 1))"
+      v-for="(item, index) in modelValue.toSorted((item) =>
+        item.Kind ? 0 : 1,
+      )"
       :key="index"
     >
       <div v-if="item.Pair">
+        <textInput
+          label="name of item"
+          placeholder="open the website"
+          labelClass="dark:!bg-slate-700"
+          inputClass="dark:!bg-slate-700"
+          v-model="item.Pair.first"
+        ></textInput>
+
         <textInput
           label="url that should be opened"
           placeholder="mywebsite.com/hereIGo"

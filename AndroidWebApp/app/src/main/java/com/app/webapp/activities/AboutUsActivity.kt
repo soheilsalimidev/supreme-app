@@ -12,7 +12,7 @@ class AboutUsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_us)
         findViewById<TextView>(R.id.version).text = BuildConfig.VERSION_NAME
-        findViewById<TextView>(R.id.aboutText).text = Config(this).configType.about_us.toString()
-
+        findViewById<TextView>(R.id.aboutText).text =
+            if (Config(this).configType.aboutUs.text != null) Config(this).configType.aboutUs.text else ""
     }
 }
