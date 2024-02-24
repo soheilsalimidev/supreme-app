@@ -66,7 +66,7 @@ class MyWebViewClient(private val context: AppCompatActivity) : WebViewClient() 
         binding.noInternet.visibility = VISIBLE
         noInternet = true
         binding.webView.visibility = GONE
-        if (Config(context).configType.no_internet_layout == 1) binding.noInternetLottieView.setImageResource(R.drawable.no_internet) else binding.noInternetLottieView.playAnimation()
+        if (Config(context).configType.noInternetLayout.type == 1) binding.noInternetLottieView.setImageResource(R.drawable.no_internet) else binding.noInternetLottieView.playAnimation()
         binding.tryAgain.setOnClickListener {
             binding.loading.visibility = VISIBLE
             binding.loading.playAnimation()

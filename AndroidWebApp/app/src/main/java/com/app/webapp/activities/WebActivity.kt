@@ -296,7 +296,7 @@ class WebActivity : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                                Uri.parse("http://play.google.com/store/apps/details?id=$123d")
                             )
                         )
                     }

@@ -6,6 +6,7 @@ use futures_util::StreamExt;
 use log::{error, info};
 use passwords::PasswordGenerator;
 use std::env;
+use std::fs::{create_dir, create_dir_all};
 use std::future::Future;
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
@@ -15,6 +16,7 @@ use std::sync::Arc;
 use tokio::fs::{self, File};
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncSeekExt, AsyncWriteExt, BufReader};
 use tokio::process::{ChildStdin, Command};
+use tokio::sync::mpsc;
 use tokio::task::JoinSet;
 
 use super::{Assetlinks, Config, Target};
@@ -31,10 +33,16 @@ pub struct Web2app {
     out_path: PathBuf,
     jar_path: PathBuf,
     keypass: String,
+    sender: mpsc::Sender<String>,
 }
-
 impl Web2app {
-    pub async fn new<T>(config: Config, apk_path: T, out_path: T, jar_path: T) -> Arc<Self>
+    pub async fn new<T>(
+        config: Config,
+        apk_path: T,
+        out_path: T,
+        jar_path: T,
+        app: mpsc::Sender<String>,
+    ) -> Arc<Self>
     where
         T: AsRef<Path>,
     {
@@ -58,10 +66,11 @@ impl Web2app {
             out_path: out_path.as_ref().to_owned(),
             jar_path: jar_path.as_ref().to_owned(),
             keypass,
+            sender: app,
         })
     }
 
-    pub async fn run(self: Arc<Self>) -> Result<()> {
+    pub async fn run(self: Arc<Self>) -> Result<String> {
         self.clone().decode().await?;
         let mut set = JoinSet::new();
         set.spawn(self.clone().change_android_manifest());
@@ -75,8 +84,7 @@ impl Web2app {
         self.encode().await?;
         self.alignzip().await?;
         self.sign_apk().await?;
-
-        Ok(())
+        self.gen_assetis_link().await
     }
 
     async fn decode(self: Arc<Self>) -> Result<()> {
@@ -90,14 +98,16 @@ impl Web2app {
             "-f",
         ];
 
+        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, move |line, _| {
+            let sender = sender.clone();
             Box::pin(async move {
-                info!("{}", &line);
+                let _ = sender.send(format!("{}", &line)).await;
                 Ok::<(), anyhow::Error>(())
             })
         })
         .await?;
-        info!("{:?}", self.gen_assetis_link().await?);
+        let _ = self.sender.send("decoding app finshed".into()).await;
 
         Ok(())
     }
@@ -116,24 +126,32 @@ impl Web2app {
                 &manifest_string
                     .replace(
                         DEFAULT_PACKGENAME,
-                        &format!("{}.{}", DEFAULT_PACKGENAME, self.config.name),
+                        &format!("{}.{}", DEFAULT_PACKGENAME, self.config.name.split_whitespace().collect::<String>()),
                     )
                     .as_bytes(),
             )
             .await?;
-
+        let _ = self
+            .sender
+            .send("changing the Android Manifest".into())
+            .await;
         Ok(())
     }
 
     async fn change_folders_name(self: Arc<Self>) -> Result<()> {
         let mut set = JoinSet::new();
         let path = Arc::new(self.out_path.to_owned());
-        let name = Arc::new(self.config.name.to_owned());
+        let name = Arc::new(
+            self.config
+                .name
+                .split_whitespace()
+                .fold(String::new(), |a, b| a + b),
+        );
         for index in 2..6 {
             let path = path.clone();
             let name = name.clone();
             set.spawn(async move {
-                fs::create_dir(path.join(format!(
+                fs::create_dir_all(path.join(format!(
                     "smali_classes{index}{DEFAULT_PACKGENAME_DIR}/{}",
                     &name
                 )))
@@ -177,7 +195,13 @@ impl Web2app {
         }
 
         while let Some(res) = set.join_next().await {
-            info!("finshed job smali transform, {:?}", res.unwrap().unwrap());
+            let _ = self
+                .sender
+                .send(format!(
+                    "finshed job smali transform, {:?}",
+                    res.unwrap().unwrap()
+                ))
+                .await;
         }
 
         Ok(())
@@ -225,6 +249,8 @@ impl Web2app {
                 .as_bytes(),
         )
         .await?;
+        let _ = self.sender.send("names and strings changed".into()).await;
+
         Ok(())
     }
 
@@ -237,9 +263,11 @@ impl Web2app {
             "-f",
         ];
 
+        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, move |line, _| {
+            let sender = sender.clone();
             Box::pin(async move {
-                info!("{}", &line);
+                let _ = sender.send(line).await;
                 Ok::<(), anyhow::Error>(())
             })
         })
@@ -320,7 +348,9 @@ impl Web2app {
                     fs::copy(
                         &f.path,
                         if f.name.ends_with("png") || f.name.ends_with("jpg") {
-                            dest.join("drawable").join(&f.name)
+                            dest.join("drawable")
+                                .join(&f.name)
+                                .with_extension(PathBuf::from(&f.path).extension().unwrap())
                         } else {
                             dest.join("raw").join(&f.name)
                         },
@@ -330,6 +360,7 @@ impl Web2app {
                 }
             })
             .await;
+        let _ = self.sender.send("finshed moving resources".into()).await;
         Ok(())
     }
 
@@ -337,6 +368,9 @@ impl Web2app {
         let path = self
             .out_path
             .join(format!("dist/{}.keystore", self.config.package_name));
+        if !path.exists() {
+            fs::create_dir_all(&path).await?;
+        }
         self.gen_keys(&path).await?;
         let out_apk_path = self.out_path.join("dist/app-debug-align.apk");
         let args = [
@@ -351,9 +385,11 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
+        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, |line, _| {
+            let sender = sender.clone();
             Box::pin(async move {
-                info!("{}", &line);
+                let _ = sender.send(format!("{}", &line)).await;
             })
         })
         .await?;
@@ -459,6 +495,8 @@ impl Web2app {
             )
             .await?;
         }
+        let _ = self.sender.send("moving resources".into()).await;
+
         Ok(())
     }
 
@@ -554,7 +592,7 @@ impl Web2app {
         let mut reader = BufReader::new(stdout).lines();
 
         while let Some(line) = reader.next_line().await? {
-            info!("{}", line);
+            let _ = self.sender.send(line).await;
         }
 
         Ok(())
@@ -674,7 +712,10 @@ mod tests {
     use colors_transform::Rgb;
     use flexi_logger::{AdaptiveFormat, Logger};
     use serde_json::from_str;
-    use std::{path::PathBuf, sync::Once};
+    use std::{
+        path::PathBuf,
+        sync::{mpsc, Once},
+    };
 
     static INIT: Once = Once::new();
 
@@ -777,6 +818,7 @@ mod tests {
                 .canonicalize()?,
             d.join("./out"),
             d.join("resources/"),
+            tokio::sync::mpsc::channel(10).0,
         )
         .await
         .run()

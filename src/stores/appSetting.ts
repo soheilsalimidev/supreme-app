@@ -2,12 +2,14 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
 export const useAppSettingStore = defineStore("appSetting", () => {
-  const appInfo = ref<AppInfo>({
-    name: "",
-    package_name: "",
-    icon_path: "",
+  const test: AppInfo = {
+    name: "asdf adsfasd",
+    package_name: "asdf.adsfasd",
+    icon_path: "/home/arthur/Downloads/wallpaper_1.jpg",
     app_setting: {
-      site_url: "",
+      googleService: undefined,
+      site_url:
+        "https://docs.rs/tokio/latest/tokio/sync/mpsc/struct.Sender.html",
       splash_screen: {
         type: 0,
       },
@@ -23,14 +25,25 @@ export const useAppSettingStore = defineStore("appSetting", () => {
       },
       swipe_refresh: false,
       sidebar_menu: {
-        enable: false,
+        enable: true,
         sidebar_menu_header: {
           type: 0,
         },
         sidebar_menu_footer: {
-          type: 0,
+          type: 1,
+          text: "sadfsda",
         },
-        item_menu: [],
+        item_menu: [
+          {
+            Kind: 2,
+          },
+          {
+            Pair: {
+              first: "asdf",
+              second: "sadf",
+            },
+          },
+        ],
       },
       admob: 0,
       admob_banner: 0,
@@ -38,7 +51,6 @@ export const useAppSettingStore = defineStore("appSetting", () => {
         enable: false,
         item_fab: [],
       },
-      googleService: undefined,
       introPage: {
         enable: false,
         pages: [],
@@ -48,8 +60,64 @@ export const useAppSettingStore = defineStore("appSetting", () => {
         text: "",
       },
     },
-    paths: [],
-  });
+    paths: [
+      {
+        path: "/home/arthur/Downloads/wallpaper_1.jpg",
+        name: "logo.png",
+      },
+    ],
+  };
+  const appInfo = ref<AppInfo>(
+    test,
+    //   {
+    //   name: "",
+    //   package_name: "",
+    //   icon_path: "",
+    //   app_setting: {
+    //     site_url: "",
+    //     splash_screen: {
+    //       type: 0,
+    //     },
+    //     cache_mode: 0,
+    //     no_internet_layout: {
+    //       type: 1,
+    //     },
+    //     toolbar: {
+    //       type: 0,
+    //     },
+    //     toolbar_custom_icon: {
+    //       enable: false,
+    //     },
+    //     swipe_refresh: false,
+    //     sidebar_menu: {
+    //       enable: false,
+    //       sidebar_menu_header: {
+    //         type: 0,
+    //       },
+    //       sidebar_menu_footer: {
+    //         type: 0,
+    //       },
+    //       item_menu: [],
+    //     },
+    //     admob: 0,
+    //     admob_banner: 0,
+    //     floating_action_button: {
+    //       enable: false,
+    //       item_fab: [],
+    //     },
+    //     googleService: undefined,
+    //     introPage: {
+    //       enable: false,
+    //       pages: [],
+    //     },
+    //     aboutUs: {
+    //       enable: false,
+    //       text: "",
+    //     },
+    //   },
+    //   paths: [],
+    // }
+  );
 
   watch(appInfo, () => console.log(appInfo.value));
 

@@ -138,13 +138,13 @@ const onDrop = async (files: string[] | null) => {
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 watch(modelValue, () => {
-  const path = appInfo.value.paths.find((path) => path.key === props.key);
+  const path = appInfo.value.paths.find((path) => path.name === props.key);
   if (path) {
-    path.file = modelValue.value ?? "";
+    path.path = modelValue.value ?? "";
   } else {
     appInfo.value.paths.push({
-      key: props.key,
-      file: modelValue.value ?? "",
+      name: props.key,
+      path: modelValue.value ?? "",
     });
   }
 });

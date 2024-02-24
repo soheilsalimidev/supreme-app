@@ -28,17 +28,17 @@ export const useNavigationStore = defineStore("navigation", () => {
     {
       name: "splash screen",
       id: 2,
-      status: "current",
+      status: "complete",
       component: "splashScreeenSetting",
     },
     {
       name: "web page settings",
       id: 3,
-      status: "upcoming",
+      status: "complete",
       component: "webPageSetting",
     },
-    { name: "Step 4", id: 4, status: "upcoming", component: "introPage" },
-    { name: "Step 5", id: 5, status: "upcoming", component: "compile" },
+    { name: "Step 4", id: 4, status: "complete", component: "introPage" },
+    { name: "Step 5", id: 5, status: "current", component: "compile" },
   ]);
 
   const activeComponent = computed(

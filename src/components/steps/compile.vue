@@ -27,6 +27,7 @@ import { ref, unref } from "vue";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
+import { listen } from "@tauri-apps/api/event";
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 const state = ref<"start" | "running" | "finished">("start");
@@ -37,6 +38,10 @@ const startRender = async () => {
     try {
       console.log(JSON.stringify(unref(appInfo)));
       await invoke("render_app", { config: unref(appInfo) });
+
+      await listen("render", (event) => {
+        console.log(event.payload);
+      });
     } catch (error) {
       console.error(error);
     }

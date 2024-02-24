@@ -161,14 +161,6 @@ import { Notification, NotificationGroup } from "notiwind";
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-import { listen } from "@tauri-apps/api/event";
-
-const t = async () => {
-  await listen("logs", (event) => {
-    console.log(event.payload);
-  });
-};
-t().then();
 </script>
 
 <style scoped>
