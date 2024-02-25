@@ -51,12 +51,10 @@ jobs:
         run: pnpm install # Change this to npm, yarn or pnpm.
 
       - name: Build the app
-        env:
-          LD_DEBUG=./src-tauri/resources/lib64/
         uses: tauri-apps/tauri-action@v0
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LD_DEBUG: ./src-tauri/resources/lib64/
         with:
           tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
           releaseName: 'App Name v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
