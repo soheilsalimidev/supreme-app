@@ -42,7 +42,7 @@
       ],
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.soheilsalimi.iapp",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
