@@ -50,11 +50,9 @@ jobs:
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
         run: pnpm install # Change this to npm, yarn or pnpm.
 
-      - name: Move libs
-        if: matrix.platform == 'ubuntu-20.04'
-        run: cp -a ./src-tauri/resources/lib64/. /usr/lib/
-
       - name: Build the app
+        env:
+          LD_DEBUG=./src-tauri/resources/lib64/
         uses: tauri-apps/tauri-action@v0
 
         env:
