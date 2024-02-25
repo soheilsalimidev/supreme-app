@@ -322,11 +322,11 @@ pub struct Config {
     package_name: String,
     icon_path: PathBuf,
     app_setting: AppSetting,
-    paths: Vec<Paths>,
+    pub paths: Vec<Paths>,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
-struct Paths {
-    name: String,
-    path: String,
+pub struct Paths {
+    pub(super) name: String,
+    pub(super) path: String,
 }

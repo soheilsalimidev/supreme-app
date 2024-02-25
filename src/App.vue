@@ -157,10 +157,61 @@
 import LineMdHeart from "~icons/line-md/heart";
 import icon from "@/assets/vue.svg";
 import { useDark, useToggle } from "@vueuse/core";
-import { Notification, NotificationGroup } from "notiwind";
+import { Notification, NotificationGroup, notify } from "notiwind";
+import { useMagicKeys, whenever } from "@vueuse/core";
+import { invoke } from "@tauri-apps/api";
+import { useAppSettingStore } from "@/stores/appSetting";
+import { storeToRefs } from "pinia";
+import { unref } from "vue";
+import { save } from "@tauri-apps/api/dialog";
+
+const { appInfo, savePath } = storeToRefs(useAppSettingStore());
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
+const keys = useMagicKeys();
+
+whenever(keys.Ctrl_s, async () => {
+  try {
+    if (!savePath.value) {
+      const selected = await save({
+        filters: [
+          {
+            name: "iapp",
+            extensions: ["iapp"],
+          },
+        ],
+      });
+      if (!selected) {
+        return;
+      }
+      savePath.value = selected + '.iapp';
+    }
+    await invoke("save_config", {
+      config: unref(appInfo),
+      path: savePath.value,
+    });
+    notify(
+      {
+        group: "generic",
+        title: "settings save",
+        text: "your settings saved in " + savePath.value,
+        type: "info",
+      },
+      3000,
+    );
+  } catch (error) {
+    notify(
+      {
+        group: "generic",
+        title: "settings saving failed",
+        text: "error" + error,
+        type: "warning",
+      },
+      3000,
+    );
+  }
+});
 </script>
 
 <style scoped>

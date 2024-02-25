@@ -1,9 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::{
+    fs::{self, File},
+    io::Write,
+    path::{self, PathBuf},
+};
+
 use flexi_logger::{writers::LogWriter, Logger};
-use tauri::Manager;
+use tauri::{utils::config, Manager};
 use tokio::sync::mpsc;
+use zip::write::FileOptions;
 
 mod convert;
 
@@ -55,7 +62,11 @@ async fn main() -> anyhow::Result<()> {
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![render_app, check_java])
+        .invoke_handler(tauri::generate_handler![
+            render_app,
+            check_java,
+            save_config
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
@@ -64,7 +75,11 @@ async fn main() -> anyhow::Result<()> {
 
 #[tauri::command]
 async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Result<(), String> {
-    let res_dir = app_handle.path_resolver().resource_dir().unwrap().join("resources");
+    let res_dir = app_handle
+        .path_resolver()
+        .resource_dir()
+        .unwrap()
+        .join("resources");
     let out_dir = app_handle
         .path_resolver()
         .app_data_dir()
@@ -99,11 +114,38 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
     let app_handle = app_handle.clone();
     tokio::spawn(async move {
         match converter.run().await {
-            Ok(assets_link) =>  app_handle.emit_all("render_fineshed", assets_link),
+            Ok(assets_link) => app_handle.emit_all("render_fineshed", assets_link),
             Err(e) => app_handle.emit_all("render_fineshed", e.to_string()),
         }
     });
 
+    Ok(())
+}
+
+#[tauri::command]
+fn save_config(mut config: convert::Config, path: String) -> Result<(), String> {
+    let file = File::create(path).unwrap();
+    let mut zip = zip::ZipWriter::new(file);
+
+    let options = FileOptions::default()
+        .compression_method(zip::CompressionMethod::Bzip2)
+        .unix_permissions(0o755);
+
+    zip.add_directory("assets/", Default::default()).unwrap();
+
+    for path_pair in config.paths.iter_mut() {
+        let path = PathBuf::from(&path_pair.path);
+        zip.start_file(format!("assets/{:?}", path.file_name().unwrap()), options)
+            .unwrap();
+        zip.write_all(&fs::read(&path).unwrap()).unwrap();
+        path_pair.path = (&path.file_name().unwrap().to_string_lossy()).to_string();
+    }
+
+    zip.start_file("config.josn", options).unwrap();
+    zip.write_all(serde_json::to_string(&config).unwrap().as_bytes())
+        .unwrap();
+
+    zip.finish().unwrap();
     Ok(())
 }
 
