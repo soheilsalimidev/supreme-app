@@ -74,7 +74,7 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
         tokio::fs::create_dir_all(&out_dir).await.unwrap();
     }
 
-    let (rx, mut rt) = mpsc::channel(10);
+    let (rx, mut rt) = mpsc::channel(20);
 
     let converter = convert::web2app::Web2app::new(
         config,

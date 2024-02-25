@@ -36,10 +36,13 @@ const startRender = async () => {
   if (state.value === "start") {
     state.value = "running";
     try {
-      console.log(JSON.stringify(unref(appInfo)));
       await invoke("render_app", { config: unref(appInfo) });
 
       await listen("render", (event) => {
+        console.log(event.payload);
+      });
+
+      await listen("render_fineshed", (event) => {
         console.log(event.payload);
       });
     } catch (error) {

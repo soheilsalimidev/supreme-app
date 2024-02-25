@@ -5,7 +5,7 @@ export const useAppSettingStore = defineStore("appSetting", () => {
   const test: AppInfo = {
     name: "asdf adsfasd",
     package_name: "asdf.adsfasd",
-    icon_path: "/home/arthur/Downloads/wallpaper_1.jpg",
+    icon_path: "C:\\Users\\sohei\\OneDrive\\Desktop\\supreme-app\\src\\assets\\vue.svg",
     app_setting: {
       googleService: undefined,
       site_url:
@@ -62,7 +62,7 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     },
     paths: [
       {
-        path: "/home/arthur/Downloads/wallpaper_1.jpg",
+        path:  "C:\\Users\\sohei\\Downloads\\PXL_20231128_101110367.jpg",
         name: "logo.png",
       },
     ],

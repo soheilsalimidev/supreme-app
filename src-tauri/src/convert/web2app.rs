@@ -3,10 +3,10 @@ use async_recursion::async_recursion;
 use colors_transform::Rgb;
 use core::f32;
 use futures_util::StreamExt;
+use image::io::Reader as ImageReader;
 use log::{error, info};
 use passwords::PasswordGenerator;
 use std::env;
-use std::fs::{create_dir, create_dir_all};
 use std::future::Future;
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
@@ -47,14 +47,14 @@ impl Web2app {
         T: AsRef<Path>,
     {
         let keypass = PasswordGenerator {
-            length: 10,
+            length: 15,
             numbers: true,
             lowercase_letters: true,
             uppercase_letters: true,
-            symbols: true,
+            symbols: false,
             spaces: false,
             exclude_similar_characters: false,
-            strict: true,
+            strict: false,
         }
         .generate_one()
         .map_err(|e| anyhow::anyhow!(e))
@@ -88,16 +88,17 @@ impl Web2app {
     }
 
     async fn decode(self: Arc<Self>) -> Result<()> {
+        let apk_tool = self.jar_path.join("apktool.jar");
+
         let args = [
             "-jar",
-            "apktool.jar",
+            &adjust_canonicalization(apk_tool),
             "d",
             self.apk_path.to_str().context("failed")?,
             "-o",
             self.out_path.to_str().context("failed")?,
             "-f",
         ];
-
         let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, move |line, _| {
             let sender = sender.clone();
@@ -126,7 +127,11 @@ impl Web2app {
                 &manifest_string
                     .replace(
                         DEFAULT_PACKGENAME,
-                        &format!("{}.{}", DEFAULT_PACKGENAME, self.config.name.split_whitespace().collect::<String>()),
+                        &format!(
+                            "{}.{}",
+                            DEFAULT_PACKGENAME,
+                            self.config.name.split_whitespace().collect::<String>()
+                        ),
                     )
                     .as_bytes(),
             )
@@ -255,9 +260,10 @@ impl Web2app {
     }
 
     async fn encode(&self) -> Result<()> {
+        let apk_tool = self.jar_path.join("apktool.jar");
         let args = [
             "-jar",
-            "apktool.jar",
+            &adjust_canonicalization(apk_tool),
             "b",
             self.out_path.as_os_str().to_str().context("")?,
             "-f",
@@ -277,8 +283,8 @@ impl Web2app {
     }
 
     async fn alignzip(&self) -> Result<()> {
-        let out_path_apk_in = self.out_path.join("dist/app-debug.apk");
-        let out_path_apk_out = self.out_path.join("dist/app-debug-align.apk");
+        let out_path_apk_in = self.out_path.join("dist/app.apk");
+        let out_path_apk_out = self.out_path.join("dist/app-align.apk");
         let args = [
             "-p",
             "-f",
@@ -332,7 +338,7 @@ impl Web2app {
                 .spawn()?;
             while let Some(event) = rx.recv().await {
                 if let CommandEvent::Stdout(line) = event {
-                    info!("{:?}", line)
+                    let _ = self.sender.send(line).await;
                 }
             }
         }
@@ -345,15 +351,19 @@ impl Web2app {
             .for_each(|f| {
                 let dest = dest.clone();
                 async move {
+                    let is_image = f.name.ends_with("png") || f.name.ends_with("jpg");
+                    if is_image
+                        && PathBuf::from(&f.path).extension().unwrap()
+                            != f.name.split(".").nth(1).unwrap()
+                    {
+                        let img = ImageReader::open(&f.path).unwrap().decode().unwrap();
+                        img.save(dest.join("drawable").join(&f.name)).unwrap();
+                        return;
+                    }
                     fs::copy(
                         &f.path,
-                        if f.name.ends_with("png") || f.name.ends_with("jpg") {
-                            dest.join("drawable")
-                                .join(&f.name)
-                                .with_extension(PathBuf::from(&f.path).extension().unwrap())
-                        } else {
-                            dest.join("raw").join(&f.name)
-                        },
+                        dest.join(if is_image { "drawable" } else { "raw" })
+                            .join(&f.name),
                     )
                     .await
                     .unwrap();
@@ -368,14 +378,12 @@ impl Web2app {
         let path = self
             .out_path
             .join(format!("dist/{}.keystore", self.config.package_name));
-        if !path.exists() {
-            fs::create_dir_all(&path).await?;
-        }
+        let apk_tool = self.jar_path.join("apksigner.jar");
         self.gen_keys(&path).await?;
-        let out_apk_path = self.out_path.join("dist/app-debug-align.apk");
+        let out_apk_path = self.out_path.join("dist/app-align.apk");
         let args = [
             "-jar",
-            "apksigner.jar",
+            &adjust_canonicalization(apk_tool),
             "sign",
             "--ks",
             path.to_str().context("")?,
@@ -385,6 +393,7 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
+        dbg!(args);
         let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, |line, _| {
             let sender = sender.clone();
@@ -572,11 +581,9 @@ impl Web2app {
             "-dname",
             dname,
         ];
-
         if out_path.exists() {
             fs::remove_file(out_path).await?;
         }
-
         let mut child = Command::new(find_java().await?)
             .args(args)
             .stderr(Stdio::piped())
@@ -701,8 +708,23 @@ async fn find_java() -> Result<PathBuf> {
     {
         key_tool_path = key_tool_path.join("bin/keytool");
     }
-
     Ok(key_tool_path)
+}
+
+#[cfg(not(target_os = "windows"))]
+fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
+    p.as_ref().display().to_string()
+}
+
+#[cfg(target_os = "windows")]
+fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
+    const VERBATIM_PREFIX: &str = r#"\\?\"#;
+    let p = p.as_ref().display().to_string();
+    if p.starts_with(VERBATIM_PREFIX) {
+        p[VERBATIM_PREFIX.len()..].to_string()
+    } else {
+        p
+    }
 }
 
 #[cfg(test)]
@@ -712,10 +734,7 @@ mod tests {
     use colors_transform::Rgb;
     use flexi_logger::{AdaptiveFormat, Logger};
     use serde_json::from_str;
-    use std::{
-        path::PathBuf,
-        sync::{mpsc, Once},
-    };
+    use std::{path::PathBuf, sync::Once};
 
     static INIT: Once = Once::new();
 
@@ -826,4 +845,5 @@ mod tests {
 
         Ok(())
     }
+    dbg!(&apk_tool);
 }
