@@ -24,7 +24,7 @@ use super::{Assetlinks, Config, Target};
 const DEFAULT_APP_URL: &str = "iapp.com";
 const DEFAULT_APP_NAME: &str = "I App";
 const DEFAULT_PACKGENAME: &str = "com.app.webapp";
-const DEFAULT_PACKGENAME_DIR: &str = "/com/app/webapp";
+const DEFAULT_PACKGENAME_DIR: &str = "com/app/webapp";
 const DEFAULT_PACKGENAME_SMALI: &str = "Lcom/app/webapp";
 
 pub struct Web2app {
@@ -77,6 +77,7 @@ impl Web2app {
         set.spawn(self.clone().change_folders_name());
         set.spawn(self.clone().change_name_string_xml());
         set.spawn(self.clone().move_resourses());
+        set.spawn(self.clone().save_settings());
         set.spawn(self.clone().create_gridinat_colors());
         while let Some(res) = set.join_next().await {
             res??;
@@ -85,6 +86,7 @@ impl Web2app {
         self.alignzip().await?;
         self.sign_apk().await?;
         self.gen_assetis_link().await
+        // Ok("asd".into())
     }
 
     async fn decode(self: Arc<Self>) -> Result<()> {
@@ -152,51 +154,45 @@ impl Web2app {
                 .split_whitespace()
                 .fold(String::new(), |a, b| a + b),
         );
-        for index in 2..6 {
-            let path = path.clone();
-            let name = name.clone();
-            set.spawn(async move {
-                fs::create_dir_all(path.join(format!(
-                    "smali_classes{index}{DEFAULT_PACKGENAME_DIR}/{}",
-                    &name
-                )))
-                .await
-                .or_else(|e| {
-                    if e.kind() == ErrorKind::AlreadyExists {
-                        Ok(())
-                    } else {
-                        error!(
-                            "{:?} , {:?}",
-                            e,
-                            path.join(format!(
-                                "smali_classes{index}{DEFAULT_PACKGENAME_DIR}/{}",
-                                &name
-                            ))
-                        );
-                        Err(e)
-                    }
-                })?;
-                let mut read_dir = fs::read_dir(
-                    path.join(format!("smali_classes{index}{DEFAULT_PACKGENAME_DIR}")),
-                )
-                .await?;
-                while let Some(file) = read_dir.next_entry().await? {
-                    if !(file.path().is_dir() && file.file_name().to_str().unwrap() == *name) {
-                        Self::rename_package_in_smali(&file.path(), name.clone()).await?;
+        let mut samil_dirs = fs::read_dir(&*path).await?;
+        while let Ok(Some(entry)) = samil_dirs.next_entry().await {
+            let path = entry.path();
+            if path.is_dir() && entry.file_name().to_string_lossy().starts_with("smali") {
+                let name = name.clone();
+                set.spawn(async move {
+                    fs::create_dir_all(path.join(DEFAULT_PACKGENAME_DIR).join(&*name))
+                        .await
+                        .or_else(|e| {
+                            if e.kind() == ErrorKind::AlreadyExists {
+                                Ok(())
+                            } else {
+                                error!(
+                                    "{:?} , {:?}",
+                                    e,
+                                    path.join(DEFAULT_PACKGENAME_DIR).join(&*name)
+                                );
+                                Err(e)
+                            }
+                        })?;
+                    let mut read_dir = fs::read_dir(path.join(DEFAULT_PACKGENAME_DIR)).await?;
+                    while let Some(file) = read_dir.next_entry().await? {
+                        if !(file.path().is_dir() && file.file_name().to_str().unwrap() == *name) {
+                            Self::rename_package_in_smali(&file.path(), name.clone()).await?;
 
-                        fs::rename(
-                            file.path(),
-                            path.join(format!(
-                                "smali_classes{index}{DEFAULT_PACKGENAME_DIR}/{}",
-                                &name
-                            ))
-                            .join(file.file_name()),
-                        )
-                        .await?;
+                            fs::rename(
+                                file.path(),
+                                path.join(DEFAULT_PACKGENAME_DIR)
+                                    .join(&*name)
+                                    .join(file.file_name()),
+                            )
+                            .await?;
+                        }
                     }
-                }
-                Ok::<u32, anyhow::Error>(index)
-            });
+                    Ok::<String, anyhow::Error>(
+                        path.file_name().unwrap().to_string_lossy().to_string(),
+                    )
+                });
+            }
         }
 
         while let Some(res) = set.join_next().await {
@@ -297,7 +293,6 @@ impl Web2app {
         {
             let d = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
                 .join("binaries/zipalign-x86_64-unknown-linux-gnu");
-            info!("{:?}", d);
             let mut child = Command::new(d)
                 .args(args)
                 .stderr(Stdio::piped())
@@ -332,12 +327,21 @@ impl Web2app {
 
         #[cfg(not(test))]
         {
-            use tauri::api::process::CommandEvent;
-            let (mut rx, _) = tauri::api::process::Command::new_sidecar("zipalign")?
-                .args(args)
-                .spawn()?;
+            let mut prosses = tauri::api::process::Command::new_sidecar("zipalign")?.args(args);
+
+            #[cfg(target_os = "linux")]
+            {
+                use std::collections::HashMap;
+                let mut env = HashMap::with_capacity(1);
+                env.insert(
+                    "LD_LIBRARY_PATH".to_string(),
+                    self.jar_path.join("lib64").to_string_lossy().to_string(),
+                );
+                prosses = prosses.envs(env);
+            }
+            let (mut rx, _) = prosses.spawn()?;
             while let Some(event) = rx.recv().await {
-                if let CommandEvent::Stdout(line) = event {
+                if let tauri::api::process::CommandEvent::Stdout(line) = event {
                     let _ = self.sender.send(line).await;
                 }
             }
@@ -374,6 +378,16 @@ impl Web2app {
         Ok(())
     }
 
+    async fn save_settings(self: Arc<Self>) -> Result<()> {
+        fs::write(
+            self.out_path.join("res/raw/setting.json"),
+            serde_json::to_string(&self.config.app_setting)?.as_bytes(),
+        )
+        .await?;
+        let _ = self.sender.send("applaying the setting".into()).await;
+        Ok(())
+    }
+
     async fn sign_apk(&self) -> Result<()> {
         let path = self
             .out_path
@@ -393,7 +407,6 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
-        dbg!(args);
         let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, |line, _| {
             let sender = sender.clone();
@@ -731,9 +744,7 @@ fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
 mod tests {
     use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
-    use colors_transform::Rgb;
     use flexi_logger::{AdaptiveFormat, Logger};
-    use serde_json::from_str;
     use std::{path::PathBuf, sync::Once};
 
     static INIT: Once = Once::new();
@@ -747,76 +758,6 @@ mod tests {
                 .start()
                 .unwrap();
         });
-    }
-
-    #[tokio::test]
-    async fn gen_key() {
-        // setup();
-        // Web2app::new(
-        //     super::Config {
-        //         name: "sdaf".into(),
-        //         package_name: "asd".into(),
-        //         icon_path: "jksd".into(),
-        //         app_setting: AppSetting {
-        //             ..Default::default()
-        //         },
-        //     },
-        //     "/home/arthur/Desktop/packages/AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk",
-        //     "/home/arthur/projects/web2app/src-tauri/out.apk",
-        //     "./",
-        // )
-        // .await;
-        // info!("{:?}", we.gen_keys().await.unwrap());
-    }
-
-    #[tokio::test]
-    async fn testtt() -> Result<()> {
-        let extract_values = |css_gridaint: String| -> (String, Vec<String>) {
-            let mut count = 0;
-            let splited = css_gridaint
-                .char_indices()
-                .skip(16)
-                .take_while(|f| {
-                    if f.1 == ')' {
-                        if count == 2 {
-                            false
-                        } else {
-                            count += 1;
-                            true
-                        }
-                    } else {
-                        true
-                    }
-                })
-                .map(|f| f.1)
-                .collect::<String>();
-            let mut splited = splited.split(",");
-            let kind = splited.nth(0).unwrap();
-            let rest = splited.collect::<String>();
-
-            let colors = rest
-                .splitn(2, "%")
-                .map(|text| {
-                    println!("{:?}", text);
-                    text.char_indices()
-                        .skip_while(|f| f.1 != '(')
-                        .skip(1)
-                        .take_while(|f| f.1 != ')')
-                        .map(|f| f.1)
-                        .collect::<String>()
-                })
-                .map(|f| {
-                    let rgba_vec = f
-                        .split(" ")
-                        .map(|f| from_str::<f32>(f).unwrap())
-                        .collect::<Vec<_>>();
-                    Rgb::from(rgba_vec[0], rgba_vec[1], rgba_vec[2]).to_css_hex_string()
-                })
-                .collect::<Vec<String>>();
-            (kind.into(), colors)
-        };
-
-        Ok(())
     }
 
     #[tokio::test]
@@ -835,7 +776,7 @@ mod tests {
             },
             d.join("../AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk")
                 .canonicalize()?,
-            d.join("./out"),
+            "/home/arthur/.local/share/com.tauri.dev/out/".into(),
             d.join("resources/"),
             tokio::sync::mpsc::channel(10).0,
         )
@@ -845,5 +786,4 @@ mod tests {
 
         Ok(())
     }
-    dbg!(&apk_tool);
 }

@@ -1,43 +1,52 @@
 {
-  "site_url": "https://app.yektafarm.com/tabs/eduction",
-  "splash_screen": 1,
-  "splash_screen_g_c": 1,
-  "cache_mode": 1,
-  "no_internet_layout": 1,
-  "toolbar": 1,
-  "toolbar_custom_icon": {"first": "asd" , "second": "asd"},
-  "sidebar_menu": 1,
-  "sidebar_menu_header_mode": 1,
-  "sidebar_menu_header_color": 1,
-  "sidebar_menu_footer_mode": 1,
-  "swipe_refresh": 1,
-  "admob": 1,
-  "introPage": false,
-  "admob_banner": 1,
-  "floating_action_button_menu": 1,
-  "googleService": null,
-  "item_menu": [
-    {
-      "Pair": {"first": "asd" , "second": "asd"}
+  "site_url": "https://docs.rs/tokio/latest/tokio/sync/mpsc/struct.Sender.html",
+  "splash_screen": {
+    "type": 0
+  },
+  "cache_mode": 0,
+  "no_internet_layout": {
+    "type": 1
+  },
+  "toolbar": {
+    "type": 0
+  },
+  "toolbar_custom_icon": {
+    "enable": false
+  },
+  "swipe_refresh": false,
+  "sidebar_menu": {
+    "enable": true,
+    "sidebar_menu_header": {
+      "type": 0
     },
-    {
-      "Kind": 0
-    }
-  ],
-  "item_fab": [
-    {
-      "Pair": {"first": "asd" , "second": "asd"}
+    "sidebar_menu_footer": {
+      "type": 1,
+      "text": "sadfsda"
     },
-    {
-      "Kind": 0
-    }
-  ],
-  "intro_pages": [
-    {
-      "title": "sdl",
-      "description": "asd",
-      "background": 1,
-      "image_name": "snap.png"
-    }
-  ]
+    "item_menu": [
+      {
+        "Kind": 2
+      },
+      {
+        "Pair": {
+          "first": "asdf",
+          "second": "sadf"
+        }
+      }
+    ]
+  },
+  "admob": 0,
+  "admob_banner": 0,
+  "floating_action_button": {
+    "enable": false,
+    "item_fab": []
+  },
+  "introPage": {
+    "enable": false,
+    "pages": []
+  },
+  "aboutUs": {
+    "enable": false,
+    "text": ""
+  }
 }

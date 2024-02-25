@@ -12,23 +12,21 @@
             </a>
           </div>
 
-          <div>
-            <div
-              class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
-            >
-              <input
-                type="checkbox"
-                name="toggle"
-                id="toggle"
-                @change="toggleDark()"
-                :value="isDark"
-                class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
-              />
-              <label
-                for="toggle"
-                class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
-              ></label>
-            </div>
+          <div
+            class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in ms-auto"
+          >
+            <input
+              type="checkbox"
+              name="toggle"
+              id="toggle"
+              @change="toggleDark()"
+              :value="isDark"
+              class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
+            />
+            <label
+              for="toggle"
+              class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
+            ></label>
           </div>
         </div>
       </div>
@@ -36,8 +34,7 @@
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 class="sr-only">Page title</h1>
-        <!-- Main 3 column grid -->
-        <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
+        <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3">
           <!-- Left column -->
           <div class="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-1-title">
@@ -51,7 +48,7 @@
           </div>
 
           <!-- Right column -->
-          <div class="grid grid-cols-1 gap-4">
+          <div class="grid-cols-1 gap-4 hidden lg:grid">
             <section aria-labelledby="section-2-title">
               <h2 class="sr-only" id="section-2-title">Section title</h2>
               <div class="rounded-lg bg-transparent overflow-hidden">
@@ -185,7 +182,7 @@ whenever(keys.Ctrl_s, async () => {
       if (!selected) {
         return;
       }
-      savePath.value = selected + '.iapp';
+      savePath.value = selected + ".iapp";
     }
     await invoke("save_config", {
       config: unref(appInfo),

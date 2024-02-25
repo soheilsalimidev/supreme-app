@@ -59,8 +59,8 @@
         "fullscreen": false,
         "resizable": true,
         "title": "web2app",
-        "width": 800,
-        "height": 600
+        "width": 1080,
+        "height": 720 
       }
     ]
   }

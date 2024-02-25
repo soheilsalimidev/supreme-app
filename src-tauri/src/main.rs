@@ -1,49 +1,17 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::{
     fs::{self, File},
     io::Write,
-    path::{self, PathBuf},
+    path::{Path, PathBuf},
 };
 
-use flexi_logger::{writers::LogWriter, Logger};
-use tauri::{utils::config, Manager};
+use flexi_logger::Logger;
+use tauri::Manager;
 use tokio::sync::mpsc;
 use zip::write::FileOptions;
 
 mod convert;
-
-struct AppLogger {
-    app: tauri::AppHandle,
-}
-
-impl LogWriter for AppLogger {
-    fn write(
-        &self,
-        now: &mut flexi_logger::DeferredNow,
-        record: &log::Record,
-    ) -> std::io::Result<()> {
-        println!("asdsad");
-        let mut s = vec![];
-        flexi_logger::default_format(&mut s, now, record)?;
-        self.app
-            .emit_all("logs", s)
-            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.to_string()))
-    }
-
-    fn flush(&self) -> std::io::Result<()> {
-        Ok(())
-    }
-
-    fn max_log_level(&self) -> log::LevelFilter {
-        log::LevelFilter::Info
-    }
-
-    fn format(&mut self, format: flexi_logger::FormatFunction) {
-        _ = format;
-    }
-}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -52,20 +20,14 @@ async fn main() -> anyhow::Result<()> {
         .start()
         .unwrap();
 
-    // info!(
-    //     "{}",
-    //     convert::Web2app::check_java()
-    //         .await
-    //         .expect("JAVA NEED TO BE INSTALLED")
-    //         .expect("JAVA NEED TO BE INSTALLED")
-    // );
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             render_app,
             check_java,
-            save_config
+            save_config,
+            move_app
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -119,6 +81,42 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
         }
     });
 
+    Ok(())
+}
+
+#[tauri::command]
+async fn move_app(
+    path: String,
+    config: convert::Config,
+    app_handle: tauri::AppHandle,
+) -> Result<(), String> {
+    let path = if path == "desk.apk" {
+        tauri::api::path::desktop_dir().unwrap()
+    } else {
+        path.into()
+    };
+
+    tokio::fs::rename(
+        app_handle
+            .path_resolver()
+            .app_data_dir()
+            .unwrap()
+            .join("out/dist/app-align.apk"),
+        &path,
+    )
+    .await
+    .unwrap();
+
+    tokio::task::spawn_blocking(move || {
+        let config_path = path
+            .join(format!("{}.iapp", config.name))
+            .to_string_lossy()
+            .to_string();
+        save_config(config, config_path)
+    })
+    .await
+    .unwrap()
+    .unwrap();
     Ok(())
 }
 
