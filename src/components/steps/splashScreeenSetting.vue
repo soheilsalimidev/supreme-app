@@ -69,7 +69,7 @@
       <div v-if="appInfo.app_setting.splash_screen.type === 2">
         <fileSelect
           label="image"
-          key="splash_bg.jpg"
+          file-name="splash_bg.jpg"
           v-model="appInfo.app_setting.splash_screen.image_path"
           :error="
             v$.app_setting.splash_screen.image_path.$errors
@@ -99,21 +99,11 @@
         </p>
       </div>
     </div>
-
-    <div class="px-4 py-3 text-right sm:px-6 mt-auto">
-      <button
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="next"
-      >
-        Next
-      </button>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
-import { useNavigationStore } from "@/stores/navigation";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
@@ -138,7 +128,6 @@ const splashType = [
   },
 ];
 
-const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
 const { appInfo } = storeToRefs(useAppSettingStore());
 
 const rules = {
@@ -172,12 +161,4 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, appInfo);
-
-const next = async () => {
-  if (await v$.value.$validate()) {
-    steps.value[1].status = "complete";
-    steps.value[2].status = "current";
-    activeTabIndex.value++;
-  }
-};
 </script>

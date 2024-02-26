@@ -619,15 +619,11 @@ impl Web2app {
     }
 }
 
-pub async fn check_java(jar_path: &Path) -> Result<Option<f32>> {
+pub async fn check_java(jar_path: &Path) -> Result<Option<String>> {
     let mut is_java = None;
     run_java_command(&["-version"], &jar_path, |f, _| {
         if is_java == None && (f.starts_with("java version") || f.starts_with("openjdk version")) {
-            is_java = Some(
-                f.as_str()[f.find("\"").unwrap()..f.len() - 1]
-                    .parse::<f32>()
-                    .unwrap(),
-            );
+            is_java = Some(f.as_str()[f.find("\"").unwrap()..f.len() - 1].to_string());
         }
         Box::pin(async {})
     })
@@ -661,16 +657,12 @@ where
         .take()
         .with_context(|| "child did not have a handle to stdout")?;
 
+    let mut reader = BufReader::new(stderr).lines();
+    while let Some(line) = reader.next_line().await.unwrap() {
+        new_line(line, &mut stdin).await;
+    }
+
     let mut reader = BufReader::new(stdout).lines();
-
-    #[cfg(debug_assertions)]
-    tokio::spawn(async move {
-        let mut reader = BufReader::new(stderr).lines();
-        while let Some(line) = reader.next_line().await.unwrap() {
-            error!("{}", line)
-        }
-    });
-
     while let Some(line) = reader.next_line().await? {
         new_line(line, &mut stdin).await;
     }

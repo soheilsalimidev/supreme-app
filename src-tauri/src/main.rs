@@ -148,7 +148,7 @@ fn save_config(mut config: convert::Config, path: String) -> Result<(), String> 
 }
 
 #[tauri::command]
-async fn check_java(app_handle: tauri::AppHandle) -> Result<Option<f32>, String> {
+async fn check_java(app_handle: tauri::AppHandle) -> Result<Option<String>, String> {
     convert::web2app::check_java(&app_handle.path_resolver().resource_dir().unwrap())
         .await
         .map_err(|e| e.to_string())

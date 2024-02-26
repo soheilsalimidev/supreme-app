@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-full">
+  <div class="min-h-full overflow-hidden">
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div
@@ -62,19 +62,36 @@
       </div>
     </main>
     <footer>
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
+      <div
+        class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl bg-gray-100 dark:bg-gray-900"
+      >
         <div
-          class="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left"
+          class="text-sm text-gray-500 text-center sm:text-left dark:text-white"
         >
           <span class="flex gap-1"
-            >&copy; build with <LineMdHeart class="text-red-500" /> by soheil
-            salimi</span
-          >
+            >Build with
+            <LineMdHeart class="text-red-500" :key="refreshHeart" /> by
+            <a href="#" class="hover:underline">soheil salimi</a>
+          </span>
         </div>
       </div>
     </footer>
   </div>
 
+  <modal
+    v-model="noJavaModal"
+    okText="ok, i download"
+    cancelText="ok"
+    title="No java"
+    :ok="() => {}"
+    :cancel="() => {}"
+  >
+    No Java found
+
+    <template #icon>
+      <LineMdAlertLoop></LineMdAlertLoop>
+    </template>
+  </modal>
   <NotificationGroup group="generic">
     <div
       class="fixed inset-0 flex items-end justify-start p-6 px-4 py-6 pointer-events-none"
@@ -159,13 +176,16 @@ import { useMagicKeys, whenever } from "@vueuse/core";
 import { invoke } from "@tauri-apps/api";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
-import { unref } from "vue";
+import { ref, unref } from "vue";
 import { save } from "@tauri-apps/api/dialog";
+import { onMounted } from "vue";
+import LineMdAlertLoop from "~icons/line-md/alert-loop";
 
+const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
-
+const noJavaModal = ref(false);
 const keys = useMagicKeys();
 
 whenever(keys.Ctrl_s, async () => {
@@ -208,6 +228,17 @@ whenever(keys.Ctrl_s, async () => {
       3000,
     );
   }
+});
+
+setInterval(() => {
+  refreshHeart.value++;
+}, 10000);
+
+onMounted(async () => {
+  try {
+    if ((await invoke<string>("check_java"))) return;
+  } catch (error) {}
+  noJavaModal.value = true;
 });
 </script>
 

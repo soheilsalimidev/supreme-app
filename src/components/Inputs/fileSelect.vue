@@ -65,7 +65,7 @@ import { computed } from "vue";
 let props = withDefaults(
   defineProps<{
     label: string;
-    key: string;
+    fileName: string;
     error?: string;
     accept?: string[];
     filterWarningText?: string;
@@ -138,12 +138,12 @@ const onDrop = async (files: string[] | null) => {
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 watch(modelValue, () => {
-  const path = appInfo.value.paths.find((path) => path.name === props.key);
+  const path = appInfo.value.paths.find((path) => path.name === props.fileName);
   if (path) {
     path.path = modelValue.value ?? "";
   } else {
     appInfo.value.paths.push({
-      name: props.key,
+      name: props.fileName,
       path: modelValue.value ?? "",
     });
   }
@@ -159,7 +159,6 @@ const selectFile = async () => {
       },
     ],
   })) as string;
-  console.log(selected);
   onDrop([selected]);
 };
 

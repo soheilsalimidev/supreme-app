@@ -19,6 +19,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.7.2",
+    "custom-vue-scrollbar": "^0.0.8",
     "notiwind": "^2.0.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.5",

@@ -32,7 +32,7 @@
 
     <fileSelect
       label="App icon"
-      key="logo.png"
+      file-name="logo.png"
       v-model="appInfo.icon_path"
       :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
       :filterCondition="
@@ -42,15 +42,6 @@
           (width === 192 && height === 192)
       "
     ></fileSelect>
-
-    <div class="px-4 py-3 text-right sm:px-6 mt-auto">
-      <button
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="next"
-      >
-        Next
-      </button>
-    </div>
   </div>
 </template>
 

@@ -16,7 +16,6 @@
             stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-20' : '',
             'relative',
           ]"
-          @click="changeStep(step.id)"
         >
           <template v-if="step.status === 'complete'" class="group">
             <div class="absolute inset-0 flex items-center" aria-hidden="true">
@@ -28,7 +27,7 @@
               <CheckIcon class="w-5 h-5 text-white" aria-hidden="true" />
               <span class="sr-only">{{ step.name }}</span>
               <span
-                class="mt-20 bg-indigo-500 whitespace-nowrap p-1 rounded-md dark:text-white hidden group-hover:block"
+                class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold hidden group-hover:block"
                 >{{ step.name }}</span
               >
             </a>
@@ -49,7 +48,7 @@
                 aria-hidden="true"
               />
               <span
-                class="mt-20 bg-indigo-500 whitespace-nowrap p-1 rounded-md dark:text-white"
+                class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold"
                 >{{ step.name }}</span
               >
             </a>
@@ -67,7 +66,7 @@
               />
               <span class="sr-only">{{ step.name }}</span>
               <span
-                class="mt-20 bg-indigo-500 whitespace-nowrap p-1 rounded-md dark:text-white opacity-0 group-hover:opacity-100 transition-all"
+                class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold hidden group-hover:block"
                 >{{ step.name }}</span
               >
             </a>
@@ -76,14 +75,49 @@
       </XyzTransitionGroup>
     </nav>
 
-    <div
-      class="mt-14 block w-full h-[31rem] p-4 overflow-scroll"
-      xyz="fade appear-short-100% origin-top ease-in-out duration-7 delay-1.5"
-      v-xyz="tabDirectionXyz"
+    <div class="w-full bg-gray-200 h-[1px] mt-14 dark:bg-gray-700"></div>
+
+    <CustomScrollbar
+      class=" w-full h-[31rem] p-4 overflow-y-scroll"
+      content-class="h-full w-full"
+      wrapper-class="w-full"
     >
-      <XyzTransition appear>
-        <component :key="activeTabIndex" :is="activeComponent"></component>
-      </XyzTransition>
+      <div
+        xyz="fade appear-short-100% origin-top ease-in-out duration-7 delay-1.5"
+        class="flex flex-nowrap "
+        v-xyz="
+          tabDirectionXyzRight
+            ? 'out-left-100% in-right-100%'
+            : 'out-right-100% in-left-100%'
+        "
+      >
+        <XyzTransition appear>
+          <component class="min-w-full basis-full" :key="activeTabIndex" :is="activeComponent"></component>
+        </XyzTransition>
+
+      </div>
+    </CustomScrollbar>
+
+    <div class="w-full bg-gray-100 h-[1px] mt-1 dark:bg-gray-700"></div>
+    <div class="flex w-full">
+      <div class="px-4 py-3 text-right sm:px-6 mt-auto">
+        <button
+          v-if="currentTab !== 0"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          @click="previous"
+        >
+          Previous
+        </button>
+      </div>
+      <div class="px-4 py-3 text-right sm:px-6 mt-auto ms-auto">
+        <button
+          v-if="currentTab !== 4"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          @click="next"
+        >
+          Next
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -92,41 +126,64 @@
 import { CheckIcon } from "@heroicons/vue/24/solid";
 import { storeToRefs } from "pinia";
 import { useNavigationStore } from "@/stores/navigation";
-import { notify } from "notiwind";
+// import { notify } from "notiwind";
 import { ref } from "vue";
+import CustomScrollbar from "custom-vue-scrollbar";
+import "custom-vue-scrollbar/dist/style.css";
+import useVuelidate from "@vuelidate/core";
 
-const tabDirectionXyz = ref("out-left-100% in-right-100%");
+const tabDirectionXyzRight = ref(true);
 
-const { steps, activeComponent, activeTabIndex } =
-  storeToRefs(useNavigationStore());
+const { steps, activeComponent, activeTabIndex, currentTab } = storeToRefs(
+  useNavigationStore(),
+);
 
-let currentTabId = 1;
-const changeStep = (stepId: number) => {
-  const goinogToStep = steps.value.find((step) => step.id === stepId)!;
-  tabDirectionXyz.value =
-    goinogToStep.id > currentTabId
-      ? "out-left-100% in-right-100%"
-      : "out-right-100% in-left-100%";
-  if (
-    steps.value.some(
-      (step) => step.id < goinogToStep.id && step.status !== "complete",
-    )
-  ) {
-    notify(
-      {
-        group: "generic",
-        title: "Tasks not completed",
-        text: "please complete all the steps before this before contiuning",
-        type: "warning",
-      },
-      3000,
-    );
-  } else {
-    steps.value.find((step) => step.status === "current")!.status = "upcoming";
-    goinogToStep.status = "current";
-    currentTabId = goinogToStep.id;
-    activeTabIndex.value++;
-  }
+// let currentTabId = 1;
+// const changeStep = (stepId: number) => {
+//   const goinogToStep = steps.value.find((step) => step.id === stepId)!;
+//   tabDirectionXyz.value =
+//     goinogToStep.id > currentTabId
+//       ? "out-left-100% in-right-100%"
+//       : "out-right-100% in-left-100%";
+//   if (
+//     steps.value.some(
+//       (step) => step.id < goinogToStep.id && step.status !== "complete",
+//     )
+//   ) {
+//     notify(
+//       {
+//         group: "generic",
+//         title: "Tasks not completed",
+//         text: "please complete all the steps before this before contiuning",
+//         type: "warning",
+//       },
+//       3000,
+//     );
+//   } else {
+//     steps.value.find((step) => step.status === "current")!.status = "upcoming";
+//     goinogToStep.status = "current";
+//     currentTabId = goinogToStep.id;
+//     currentTab.value = goinogToStep.id - 1;
+//     activeTabIndex.value++;
+//   }
+// };
+
+const v$ = useVuelidate();
+
+const previous = () => {
+  tabDirectionXyzRight.value = false;
+  steps.value.find((step) => step.status === "current")!.status = "upcoming";
+  steps.value[--currentTab.value].status = "current";
+  activeTabIndex.value++;
+};
+
+const next = async () => {
+  // if (await v$.value.$validate()) {
+  tabDirectionXyzRight.value = true;
+  steps.value.find((step) => step.status === "current")!.status = "complete";
+  steps.value[++currentTab.value].status = "current";
+  activeTabIndex.value++;
+  // }
 };
 </script>
 
@@ -151,5 +208,10 @@ const changeStep = (stepId: number) => {
 }
 .slideback-leave-to {
   transform: translate(100%, 0);
+}
+
+.dark .scrollbar__thumb {
+  background: gray;
+  border-radius: 8px;
 }
 </style>

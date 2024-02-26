@@ -318,7 +318,7 @@ impl Default for AppSetting {
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Config {
-pub    name: String,
+    pub name: String,
     package_name: String,
     icon_path: PathBuf,
     app_setting: AppSetting,

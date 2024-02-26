@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-4 flex-col w-full overflow-scroll">
+  <div class="flex gap-4 flex-col w-full">
     <checkboxItem
       :open="items[0]"
       @update:open="openNew(0)"
@@ -47,7 +47,7 @@
           class="mt-2"
         >
           <fileSelect
-            key="loading.json"
+            file-name="loading.json"
             label="select your lottie file"
             :accept="['json']"
             v-model="appInfo.app_setting.no_internet_layout.lottieFile"
@@ -58,7 +58,7 @@
           class="mt-2"
         >
           <fileSelect
-            key="no_internet.json"
+            file-name="no_internet.json"
             label="select your image"
             v-model="appInfo.app_setting.no_internet_layout.image"
           ></fileSelect>
@@ -137,7 +137,7 @@
       <template #default>
         <div class="gap-6 flex flex-col">
           <fileSelect
-            key="toolbar_icon.png"
+            file-name="toolbar_icon.png"
             :error="
               v$.app_setting.toolbar_custom_icon.first.$errors
                 .map((e) => e.$message)
@@ -258,14 +258,6 @@
         </div>
       </template>
     </checkboxItem>
-    <div class="px-4 py-3 text-right sm:px-6 mt-auto">
-      <button
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="next"
-      >
-        Next
-      </button>
-    </div>
   </div>
 </template>
 

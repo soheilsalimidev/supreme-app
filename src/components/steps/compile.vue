@@ -3,22 +3,25 @@
     <div
       :class="[
         state === 'running' &&
-          'transition-all ease-in-out w-full h-full m-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 duration-700 overflow-y-scroll overflow-x-hidden',
-        state === 'start' && 'w-52 h-12 btn ',
+          'w-full h-full m-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 duration-700 border-transparent',
+        state === 'start' &&
+          'w-52 h-12 btn text-inherit cursor-pointer text-base relative animate-[0.5s_collision_ease-in] overflow-hidden transition-[0.3s] duration-[0.1s] m-0 p-0 border-[none] border-2 border-solid border-indigo-300 dark:border-white',
       ]"
-      class="text-white"
+      class="text-white transition-all ease-in-out"
       @click="startRender"
       ref="logsDiv"
     >
       <p
         v-if="state === 'start'"
-        class="flex justify-center items-center h-full dark:text-white text:dark z-50"
+        class="flex justify-center items-center h-full dark:text-white text-indigo-600 z-50 relative font-bold text-[1.2rem] transition-[1s] duration-[ease-in-out] hover:text-indigo-100 dark:hover:text-indigo-100"
       >
         Start
       </p>
       <div v-else>
         <TransitionGroup name="list" tag="ul">
-          <li v-for="(log, index) in logs" :key="index">{{ log }}</li>
+          <li v-for="(log, index) in logs" :key="index" class="text-black">
+            {{ log }}
+          </li>
         </TransitionGroup>
       </div>
     </div>
@@ -38,7 +41,7 @@ import { useScroll } from "@vueuse/core";
 const logsDiv = ref<HTMLElement | null>(null);
 const { y } = useScroll(logsDiv, { behavior: "smooth" });
 
-const logs = ref<string[]>([]);
+const logs = ref<string[]>(["start rendering"]);
 const { appInfo } = storeToRefs(useAppSettingStore());
 const state = ref<"start" | "running" | "finished">("start");
 
@@ -54,7 +57,7 @@ const startRender = async () => {
       });
 
       await listen<string>("render_fineshed", async (event) => {
-         let selected = await save({
+        let selected = await save({
           filters: [
             {
               name: "app",
@@ -72,10 +75,13 @@ const startRender = async () => {
             },
             3000,
           );
-          selected = "desk"
+          selected = "desk";
         }
 
-        await invoke("move_app", { path: selected + ".apk" });
+        await invoke("move_app", {
+          path: selected + ".apk",
+          config: unref(appInfo),
+        });
 
         console.log(event.payload);
       });
@@ -87,36 +93,6 @@ const startRender = async () => {
 </script>
 
 <style scoped>
-.btn {
-  margin: 0;
-  padding: 0;
-  border: none;
-  outline: none;
-  color: inherit;
-  cursor: pointer;
-  font-size: 16px;
-  position: relative;
-  border: 2px solid #000;
-  animation: 0.5s collision ease-in;
-  overflow: hidden;
-  transition: 0.3s 0.1s;
-}
-.btn:active {
-  transform: translateX(100px);
-  background: rgba(255, 255, 255, 0.5);
-}
-.btn p {
-  position: relative;
-  color: #000;
-  font-weight: 700;
-  font-size: 1.2rem;
-  z-index: 5;
-  transition: 1s ease-in-out;
-}
-.btn:hover p {
-  color: #fff;
-}
-
 .btn:before,
 .btn:after {
   content: "";
@@ -127,7 +103,7 @@ const startRender = async () => {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: #000;
+  background-color: #6366f1;
 }
 .btn:hover:before {
   animation: collisionLeft 1s both;

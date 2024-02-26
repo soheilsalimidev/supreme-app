@@ -10,6 +10,9 @@ declare module 'vue' {
     AppInfo: typeof import('./src/components/steps/appInfo.vue')['default']
     CheckboxItem: typeof import('./src/components/Inputs/checkboxItem.vue')['default']
     Compile: typeof import('./src/components/steps/compile.vue')['default']
+    Dialog: typeof import('@headlessui/vue')['Dialog']
+    DialogPanel: typeof import('@headlessui/vue')['DialogPanel']
+    DialogTitle: typeof import('@headlessui/vue')['DialogTitle']
     Disclosure: typeof import('@headlessui/vue')['Disclosure']
     DisclosureButton: typeof import('@headlessui/vue')['DisclosureButton']
     DisclosurePanel: typeof import('@headlessui/vue')['DisclosurePanel']
@@ -22,6 +25,7 @@ declare module 'vue' {
     MenuButton: typeof import('@headlessui/vue')['MenuButton']
     MenuItem: typeof import('@headlessui/vue')['MenuItem']
     MenuItems: typeof import('@headlessui/vue')['MenuItems']
+    Modal: typeof import('./src/components/Inputs/modal.vue')['default']
     RadioGroup: typeof import('@headlessui/vue')['RadioGroup']
     RadioGroupDescription: typeof import('@headlessui/vue')['RadioGroupDescription']
     RadioGroupLabel: typeof import('@headlessui/vue')['RadioGroupLabel']
@@ -30,6 +34,8 @@ declare module 'vue' {
     SplashScreeenSetting: typeof import('./src/components/steps/splashScreeenSetting.vue')['default']
     Steps: typeof import('./src/components/steps.vue')['default']
     TextInput: typeof import('./src/components/Inputs/textInput.vue')['default']
+    TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
+    TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
     WebPageSetting: typeof import('./src/components/steps/webPageSetting.vue')['default']
   }
 }

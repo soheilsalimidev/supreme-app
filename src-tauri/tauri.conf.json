@@ -60,7 +60,8 @@
         "resizable": true,
         "title": "web2app",
         "width": 1080,
-        "height": 720 
+        "minWidth": 720,
+        "minHeight": 720
       }
     ]
   }

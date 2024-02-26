@@ -16,6 +16,7 @@ export const useNavigationStore = defineStore("navigation", () => {
   };
 
   const activeTabIndex = ref(1);
+  const currentTab = ref(0);
   const steps = ref<
     {
       name: string;
@@ -48,5 +49,5 @@ export const useNavigationStore = defineStore("navigation", () => {
       ],
   );
 
-  return { steps, activeComponent, activeTabIndex };
+  return { steps, activeComponent, activeTabIndex, currentTab };
 });

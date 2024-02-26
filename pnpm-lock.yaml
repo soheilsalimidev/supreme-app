@@ -32,6 +32,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.7.2
     version: 10.7.2(vue@3.4.5)
+  custom-vue-scrollbar:
+    specifier: ^0.0.8
+    version: 0.0.8(lodash-es@4.17.21)(vue@3.4.5)
   notiwind:
     specifier: ^2.0.2
     version: 2.0.2(vue@3.4.5)
@@ -1509,6 +1512,16 @@ packages:
 
   /csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
+
+  /custom-vue-scrollbar@0.0.8(lodash-es@4.17.21)(vue@3.4.5):
+    resolution: {integrity: sha512-JcO0B+02Kf9wXSL9SaxXVvuToaY+lvJAtmrwNfSLS3x6xx5+mO24r5/dGkNK8av0VlSDzviypYUXTjEZbwgGHA==}
+    peerDependencies:
+      lodash-es: ^4.17.21
+      vue: ^3.2.13
+    dependencies:
+      lodash-es: 4.17.21
+      vue: 3.4.5(typescript@5.3.3)
+    dev: false
 
   /de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
