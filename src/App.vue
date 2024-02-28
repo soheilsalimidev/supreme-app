@@ -34,11 +34,21 @@
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 class="sr-only">Page title</h1>
-        <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3">
-          <!-- Left column -->
-          <div class="grid grid-cols-1 gap-4 lg:col-span-2">
+        <div
+          class="gap-4 items-start grid"
+          :class="[!activeComponentFrame ? 'grid-cols-6' : 'grid-cols-3']"
+          ref="grid"
+        >
+          <div
+            class="grid gap-4"
+            :class="[
+              !activeComponentFrame
+                ? 'lg:col-start-2 lg:col-span-4 sm:col-start-0 sm:col-span-6'
+                : 'lg:col-span-2 sm:col-span-5',
+            ]"
+          >
             <section aria-labelledby="section-1-title">
-              <h2 class="sr-only" id="section-1-title">Section title</h2>
+              <h2 class="sr-only" id="section-1-title">Steps</h2>
               <div class="rounded-lg bg-white dark:bg-slate-800 shadow">
                 <div class="p-6">
                   <steps />
@@ -48,15 +58,26 @@
           </div>
 
           <!-- Right column -->
-          <div class="grid-cols-1 gap-4 hidden lg:grid">
-            <section aria-labelledby="section-2-title">
-              <h2 class="sr-only" id="section-2-title">Section title</h2>
-              <div class="rounded-lg bg-transparent overflow-hidden">
-                <div class="p-6">
-                  <frame />
+          <div class="gap-4 hidden lg:grid col-span-1">
+            <Transition
+              enter-active-class="animate__animated animate__fadeInRightBig"
+              leave-active-class="animate__animated animate__fadeOutRight"
+              :duration="{ enter: 1000, leave: 2000 }"
+            >
+              <section
+                aria-labelledby="section-2-title"
+                v-if="activeComponentFrame"
+              >
+                <h2 class="sr-only" id="section-2-title">
+                  Phone frame preview
+                </h2>
+                <div class="rounded-lg bg-transparent overflow-hidden">
+                  <div class="p-6 flex items-center justify-center">
+                    <frame />
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </Transition>
           </div>
         </div>
       </div>
@@ -180,14 +201,19 @@ import { ref, unref } from "vue";
 import { save } from "@tauri-apps/api/dialog";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
+import { useNavigationStore } from "./stores/navigation";
+import { wrapGrid } from "animate-css-grid";
+import "animate.css";
 
 const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());
+const { activeComponentFrame } = storeToRefs(useNavigationStore());
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const noJavaModal = ref(false);
 const keys = useMagicKeys();
 
+const grid = ref<HTMLElement | null>();
 whenever(keys.Ctrl_s, async () => {
   try {
     if (!savePath.value) {
@@ -236,9 +262,10 @@ setInterval(() => {
 
 onMounted(async () => {
   try {
-    if ((await invoke<string>("check_java"))) return;
+    if (await invoke<string>("check_java")) return;
   } catch (error) {}
   noJavaModal.value = true;
+  wrapGrid(grid.value!, { duration: 600 });
 });
 </script>
 

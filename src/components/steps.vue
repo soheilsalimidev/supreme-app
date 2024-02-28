@@ -78,24 +78,28 @@
     <div class="w-full bg-gray-200 h-[1px] mt-14 dark:bg-gray-700"></div>
 
     <CustomScrollbar
-      class=" w-full h-[31rem] p-4 overflow-y-scroll"
+      class="w-full h-[31rem] p-4 overflow-y-scroll"
       content-class="h-full w-full"
       wrapper-class="w-full"
     >
-      <div
-        xyz="fade appear-short-100% origin-top ease-in-out duration-7 delay-1.5"
-        class="flex flex-nowrap "
-        v-xyz="
+      <Transition
+        :enter-active-class="
           tabDirectionXyzRight
-            ? 'out-left-100% in-right-100%'
-            : 'out-right-100% in-left-100%'
+            ? 'animate__animated animate__slideInRight'
+            : 'animate__animated animate__slideInLeft'
+        "
+        :enter-leave-class="
+          tabDirectionXyzRight
+            ? 'animate__animated animate__slideOutRight'
+            : ' animate__animated animate__slideOutLeft'
         "
       >
-        <XyzTransition appear>
-          <component class="min-w-full basis-full" :key="activeTabIndex" :is="activeComponent"></component>
-        </XyzTransition>
-
-      </div>
+        <component
+          class="min-w-full basis-full"
+          :key="activeTabIndex"
+          :is="activeComponent"
+        ></component>
+      </Transition>
     </CustomScrollbar>
 
     <div class="w-full bg-gray-100 h-[1px] mt-1 dark:bg-gray-700"></div>
@@ -127,6 +131,7 @@ import { CheckIcon } from "@heroicons/vue/24/solid";
 import { storeToRefs } from "pinia";
 import { useNavigationStore } from "@/stores/navigation";
 // import { notify } from "notiwind";
+import "animate.css";
 import { ref } from "vue";
 import CustomScrollbar from "custom-vue-scrollbar";
 import "custom-vue-scrollbar/dist/style.css";
@@ -187,29 +192,7 @@ const next = async () => {
 };
 </script>
 
-<style>
-.slide-leave-active,
-.slide-enter-active {
-  transition: 1s;
-}
-.slide-enter {
-  transform: translate(100%, 0);
-}
-.slide-leave-to {
-  transform: translate(-100%, 0);
-}
-
-.slideback-leave-active,
-.slideback-enter-active {
-  transition: 1s;
-}
-.slideback-enter {
-  transform: translate(-100%, 0);
-}
-.slideback-leave-to {
-  transform: translate(100%, 0);
-}
-
+<style scoped>
 .dark .scrollbar__thumb {
   background: gray;
   border-radius: 8px;

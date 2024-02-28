@@ -19,6 +19,7 @@ declare module 'vue' {
     FileSelect: typeof import('./src/components/Inputs/fileSelect.vue')['default']
     Float: typeof import('@headlessui-float/vue')['Float']
     Frame: typeof import('./src/components/frame.vue')['default']
+    Info: typeof import('./src/components/frames/info.vue')['default']
     IntroPage: typeof import('./src/components/steps/introPage.vue')['default']
     ListItemMaker: typeof import('./src/components/ListItemMaker.vue')['default']
     Menu: typeof import('@headlessui/vue')['Menu']
@@ -31,11 +32,13 @@ declare module 'vue' {
     RadioGroupLabel: typeof import('@headlessui/vue')['RadioGroupLabel']
     RadioGroupOption: typeof import('@headlessui/vue')['RadioGroupOption']
     RadioList: typeof import('./src/components/Inputs/radioList.vue')['default']
+    SpashScreenFrame: typeof import('./src/components/frames/spashScreenFrame.vue')['default']
     SplashScreeenSetting: typeof import('./src/components/steps/splashScreeenSetting.vue')['default']
     Steps: typeof import('./src/components/steps.vue')['default']
     TextInput: typeof import('./src/components/Inputs/textInput.vue')['default']
     TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
+    WebPageFrame: typeof import('./src/components/frames/webPageFrame.vue')['default']
     WebPageSetting: typeof import('./src/components/steps/webPageSetting.vue')['default']
   }
 }

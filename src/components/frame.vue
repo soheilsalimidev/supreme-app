@@ -1,20 +1,33 @@
 <template>
-    <div class="device device-google-pixel-6-pro">
-      <div class="device-frame">
-      
-      </div>
-      <div class="device-stripe"></div>
-      <div class="device-header"></div>
-      <div class="device-sensors"></div>
-      <div class="device-btns"></div>
-      <div class="device-power"></div>
-      <div class="device-home"></div>
+  <div class="device device-google-pixel-6-pro">
+    <div class="device-frame">
+      <component
+        class="min-w-full"
+        :key="activeTabIndex"
+        :is="activeComponentFrame"
+      ></component>
     </div>
+    <div class="device-stripe"></div>
+    <div class="device-header"></div>
+    <div class="device-sensors"></div>
+    <div class="device-btns"></div>
+    <div class="device-power"></div>
+    <div class="device-home"></div>
+  </div>
 </template>
+
+<script setup lang="ts">
+import { useNavigationStore } from "@/stores/navigation";
+import { storeToRefs } from "pinia";
+
+const { activeComponentFrame, activeTabIndex } = storeToRefs(
+  useNavigationStore(),
+);
+</script>
 
 <style scoped lang="scss">
 .device {
-  --devices-scale: .70;
+  --devices-scale: 0.7;
 }
 
 .device,
@@ -45,71 +58,77 @@
   position: relative;
 }
 
-
 .device-google-pixel-6-pro {
-  height: calc(var(--devices-scale)*862px);
-  width: calc(var(--devices-scale)*404px);
+  height: calc(var(--devices-scale) * 862px);
+  width: calc(var(--devices-scale) * 404px);
 }
 
 .device-google-pixel-6-pro .device-frame {
   background: #121212;
-  border-radius: calc(var(--devices-scale)*28px);
-  box-shadow: inset 0 0 calc(var(--devices-scale)*12px) #8d8d86, inset 0 calc(var(--devices-scale)*7px) 0 calc(var(--devices-scale)*3px) #fdfdfc, inset 0 calc(var(--devices-scale)*-6px) 0 calc(var(--devices-scale)*3px) #fdfdfc;
-  height: calc(var(--devices-scale)*862px);
-  margin: 0 calc(var(--devices-scale)*2px);
-  padding: calc(var(--devices-scale)*20px) calc(var(--devices-scale)*12px) calc(var(--devices-scale)*26px) calc(var(--devices-scale)*12px);
-  width: calc(var(--devices-scale)*400px);
+  border-radius: calc(var(--devices-scale) * 28px);
+  box-shadow:
+    inset 0 0 calc(var(--devices-scale) * 12px) #8d8d86,
+    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
+      #fdfdfc,
+    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
+      #fdfdfc;
+  height: calc(var(--devices-scale) * 862px);
+  margin: 0 calc(var(--devices-scale) * 2px);
+  padding: calc(var(--devices-scale) * 20px) calc(var(--devices-scale) * 12px)
+    calc(var(--devices-scale) * 26px) calc(var(--devices-scale) * 12px);
+  width: calc(var(--devices-scale) * 400px);
 }
 
 .device-google-pixel-6-pro .device-screen {
-  border-radius: calc(var(--devices-scale)*27px);
-  height: calc(var(--devices-scale)*816px);
-  width: calc(var(--devices-scale)*376px);
+  border-radius: calc(var(--devices-scale) * 27px);
+  height: calc(var(--devices-scale) * 816px);
+  width: calc(var(--devices-scale) * 376px);
 }
 
 .device-google-pixel-6-pro .device-header {
   background: linear-gradient(to bottom, #8d8d86 0, #cbcbc8 30%, #cbcbc8 100%);
-  height: calc(var(--devices-scale)*10px);
+  height: calc(var(--devices-scale) * 10px);
   left: 50%;
-  margin-left: calc(var(--devices-scale)*-147px);
+  margin-left: calc(var(--devices-scale) * -147px);
   position: absolute;
   top: 0;
-  width: calc(var(--devices-scale)*294px);
+  width: calc(var(--devices-scale) * 294px);
 }
 
 .device-google-pixel-6-pro .device-stripe::after {
   background: linear-gradient(to top, #121212, #666661);
-  border-radius: calc(var(--devices-scale)*50px) calc(var(--devices-scale)*50px) 0 0;
+  border-radius: calc(var(--devices-scale) * 50px)
+    calc(var(--devices-scale) * 50px) 0 0;
   bottom: 0;
   content: "";
-  height: calc(var(--devices-scale)*2px);
+  height: calc(var(--devices-scale) * 2px);
   left: 50%;
-  margin-left: calc(var(--devices-scale)*-22px);
+  margin-left: calc(var(--devices-scale) * -22px);
   position: absolute;
-  width: calc(var(--devices-scale)*44px);
+  width: calc(var(--devices-scale) * 44px);
 }
 
 .device-google-pixel-6-pro .device-stripe::before {
   background: #cbcbc8;
   bottom: 0;
   content: "";
-  height: calc(var(--devices-scale)*9px);
+  height: calc(var(--devices-scale) * 9px);
   left: 50%;
-  margin-left: calc(var(--devices-scale)*40px);
+  margin-left: calc(var(--devices-scale) * 40px);
   position: absolute;
-  width: calc(var(--devices-scale)*11px);
+  width: calc(var(--devices-scale) * 11px);
 }
 
 .device-google-pixel-6-pro .device-sensors {
   background: #121212;
   border-radius: 50%;
-  height: calc(var(--devices-scale)*22px);
+  height: calc(var(--devices-scale) * 22px);
   left: 50%;
-  margin-left: calc(var(--devices-scale)*-11px);
-  margin-top: calc(var(--devices-scale)*-11px);
+  margin-left: calc(var(--devices-scale) * -11px);
+  margin-top: calc(var(--devices-scale) * -11px);
   position: absolute;
-  top: calc(var(--devices-scale)*39px);
-  width: calc(var(--devices-scale)*22px);
+  top: calc(var(--devices-scale) * 39px);
+  width: calc(var(--devices-scale) * 22px);
 }
 
 .device-google-pixel-6-pro .device-sensors::after,
@@ -120,44 +139,61 @@
 
 .device-google-pixel-6-pro .device-sensors::after {
   background: linear-gradient(to bottom, #121212, #666661);
-  border-radius: 0 0 calc(var(--devices-scale)*50px) calc(var(--devices-scale)*50px);
-  height: calc(var(--devices-scale)*4px);
+  border-radius: 0 0 calc(var(--devices-scale) * 50px)
+    calc(var(--devices-scale) * 50px);
+  height: calc(var(--devices-scale) * 4px);
   left: 50%;
-  margin-left: calc(var(--devices-scale)*-103px);
-  top: calc(var(--devices-scale)*-18px);
-  width: calc(var(--devices-scale)*206px);
+  margin-left: calc(var(--devices-scale) * -103px);
+  top: calc(var(--devices-scale) * -18px);
+  width: calc(var(--devices-scale) * 206px);
 }
 
 .device-google-pixel-6-pro .device-sensors::before {
-  background: radial-gradient(farthest-corner at 20% 20%, #6074bf 0, transparent 40%), radial-gradient(farthest-corner at 80% 80%, #513785 0, #24555e 20%, transparent 50%);
+  background: radial-gradient(
+      farthest-corner at 20% 20%,
+      #6074bf 0,
+      transparent 40%
+    ),
+    radial-gradient(
+      farthest-corner at 80% 80%,
+      #513785 0,
+      #24555e 20%,
+      transparent 50%
+    );
   border-radius: 50%;
-  box-shadow: 0 0 calc(var(--devices-scale)*1px) calc(var(--devices-scale)*1px) rgba(255, 255, 255, .05);
-  height: calc(var(--devices-scale)*8px);
-  left: calc(var(--devices-scale)*7px);
-  top: calc(var(--devices-scale)*7px);
-  width: calc(var(--devices-scale)*8px);
+  box-shadow: 0 0 calc(var(--devices-scale) * 1px)
+    calc(var(--devices-scale) * 1px) rgba(255, 255, 255, 0.05);
+  height: calc(var(--devices-scale) * 8px);
+  left: calc(var(--devices-scale) * 7px);
+  top: calc(var(--devices-scale) * 7px);
+  width: calc(var(--devices-scale) * 8px);
 }
 
 .device-google-pixel-6-pro .device-btns {
   background: #b2b2ae;
-  height: calc(var(--devices-scale)*102px);
+  height: calc(var(--devices-scale) * 102px);
   position: absolute;
   right: 0;
-  top: calc(var(--devices-scale)*306px);
-  width: calc(var(--devices-scale)*3px);
+  top: calc(var(--devices-scale) * 306px);
+  width: calc(var(--devices-scale) * 3px);
 }
 
 .device-google-pixel-6-pro .device-power {
   background: #b2b2ae;
-  height: calc(var(--devices-scale)*58px);
+  height: calc(var(--devices-scale) * 58px);
   position: absolute;
   right: 0;
-  top: calc(var(--devices-scale)*194px);
-  width: calc(var(--devices-scale)*3px);
+  top: calc(var(--devices-scale) * 194px);
+  width: calc(var(--devices-scale) * 3px);
 }
 
 .device-google-pixel-6-pro.device-gold .device-frame {
-  box-shadow: inset 0 0 calc(var(--devices-scale)*12px) #ff962e, inset 0 calc(var(--devices-scale)*7px) 0 calc(var(--devices-scale)*3px) white, inset 0 calc(var(--devices-scale)*-6px) 0 calc(var(--devices-scale)*3px) white;
+  box-shadow:
+    inset 0 0 calc(var(--devices-scale) * 12px) #ff962e,
+    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
+      white,
+    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
+      white;
 }
 
 .device-google-pixel-6-pro.device-gold .device-header {
@@ -181,7 +217,12 @@
 }
 
 .device-google-pixel-6-pro.device-black .device-frame {
-  box-shadow: inset 0 0 calc(var(--devices-scale)*12px) black, inset 0 calc(var(--devices-scale)*7px) 0 calc(var(--devices-scale)*3px) #646668, inset 0 calc(var(--devices-scale)*-6px) 0 calc(var(--devices-scale)*3px) #646668;
+  box-shadow:
+    inset 0 0 calc(var(--devices-scale) * 12px) black,
+    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
+      #646668,
+    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
+      #646668;
 }
 
 .device-google-pixel-6-pro.device-black .device-header {
@@ -203,5 +244,4 @@
 .device-google-pixel-6-pro.device-black .device-power {
   background: #191a1a;
 }
-
 </style>

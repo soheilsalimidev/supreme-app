@@ -5,14 +5,20 @@ import splashScreeenSetting from "@/components/steps/splashScreeenSetting.vue";
 import webPageSetting from "@/components/steps/webPageSetting.vue";
 import compile from "@/components/steps/compile.vue";
 import introPage from "@/components/steps/introPage.vue";
-
+import spashScreenFrame from "@/components/frames/spashScreenFrame.vue";
+import webPageFrame from "@/components/frames/webPageFrame.vue";
 export const useNavigationStore = defineStore("navigation", () => {
-  const components = {
+  const componentsSteps = {
     appInfo,
     splashScreeenSetting,
     webPageSetting,
     compile,
     introPage,
+  };
+
+  const componentsFrame = {
+    spashScreenFrame,
+    webPageFrame,
   };
 
   const activeTabIndex = ref(1);
@@ -22,32 +28,60 @@ export const useNavigationStore = defineStore("navigation", () => {
       name: string;
       id: number;
       status: "current" | "upcoming" | "complete";
-      component: keyof typeof components;
+      componentStep: keyof typeof componentsSteps;
+      componentFrame?: keyof typeof componentsFrame;
     }[]
   >([
-    { name: "app info", id: 1, status: "current", component: "appInfo" },
+    {
+      name: "app info",
+      id: 1,
+      status: "current",
+      componentStep: "appInfo",
+    },
     {
       name: "splash screen",
       id: 2,
       status: "upcoming",
-      component: "splashScreeenSetting",
+      componentFrame: "spashScreenFrame",
+      componentStep: "splashScreeenSetting",
     },
     {
       name: "web page settings",
       id: 3,
       status: "upcoming",
-      component: "webPageSetting",
+      componentFrame: "webPageFrame",
+      componentStep: "webPageSetting",
     },
-    { name: "Step 4", id: 4, status: "upcoming", component: "introPage" },
-    { name: "Step 5", id: 5, status: "upcoming", component: "compile" },
+    {
+      name: "Step 4",
+      id: 4,
+      status: "upcoming",
+      componentStep: "introPage",
+    },
+    {
+      name: "Step 5",
+      id: 5,
+      status: "upcoming",
+      componentStep: "compile",
+    },
   ]);
 
+  const activeComponentFrame = computed(() => {
+    return steps.value[currentTab.value].componentFrame
+      ? //@ts-ignore
+        componentsFrame[steps.value[currentTab.value]!.componentFrame]
+      : undefined;
+  });
+
   const activeComponent = computed(
-    () =>
-      components[
-        steps.value.find((step) => step.status === "current")!.component
-      ],
+    () => componentsSteps[steps.value[currentTab.value]!.componentStep],
   );
 
-  return { steps, activeComponent, activeTabIndex, currentTab };
+  return {
+    steps,
+    activeComponent,
+    activeTabIndex,
+    currentTab,
+    activeComponentFrame,
+  };
 });
