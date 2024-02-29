@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppInfo: typeof import('./src/components/steps/appInfo.vue')['default']
     CheckboxItem: typeof import('./src/components/Inputs/checkboxItem.vue')['default']
+    ColorPicker: typeof import('./src/components/Inputs/colorPicker.vue')['default']
+    ColorPickerComponent: typeof import('./src/components/Inputs/colorPickerComponent.vue')['default']
     Compile: typeof import('./src/components/steps/compile.vue')['default']
     Dialog: typeof import('@headlessui/vue')['Dialog']
     DialogPanel: typeof import('@headlessui/vue')['DialogPanel']

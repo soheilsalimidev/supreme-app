@@ -80,23 +80,13 @@
       </div>
       <div v-else-if="appInfo.app_setting.splash_screen.type === 3">
         <color-picker
-          v-model:gradientColor="
-            appInfo.app_setting.splash_screen.splash_screen_g_c
-          "
-          lang="En"
-          :theme="isDark ? 'black' : 'white'"
-          useType="gradient"
-        />
-        <p
-          class="mt-2 text-sm text-red-600"
-          v-if="v$.app_setting.splash_screen.splash_screen_g_c.$error"
-        >
-          {{
+          v-model="appInfo.app_setting.splash_screen.splash_screen_g_c"
+          :error="
             v$.app_setting.splash_screen.splash_screen_g_c.$errors
               .map((e) => e.$message)
-              .join(",")
-          }}
-        </p>
+              .join(',')
+          "
+        />
       </div>
     </div>
   </div>
@@ -107,12 +97,7 @@ import { useAppSettingStore } from "@/stores/appSetting";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import CheckCircleIcon from '~icons/heroicons/check-circle';
-import { ColorPicker } from "vue3-colorpicker";
-import "vue3-colorpicker/style.css";
-import { useDark } from "@vueuse/core";
-
-const isDark = useDark();
+import CheckCircleIcon from "~icons/heroicons/check-circle";
 const splashType = [
   { title: "Just icon and app name", description: "sajdkfhasdkjfh", value: 0 },
   {

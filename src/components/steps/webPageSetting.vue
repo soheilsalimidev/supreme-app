@@ -192,12 +192,9 @@
             "
           >
             <color-picker
-              v-model:gradientColor="
+              v-model="
                 appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
               "
-              lang="En"
-              :theme="isDark ? 'black' : 'white'"
-              useType="gradient"
             />
             <p class="mt-2 text-sm text-red-600">
               {{
@@ -263,18 +260,14 @@
 
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
-import ExclamationTriangleIcon from '~icons/heroicons/exclamation-triangle';
+import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 import useVuelidate from "@vuelidate/core";
 import { requiredIf } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { ColorPicker } from "vue3-colorpicker";
-import "vue3-colorpicker/style.css";
-import { useDark } from "@vueuse/core";
 import { ref } from "vue";
 
 const items = ref([false, false, false, false, false, false, false]);
 
-const isDark = useDark();
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 
