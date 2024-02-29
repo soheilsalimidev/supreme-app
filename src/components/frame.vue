@@ -33,7 +33,6 @@ const { activeComponentFrame, activeTabIndex } = storeToRefs(
 .device,
 .device::before,
 .device::after,
-.device *,
 .device *::before,
 .device *::after {
   box-sizing: border-box;

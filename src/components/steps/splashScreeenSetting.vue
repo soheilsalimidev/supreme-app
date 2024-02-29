@@ -99,16 +99,16 @@ import { helpers, required } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
 import CheckCircleIcon from "~icons/heroicons/check-circle";
 const splashType = [
-  { title: "Just icon and app name", description: "sajdkfhasdkjfh", value: 0 },
+  { title: "Just icon and app name", description: "", value: 0 },
   {
     title: "Icon with animation",
-    description: "asdjhaksjdhklajshdk",
+    description: "",
     value: 1,
   },
-  { title: "full screen image", description: "sdlkjfhaskldfhkasdjh", value: 2 },
+  { title: "full screen image", description: "", value: 2 },
   {
     title: "icon and app name with gradient color",
-    description: "sdlkjfhaskldfhkasdjh",
+    description: "",
     value: 3,
   },
 ];
