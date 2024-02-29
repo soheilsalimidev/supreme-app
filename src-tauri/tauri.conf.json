@@ -34,14 +34,26 @@
       }
     },
     "bundle": {
+      "deb": {
+        "files": {
+          "/usr/lib64": "./resources/lib64-linux/"
+        }
+      },
       "resources": [
-        "./resources/*"
+        "./resources/*.jar",
+        "./resources/lib64"
       ],
       "externalBin": [
         "./binaries/zipalign"
       ],
       "active": true,
-      "targets": "all",
+      "targets": [
+        "deb",
+        "msi",
+        "nsis",
+        "app",
+        "dmg"
+      ],
       "identifier": "com.soheilsalimi.iapp",
       "icon": [
         "icons/32x32.png",

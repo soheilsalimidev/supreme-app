@@ -80,6 +80,7 @@
       </div>
       <div v-else-if="appInfo.app_setting.splash_screen.type === 3">
         <color-picker
+          label="select your color"
           v-model="appInfo.app_setting.splash_screen.splash_screen_g_c"
           :error="
             v$.app_setting.splash_screen.splash_screen_g_c.$errors
