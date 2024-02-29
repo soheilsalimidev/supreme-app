@@ -3,6 +3,16 @@ import { ref, watch } from "vue";
 
 export const useAppSettingStore = defineStore("appSetting", () => {
   const savePath = ref();
+  const selectedWebPageSetting = ref([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]);
 
   // const test: AppInfo = {
   //   name: "asdf adsfasd",
@@ -72,7 +82,7 @@ export const useAppSettingStore = defineStore("appSetting", () => {
   // };
   const appInfo = ref<AppInfo>(
     // test,
-      {
+    {
       name: "",
       package_name: "",
       icon_path: "",
@@ -119,12 +129,12 @@ export const useAppSettingStore = defineStore("appSetting", () => {
         },
       },
       paths: [],
-    }
+    },
   );
 
   watch(appInfo, () => console.log(appInfo.value));
 
-  return { appInfo, savePath };
+  return { appInfo, savePath, selectedWebPageSetting };
 });
 
 export interface AppInfo {
@@ -173,6 +183,7 @@ export interface Setting {
   admob: number;
   admob_banner: number;
   googleService: any;
+  loading?:string
   floating_action_button: {
     enable: boolean;
     item_fab: ItemMenu[];

@@ -116,10 +116,7 @@ const onDrop = async (files: string[] | null) => {
 
     if (props.accept.some((type) => type.includes("png"))) {
       const { width, height } = await getImageDimensions(fileUrl);
-      if (props.filterCondition(width, height)) {
-        modelValue.value = files[0];
-        return;
-      } else {
+      if (!props.filterCondition(width, height)) {
         notify(
           {
             group: "generic",
@@ -129,10 +126,10 @@ const onDrop = async (files: string[] | null) => {
           },
           5000,
         );
-      }
-    } else {
-      return;
-    }
+        return;
+      } 
+    } 
+    modelValue.value = files[0];
   }
 };
 
@@ -154,7 +151,7 @@ const selectFile = async () => {
     multiple: false,
     filters: [
       {
-        name: "",
+        name: props.accept.join(','),
         extensions: props.accept,
       },
     ],

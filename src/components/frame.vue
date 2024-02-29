@@ -1,28 +1,71 @@
 <template>
-  <div class="device device-google-pixel-6-pro">
-    <div class="device-frame">
-      <component
-        class="min-w-full"
-        :key="activeTabIndex"
-        :is="activeComponentFrame"
-      ></component>
+  <div class="flex flex-col">
+    <div class="device device-google-pixel-6-pro ">
+      <div class="device-frame ">
+        <component
+          class="min-w-full"
+          :key="activeTabIndex"
+          :is="activeComponentFrame"
+        ></component>
+      </div>
+      <div class="device-stripe"></div>
+      <div class="device-header"></div>
+      <div class="device-sensors"></div>
+      <div class="device-btns"></div>
+      <div class="device-power"></div>
+      <div class="device-home"></div>
     </div>
-    <div class="device-stripe"></div>
-    <div class="device-header"></div>
-    <div class="device-sensors"></div>
-    <div class="device-btns"></div>
-    <div class="device-power"></div>
-    <div class="device-home"></div>
+    <Transition
+      enter-active-class="animate__animated animate__bounceIn"
+      leave-active-class="animate__animated animate__bounceOut"
+    >
+      <div
+        class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4"
+        v-if="previewWaring"
+      >
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <ExclamationTriangleIcon
+              class="h-5 w-5 text-yellow-400"
+              aria-hidden="true"
+            />
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-yellow-700">
+              be aware that this just preview
+              {{ " " }}
+              <a
+                href="#"
+                class="font-medium underline text-yellow-700 hover:text-yellow-600"
+              >
+                and what you see on rendered app may be differnt
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useNavigationStore } from "@/stores/navigation";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
+import { ref } from "vue";
+import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 
 const { activeComponentFrame, activeTabIndex } = storeToRefs(
-  useNavigationStore(),
+  useNavigationStore()
 );
+
+const previewWaring = ref(true);
+
+onMounted(() => {
+  setInterval(() => {
+    previewWaring.value = !previewWaring.value;
+  }, 360000);
+});
 </script>
 
 <style scoped lang="scss">
@@ -65,8 +108,7 @@ const { activeComponentFrame, activeTabIndex } = storeToRefs(
 .device-google-pixel-6-pro .device-frame {
   background: #121212;
   border-radius: calc(var(--devices-scale) * 28px);
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) #8d8d86,
+  box-shadow: inset 0 0 calc(var(--devices-scale) * 12px) #8d8d86,
     inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
       #fdfdfc,
     inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
@@ -187,8 +229,7 @@ const { activeComponentFrame, activeTabIndex } = storeToRefs(
 }
 
 .device-google-pixel-6-pro.device-gold .device-frame {
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) #ff962e,
+  box-shadow: inset 0 0 calc(var(--devices-scale) * 12px) #ff962e,
     inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
       white,
     inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
@@ -216,8 +257,7 @@ const { activeComponentFrame, activeTabIndex } = storeToRefs(
 }
 
 .device-google-pixel-6-pro.device-black .device-frame {
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) black,
+  box-shadow: inset 0 0 calc(var(--devices-scale) * 12px) black,
     inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
       #646668,
     inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)

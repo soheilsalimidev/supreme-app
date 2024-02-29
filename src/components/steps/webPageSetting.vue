@@ -43,18 +43,18 @@
         ></radioList>
 
         <div
-          v-if="appInfo.app_setting.no_internet_layout.type === 1"
+          v-if="appInfo.app_setting.no_internet_layout.type === 2"
           class="mt-2"
         >
           <fileSelect
-            file-name="loading.json"
+            file-name="no_internet.json"
             label="select your lottie file"
             :accept="['json']"
             v-model="appInfo.app_setting.no_internet_layout.lottieFile"
           ></fileSelect>
         </div>
         <div
-          v-if="appInfo.app_setting.no_internet_layout.type === 2"
+          v-if="appInfo.app_setting.no_internet_layout.type === 1"
           class="mt-2"
         >
           <fileSelect
@@ -121,6 +121,7 @@
       </template>
     </checkboxItem>
     <checkboxItem
+      v-if="appInfo.app_setting.toolbar.type === 1"
       :open="items[4]"
       label="toolbar_custom_icon"
       @update:open="openNew(4)"
@@ -192,6 +193,7 @@
             "
           >
             <color-picker
+              label="select your colors"
               v-model="
                 appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
               "
@@ -255,6 +257,45 @@
         </div>
       </template>
     </checkboxItem>
+    <checkboxItem
+      :open="items[7]"
+      label="loading"
+      @update:open="openNew(7)"
+      disableCheckbox
+    >
+      <template #description> loading lottie </template>
+      <template #default>
+        <fileSelect
+          file-name="loading.json"
+          label="select your lottie file"
+          :accept="['json']"
+          v-model="appInfo.app_setting.loading"
+        ></fileSelect>
+
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <ExclamationTriangleIcon
+                class="h-5 w-5 text-yellow-400"
+                aria-hidden="true"
+              />
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-yellow-700">
+                if you don't select anything
+                {{ " " }}
+                <a
+                  href="#"
+                  class="font-medium underline text-yellow-700 hover:text-yellow-600"
+                >
+                  the default one will be selected
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </checkboxItem>
   </div>
 </template>
 
@@ -264,12 +305,10 @@ import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 import useVuelidate from "@vuelidate/core";
 import { requiredIf } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 
-const items = ref([false, false, false, false, false, false, false]);
-
-
-const { appInfo } = storeToRefs(useAppSettingStore());
+const { appInfo, selectedWebPageSetting: items } = storeToRefs(
+  useAppSettingStore()
+);
 
 const openNew = (index: number) => {
   if (items.value[index]) {
@@ -290,19 +329,19 @@ const rules = {
     toolbar_custom_icon: {
       first: {
         req: requiredIf(
-          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
+          () => appInfo.value.app_setting.toolbar_custom_icon.enable
         ),
       },
       second: {
         req: requiredIf(
-          () => appInfo.value.app_setting.toolbar_custom_icon.enable,
+          () => appInfo.value.app_setting.toolbar_custom_icon.enable
         ),
       },
     },
     floating_action_button: {
       item_fab: {
         req: requiredIf(
-          () => appInfo.value.app_setting.floating_action_button.enable,
+          () => appInfo.value.app_setting.floating_action_button.enable
         ),
       },
     },
@@ -312,7 +351,7 @@ const rules = {
           req: requiredIf(
             () =>
               appInfo.value.app_setting.sidebar_menu.sidebar_menu_header
-                .type === 1,
+                .type === 1
           ),
         },
       },
@@ -321,7 +360,7 @@ const rules = {
           req: requiredIf(
             () =>
               appInfo.value.app_setting.sidebar_menu.sidebar_menu_footer
-                .type === 1,
+                .type === 1
           ),
         },
       },

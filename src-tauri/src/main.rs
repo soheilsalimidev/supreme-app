@@ -27,7 +27,8 @@ async fn main() -> anyhow::Result<()> {
             render_app,
             check_java,
             save_config,
-            move_app
+            move_app,
+            get_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -153,3 +154,9 @@ async fn check_java(app_handle: tauri::AppHandle) -> Result<Option<String>, Stri
         .await
         .map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+async fn get_file(path: String) -> Result<String, String> {
+    tokio::fs::read_to_string(path).await.map_err(|e| e.to_string())
+}
+
