@@ -4,7 +4,7 @@ fn main() {
     let _ = fs::remove_dir_all("./resources/lib64/");
     let _ = fs::create_dir("./resources/lib64/");
 
-    #[cfg(target_os = "linux")]
+    #[cfg(not(target_os = "macos"))]
     {
         let _ = fs::copy(
             "./resources/lib64-linux/libbcc.so",
