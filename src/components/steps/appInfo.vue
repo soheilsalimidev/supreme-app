@@ -34,6 +34,8 @@
       label="App icon"
       file-name="logo.png"
       v-model="appInfo.icon_path"
+      filterWarningTitle="inviled image"
+      filterWarningText="your image should be 512*512 size"
       :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
       :filterCondition="
         (width: number, height: number) =>
@@ -51,9 +53,6 @@ import useVuelidate from "@vuelidate/core";
 import { required, helpers, url } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
 import { watch } from "vue";
-import { useNavigationStore } from "@/stores/navigation";
-
-const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
 const { appInfo } = storeToRefs(useAppSettingStore());
 
 watch(
@@ -90,12 +89,4 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, appInfo);
-
-const next = async () => {
-  if (await v$.value.$validate()) {
-    steps.value[0].status = "complete";
-    steps.value[1].status = "current";
-    activeTabIndex.value++;
-  }
-};
 </script>

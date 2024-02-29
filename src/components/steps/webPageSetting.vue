@@ -263,7 +263,6 @@
 
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
-import { useNavigationStore } from "@/stores/navigation";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/solid";
 import useVuelidate from "@vuelidate/core";
 import { requiredIf } from "@vuelidate/validators";
@@ -278,13 +277,12 @@ const items = ref([false, false, false, false, false, false, false]);
 const isDark = useDark();
 
 const { appInfo } = storeToRefs(useAppSettingStore());
-const { steps, activeTabIndex } = storeToRefs(useNavigationStore());
 
 const openNew = (index: number) => {
   if (items.value[index]) {
     items.value[index] = false;
   } else {
-    items.value.forEach((_ , index) => (items.value[index] = false));
+    items.value.forEach((_, index) => (items.value[index] = false));
     items.value[index] = true;
   }
 };
@@ -339,14 +337,6 @@ const rules = {
 };
 
 const v$ = useVuelidate(rules, appInfo);
-
-const next = async () => {
-  if (await v$.value.$validate()) {
-    steps.value[2].status = "complete";
-    steps.value[4].status = "current";
-    activeTabIndex.value++;
-  }
-};
 
 const sidebarMenuFooterModes = [
   {

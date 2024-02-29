@@ -203,7 +203,6 @@ import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import { useNavigationStore } from "./stores/navigation";
 import { wrapGrid } from "animate-css-grid";
-import "animate.css";
 
 const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());

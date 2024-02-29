@@ -131,7 +131,6 @@ import { CheckIcon } from "@heroicons/vue/24/solid";
 import { storeToRefs } from "pinia";
 import { useNavigationStore } from "@/stores/navigation";
 // import { notify } from "notiwind";
-import "animate.css";
 import { ref } from "vue";
 import CustomScrollbar from "custom-vue-scrollbar";
 import "custom-vue-scrollbar/dist/style.css";
@@ -183,12 +182,12 @@ const previous = () => {
 };
 
 const next = async () => {
-  // if (await v$.value.$validate()) {
-  tabDirectionXyzRight.value = true;
-  steps.value.find((step) => step.status === "current")!.status = "complete";
-  steps.value[++currentTab.value].status = "current";
-  activeTabIndex.value++;
-  // }
+  if (await v$.value.$validate()) {
+    tabDirectionXyzRight.value = true;
+    steps.value.find((step) => step.status === "current")!.status = "complete";
+    steps.value[++currentTab.value].status = "current";
+    activeTabIndex.value++;
+  }
 };
 </script>
 
