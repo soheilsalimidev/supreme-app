@@ -1,13 +1,12 @@
 <template>
   <div class="flex flex-col items-center">
     <nav aria-label="Progress" class="w-fit">
-      <XyzTransitionGroup
+      <TransitionGroup
+        tag="ol"
         role="list"
         class="flex items-center"
         appear
-        tag="ol"
-        duration="auto"
-        xyz="fade flip-down origin-bottom stagger-1 delay-1"
+        enter-active-class="animate__animated animate__fadeIn"
       >
         <li
           v-for="(step, stepIdx) in steps"
@@ -72,7 +71,7 @@
             </a>
           </template>
         </li>
-      </XyzTransitionGroup>
+      </TransitionGroup>
     </nav>
 
     <div class="w-full bg-gray-200 h-[1px] mt-14 dark:bg-gray-700"></div>
@@ -93,6 +92,8 @@
             ? 'animate__animated animate__slideOutRight'
             : ' animate__animated animate__slideOutLeft'
         "
+        appear
+        appear-active-class="animate__animated animate__fadeIn"
       >
         <component
           class="min-w-full basis-full"
@@ -127,10 +128,9 @@
 </template>
 
 <script lang="ts" setup>
-import { CheckIcon } from "@heroicons/vue/24/solid";
+import CheckIcon from '~icons/heroicons/check-solid';
 import { storeToRefs } from "pinia";
 import { useNavigationStore } from "@/stores/navigation";
-// import { notify } from "notiwind";
 import { ref } from "vue";
 import CustomScrollbar from "custom-vue-scrollbar";
 import "custom-vue-scrollbar/dist/style.css";
@@ -141,36 +141,6 @@ const tabDirectionXyzRight = ref(true);
 const { steps, activeComponent, activeTabIndex, currentTab } = storeToRefs(
   useNavigationStore(),
 );
-
-// let currentTabId = 1;
-// const changeStep = (stepId: number) => {
-//   const goinogToStep = steps.value.find((step) => step.id === stepId)!;
-//   tabDirectionXyz.value =
-//     goinogToStep.id > currentTabId
-//       ? "out-left-100% in-right-100%"
-//       : "out-right-100% in-left-100%";
-//   if (
-//     steps.value.some(
-//       (step) => step.id < goinogToStep.id && step.status !== "complete",
-//     )
-//   ) {
-//     notify(
-//       {
-//         group: "generic",
-//         title: "Tasks not completed",
-//         text: "please complete all the steps before this before contiuning",
-//         type: "warning",
-//       },
-//       3000,
-//     );
-//   } else {
-//     steps.value.find((step) => step.status === "current")!.status = "upcoming";
-//     goinogToStep.status = "current";
-//     currentTabId = goinogToStep.id;
-//     currentTab.value = goinogToStep.id - 1;
-//     activeTabIndex.value++;
-//   }
-// };
 
 const v$ = useVuelidate();
 

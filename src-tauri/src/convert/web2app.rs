@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Context, Result};
 use async_recursion::async_recursion;
 use colors_transform::Rgb;
-use core::f32;
 use futures_util::StreamExt;
 use image::io::Reader as ImageReader;
 use log::{error, info};

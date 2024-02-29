@@ -11,9 +11,6 @@ dependencies:
   '@headlessui/vue':
     specifier: ^1.7.19
     version: 1.7.19(vue@3.4.5)
-  '@heroicons/vue':
-    specifier: ^2.1.1
-    version: 2.1.1(vue@3.4.5)
   '@tauri-apps/api':
     specifier: ^1.5.3
     version: 1.5.3
@@ -44,11 +41,17 @@ dependencies:
   vue:
     specifier: ^3.4.5
     version: 3.4.5(typescript@5.3.3)
+  vue-i18n:
+    specifier: '9'
+    version: 9.9.1(vue@3.4.5)
   vue3-colorpicker:
     specifier: ^2.2.3
     version: 2.2.3(@aesoper/normal-utils@0.1.5)(@popperjs/core@2.11.8)(@vueuse/core@10.7.2)(gradient-parser@1.0.2)(lodash-es@4.17.21)(tinycolor2@1.6.0)(vue-types@4.2.1)(vue@3.4.5)
 
 devDependencies:
+  '@iconify-json/heroicons':
+    specifier: ^1.1.20
+    version: 1.1.20
   '@iconify-json/line-md':
     specifier: ^1.1.36
     version: 1.1.36
@@ -472,14 +475,6 @@ packages:
       vue: 3.4.5(typescript@5.3.3)
     dev: false
 
-  /@heroicons/vue@2.1.1(vue@3.4.5):
-    resolution: {integrity: sha512-Yi5nh/89L193ALgHyJUQUdNLsKXPrrE3yj5yiR8WAlo7nZyXGxGauQcEAmBsa2XJGMhBMuEdoOiuZ8wEwTBxVQ==}
-    peerDependencies:
-      vue: '>= 3'
-    dependencies:
-      vue: 3.4.5(typescript@5.3.3)
-    dev: false
-
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
@@ -498,6 +493,12 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    dev: true
+
+  /@iconify-json/heroicons@1.1.20:
+    resolution: {integrity: sha512-puNt1al/rDw8Rb5x8sfk20UA8AQjMskLMh63nSUBj+8I0lQ7LtX+0Qn8wow2xTXTEsynJ9xXLD8Aat53e0qi8A==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify-json/line-md@1.1.36:
@@ -532,6 +533,27 @@ packages:
       '@iconify/types': 2.0.0
       vue: 3.4.5(typescript@5.3.3)
     dev: true
+
+  /@intlify/core-base@9.9.1:
+    resolution: {integrity: sha512-qsV15dg7jNX2faBRyKMgZS8UcFJViWEUPLdzZ9UR0kQZpFVeIpc0AG7ZOfeP7pX2T9SQ5jSiorq/tii9nkkafA==}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/message-compiler': 9.9.1
+      '@intlify/shared': 9.9.1
+    dev: false
+
+  /@intlify/message-compiler@9.9.1:
+    resolution: {integrity: sha512-zTvP6X6HeumHOXuAE1CMMsV6tTX+opKMOxO1OHTCg5N5Sm/F7d8o2jdT6W6L5oHUsJ/vvkGefHIs7Q3hfowmsA==}
+    engines: {node: '>= 16'}
+    dependencies:
+      '@intlify/shared': 9.9.1
+      source-map-js: 1.0.2
+    dev: false
+
+  /@intlify/shared@9.9.1:
+    resolution: {integrity: sha512-b3Pta1nwkz5rGq434v0psHwEwHGy1pYCttfcM22IE//K9owbpkEvFptx9VcuRAxjQdrO2If249cmDDjBu5wMDA==}
+    engines: {node: '>= 16'}
+    dev: false
 
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3786,6 +3808,18 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-i18n@9.9.1(vue@3.4.5):
+    resolution: {integrity: sha512-xyQ4VspLdNSPTKBFBPWa1tvtj+9HuockZwgFeD2OhxxXuC2CWeNvV4seu2o9+vbQOyQbhAM5Ez56oxUrrnTWdw==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@intlify/core-base': 9.9.1
+      '@intlify/shared': 9.9.1
+      '@vue/devtools-api': 6.6.1
+      vue: 3.4.5(typescript@5.3.3)
+    dev: false
 
   /vue-template-compiler@2.7.16:
     resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}

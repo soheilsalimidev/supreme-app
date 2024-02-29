@@ -13,9 +13,10 @@
           class="col-span-2"
           label="App packagename"
           placeholder="com.app.webapp"
+          disabled
           @blur="v$.package_name.$touch"
           :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
-          v-model="appInfo.package_name"
+          v-model="packageName"
         />
         <textInput
           class="col-span-2"
@@ -52,8 +53,20 @@ import { useAppSettingStore } from "@/stores/appSetting";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers, url } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { watch } from "vue";
+import { computed, watch } from "vue";
 const { appInfo } = storeToRefs(useAppSettingStore());
+
+const packageName = computed(() => {
+  return (
+    "com.app.webapp" +
+    appInfo.value.name
+      .trim()
+      .toLowerCase()
+      .replaceAll("-", ".")
+      .split(" ")
+      .join("")
+  );
+});
 
 watch(
   () => appInfo.value.name,

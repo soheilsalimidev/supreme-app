@@ -263,7 +263,7 @@
 
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/solid";
+import ExclamationTriangleIcon from '~icons/heroicons/exclamation-triangle';
 import useVuelidate from "@vuelidate/core";
 import { requiredIf } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";

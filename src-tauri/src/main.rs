@@ -3,7 +3,7 @@
 use std::{
     fs::{self, File},
     io::Write,
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 use flexi_logger::Logger;

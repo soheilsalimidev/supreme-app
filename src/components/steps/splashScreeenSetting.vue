@@ -107,7 +107,7 @@ import { useAppSettingStore } from "@/stores/appSetting";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
-import { CheckCircleIcon } from "@heroicons/vue/24/outline";
+import CheckCircleIcon from '~icons/heroicons/check-circle';
 import { ColorPicker } from "vue3-colorpicker";
 import "vue3-colorpicker/style.css";
 import { useDark } from "@vueuse/core";

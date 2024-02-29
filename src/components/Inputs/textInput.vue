@@ -17,10 +17,10 @@
         :disabled="disabled"
         :class="[
           error &&
-            'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500',
+            'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 dark:placeholder-red-600',
           inputClass,
         ]"
-        class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 dark:text-slate-400 dark:bg-slate-800 text-lg"
+        class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 dark:text-white dark:bg-slate-800 text-lg disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:disabled:text-slate-500"
         v-model="modelValue"
         :placeholder="placeholder"
       />
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ExclamationCircleIcon } from "@heroicons/vue/24/solid";
+import ExclamationCircleIcon from "~icons/heroicons/exclamation-circle-solid";
 
 defineProps<{
   label: string;

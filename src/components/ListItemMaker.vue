@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import type { ItemMenu } from "@/stores/appSetting";
-import { ChevronDownIcon } from "@heroicons/vue/24/solid";
+import ChevronDownIcon from '~icons/heroicons/chevron-down-solid';
 import LineMdPlusCircle from "~icons/line-md/plus-circle";
 import LineMdHomeMd from "~icons/line-md/home-md";
 import LineMdPhone from "~icons/line-md/phone";
