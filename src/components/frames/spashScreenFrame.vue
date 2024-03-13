@@ -19,25 +19,37 @@ const getLogo = computed(() => convertFileSrc(appInfo.value.icon_path));
     <div
       v-if="appInfo.app_setting.splash_screen.type === 0"
     >
-      <img :src="getLogo" class="w-52 h-52" />
-      <h2 class="mt-5 text-2xl">{{ appInfo.name }}</h2>
+      <img
+        :src="getLogo"
+        class="w-52 h-52"
+      >
+      <h2 class="mt-5 text-2xl">
+        {{ appInfo.name }}
+      </h2>
     </div>
     <div
       v-else-if="appInfo.app_setting.splash_screen.type === 1"
       class=""
     >
       <div class="bounce">
-        <img :src="getLogo" class="w-52 h-52" />
+        <img
+          :src="getLogo"
+          class="w-52 h-52"
+        >
       </div>
-      <h2 class="mt-5 text-2xl">{{ appInfo.name }}</h2>
+      <h2 class="mt-5 text-2xl">
+        {{ appInfo.name }}
+      </h2>
     </div>
-    <div v-else-if="appInfo.app_setting.splash_screen.type === 2" >
+    <div v-else-if="appInfo.app_setting.splash_screen.type === 2">
       <img
         v-if="appInfo.app_setting.splash_screen.image_path"
         :src="convertFileSrc(appInfo.app_setting.splash_screen.image_path)"
         class="h-full w-full"
-      />
-      <p v-else>Select your image</p>
+      >
+      <p v-else>
+        Select your image
+      </p>
     </div>
     <div
       v-else-if="appInfo.app_setting.splash_screen.type === 3"
@@ -45,8 +57,13 @@ const getLogo = computed(() => convertFileSrc(appInfo.value.icon_path));
         backgroundImage: appInfo.app_setting.splash_screen.splash_screen_g_c,
       }"
     >
-      <img :src="getLogo" class="w-52 h-52" />
-      <h2 class="mt-5 text-2xl">{{ appInfo.name }}</h2>
+      <img
+        :src="getLogo"
+        class="w-52 h-52"
+      >
+      <h2 class="mt-5 text-2xl">
+        {{ appInfo.name }}
+      </h2>
     </div>
   </Transition>
 </template>

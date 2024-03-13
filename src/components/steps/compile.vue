@@ -1,6 +1,7 @@
 <template>
   <div class="flex justify-center items-center h-full">
     <div
+      ref="logsDiv"
       :class="[
         state === 'running' &&
           'w-full h-full m-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 duration-700 border-transparent',
@@ -9,7 +10,6 @@
       ]"
       class="text-white transition-all ease-in-out"
       @click="startRender"
-      ref="logsDiv"
     >
       <p
         v-if="state === 'start'"
@@ -18,8 +18,15 @@
         Start
       </p>
       <div v-else>
-        <TransitionGroup name="list" tag="ul">
-          <li v-for="(log, index) in logs" :key="index" class="text-black">
+        <TransitionGroup
+          name="list"
+          tag="ul"
+        >
+          <li
+            v-for="(log, index) in logs"
+            :key="index"
+            class="text-black"
+          >
             {{ log }}
           </li>
         </TransitionGroup>

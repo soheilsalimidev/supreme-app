@@ -1,7 +1,14 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <TransitionRoot as="template" :show="open">
-    <Dialog as="div" class="relative z-10" @close="open = false">
+  <TransitionRoot
+    as="template"
+    :show="open"
+  >
+    <Dialog
+      as="div"
+      class="relative z-10"
+      @close="open = false"
+    >
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -43,8 +50,9 @@
                     <DialogTitle
                       as="h3"
                       class="text-lg font-medium leading-6 text-gray-900 dark:text-white"
-                      >{{ title }}</DialogTitle
                     >
+                      {{ title }}
+                    </DialogTitle>
                     <div class="mt-2">
                       <p class="text-sm text-gray-500 dark:text-slate-400">
                         <slot />
@@ -67,13 +75,13 @@
                   {{ okText }}
                 </button>
                 <button
+                  ref="cancelButtonRef"
                   type="button"
                   class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                   @click="
                     open = false;
                     cancel();
                   "
-                  ref="cancelButtonRef"
                 >
                   {{ cancelText }}
                 </button>

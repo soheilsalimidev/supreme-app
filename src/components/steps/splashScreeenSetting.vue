@@ -2,7 +2,9 @@
   <div class="flex flex-col">
     <div class="px-4 py-5 space-y-6 sm:p-6">
       <RadioGroup v-model="appInfo.app_setting.splash_screen.type">
-        <RadioGroupLabel class="sr-only"> Server size </RadioGroupLabel>
+        <RadioGroupLabel class="sr-only">
+          Server size
+        </RadioGroupLabel>
         <div class="space-y-4">
           <RadioGroup v-model="appInfo.app_setting.splash_screen.type">
             <RadioGroupLabel
@@ -15,11 +17,11 @@
               class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4"
             >
               <RadioGroupOption
-                as="template"
                 v-for="(splashList, index) in splashType"
                 :key="index"
-                :value="splashList.value"
                 v-slot="{ checked, active }"
+                as="template"
+                :value="splashList.value"
               >
                 <div
                   :class="[
@@ -68,20 +70,20 @@
 
       <div v-if="appInfo.app_setting.splash_screen.type === 2">
         <fileSelect
+          v-model="appInfo.app_setting.splash_screen.image_path"
           label="image"
           file-name="splash_bg.jpg"
-          v-model="appInfo.app_setting.splash_screen.image_path"
           :error="
             v$.app_setting.splash_screen.image_path.$errors
               .map((e) => e.$message)
               .join(',')
           "
-        ></fileSelect>
+        />
       </div>
       <div v-else-if="appInfo.app_setting.splash_screen.type === 3">
         <color-picker
-          label="select your color"
           v-model="appInfo.app_setting.splash_screen.splash_screen_g_c"
+          label="select your color"
           :error="
             v$.app_setting.splash_screen.splash_screen_g_c.$errors
               .map((e) => e.$message)

@@ -41,7 +41,7 @@
       },
       "resources": [
         "./resources/*.jar",
-        "./resources/lib64"
+        "./resources/lib64-linux/*"
       ],
       "externalBin": [
         "./binaries/zipalign"

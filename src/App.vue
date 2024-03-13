@@ -8,7 +8,11 @@
           <div class="absolute left-0 flex-shrink-0 lg:static">
             <a href="#">
               <span class="sr-only">Logo</span>
-              <img class="h-8 w-auto" :src="icon" alt="Workflow" />
+              <img
+                class="h-8 w-auto"
+                :src="icon"
+                alt="Workflow"
+              >
             </a>
           </div>
 
@@ -16,28 +20,30 @@
             class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in ms-auto"
           >
             <input
+              id="toggle"
               type="checkbox"
               name="toggle"
-              id="toggle"
-              @change="toggleDark()"
               :value="isDark"
               class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
-            />
+              @change="toggleDark()"
+            >
             <label
               for="toggle"
               class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
-            ></label>
+            />
           </div>
         </div>
       </div>
     </header>
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="sr-only">Page title</h1>
+        <h1 class="sr-only">
+          Page title
+        </h1>
         <div
+          ref="grid"
           class="gap-4 items-start grid"
           :class="[!activeComponentFrame ? 'grid-cols-6' : 'grid-cols-3']"
-          ref="grid"
         >
           <div
             class="grid gap-4"
@@ -48,7 +54,12 @@
             ]"
           >
             <section aria-labelledby="section-1-title">
-              <h2 class="sr-only" id="section-1-title">Steps</h2>
+              <h2
+                id="section-1-title"
+                class="sr-only"
+              >
+                Steps
+              </h2>
               <div class="rounded-lg bg-white dark:bg-slate-800 shadow">
                 <div class="p-6">
                   <steps />
@@ -65,10 +76,13 @@
               :duration="{ enter: 1000, leave: 2000 }"
             >
               <section
-                aria-labelledby="section-2-title"
                 v-if="activeComponentFrame"
+                aria-labelledby="section-2-title"
               >
-                <h2 class="sr-only" id="section-2-title">
+                <h2
+                  id="section-2-title"
+                  class="sr-only"
+                >
                   Phone frame preview
                 </h2>
                 <div class="rounded-lg bg-transparent overflow-hidden">
@@ -89,10 +103,15 @@
         <div
           class="text-sm text-gray-500 text-center sm:text-left dark:text-white"
         >
-          <span class="flex gap-1"
-            >Build with
-            <LineMdHeart class="text-red-500" :key="refreshHeart" /> by
-            <a href="#" class="hover:underline">soheil salimi</a>
+          <span class="flex gap-1">Build with
+            <LineMdHeart
+              :key="refreshHeart"
+              class="text-red-500"
+            /> by
+            <a
+              href="#"
+              class="hover:underline"
+            >soheil salimi</a>
           </span>
         </div>
       </div>
@@ -101,8 +120,8 @@
 
   <modal
     v-model="noJavaModal"
-    okText="ok, i download"
-    cancelText="ok"
+    ok-text="ok, i download"
+    cancel-text="ok"
     title="No java"
     :ok="() => {}"
     :cancel="() => {}"
@@ -110,7 +129,7 @@
     No Java found
 
     <template #icon>
-      <LineMdAlertLoop></LineMdAlertLoop>
+      <LineMdAlertLoop />
     </template>
   </modal>
   <NotificationGroup group="generic">
@@ -129,7 +148,10 @@
           move="transition duration-500"
           move-delay="delay-300"
         >
-          <div v-for="notification in notifications" :key="notification.id">
+          <div
+            v-for="notification in notifications"
+            :key="notification.id"
+          >
             <div
               v-if="notification.type === 'info'"
               class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
@@ -151,14 +173,16 @@
                   <span class="font-semibold text-blue-500">{{
                     notification.title
                   }}</span>
-                  <p class="text-sm text-gray-600">{{ notification.text }}</p>
+                  <p class="text-sm text-gray-600">
+                    {{ notification.text }}
+                  </p>
                 </div>
               </div>
             </div>
 
             <div
-              class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
               v-if="notification.type === 'warning'"
+              class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
             >
               <div class="flex items-center justify-center w-12 bg-yellow-500">
                 <svg
@@ -177,7 +201,9 @@
                   <span class="font-semibold text-yellow-500">{{
                     notification.title
                   }}</span>
-                  <p class="text-sm text-gray-600">{{ notification.text }}</p>
+                  <p class="text-sm text-gray-600">
+                    {{ notification.text }}
+                  </p>
                 </div>
               </div>
             </div>

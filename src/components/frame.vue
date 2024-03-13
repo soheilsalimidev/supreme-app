@@ -3,25 +3,25 @@
     <div class="device device-google-pixel-6-pro ">
       <div class="device-frame ">
         <component
-          class="min-w-full"
-          :key="activeTabIndex"
           :is="activeComponentFrame"
-        ></component>
+          :key="activeTabIndex"
+          class="min-w-full"
+        />
       </div>
-      <div class="device-stripe"></div>
-      <div class="device-header"></div>
-      <div class="device-sensors"></div>
-      <div class="device-btns"></div>
-      <div class="device-power"></div>
-      <div class="device-home"></div>
+      <div class="device-stripe" />
+      <div class="device-header" />
+      <div class="device-sensors" />
+      <div class="device-btns" />
+      <div class="device-power" />
+      <div class="device-home" />
     </div>
     <Transition
       enter-active-class="animate__animated animate__bounceIn"
       leave-active-class="animate__animated animate__bounceOut"
     >
       <div
-        class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4"
         v-if="previewWaring"
+        class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4"
       >
         <div class="flex">
           <div class="flex-shrink-0">

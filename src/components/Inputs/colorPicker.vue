@@ -6,22 +6,23 @@
       <label
         for="name"
         class="lrt:left-2 absolute -top-2 -mt-px inline-block bg-white dark:bg-slate-800 dark:bg-slate-800px-1 text-xs font-medium text-gray-900 dark:text-gray-100 rtl:right-2"
-        >{{ label }}</label
-      >
+      >{{ label }}</label>
       <span
         class="mx-3 ml-auto block w-fit border-0 p-0 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:ring-0 sm:text-sm text-nowrap"
-        >{{ data }}</span
-      >
+      >{{ data }}</span>
       <div style="direction: ltr">
         <ColorPicker
           v-model:gradientColor="data"
           lang="En"
-          useType="gradient"
+          use-type="gradient"
           :theme="isDark ? 'black' : 'white'"
         />
       </div>
     </div>
-    <p class="mt-2 text-sm text-red-600" v-if="error">
+    <p
+      v-if="error"
+      class="mt-2 text-sm text-red-600"
+    >
       {{ error }}
     </p>
   </div>

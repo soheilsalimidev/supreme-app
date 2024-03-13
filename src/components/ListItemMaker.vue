@@ -8,20 +8,20 @@
     >
       <div v-if="item.Pair">
         <textInput
+          v-model="item.Pair.first"
           label="name of item"
           placeholder="open the website"
-          labelClass="dark:!bg-slate-700"
-          inputClass="dark:!bg-slate-700"
-          v-model="item.Pair.first"
-        ></textInput>
+          label-class="dark:!bg-slate-700"
+          input-class="dark:!bg-slate-700"
+        />
 
         <textInput
+          v-model="item.Pair.second"
           label="url that should be opened"
           placeholder="mywebsite.com/hereIGo"
-          labelClass="dark:!bg-slate-700"
-          inputClass="dark:!bg-slate-700"
-          v-model="item.Pair.second"
-        ></textInput>
+          label-class="dark:!bg-slate-700"
+          input-class="dark:!bg-slate-700"
+        />
         <!-- TODO:ADD icon select -->
       </div>
       <div v-else>
@@ -42,7 +42,10 @@
     </div>
   </div>
 
-  <Menu as="div" class="relative inline-block text-left z-50">
+  <Menu
+    as="div"
+    class="relative inline-block text-left z-50"
+  >
     <Float
       portal
       enter="transition duration-200 ease-out"
@@ -70,8 +73,8 @@
           class="absolute left-1/2 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-gray-700"
         >
           <div
-            class="px-1 py-1"
             v-for="item in defaultItems.filter((item) => !item.added)"
+            class="px-1 py-1"
           >
             <MenuItem
               v-slot="{ active }"

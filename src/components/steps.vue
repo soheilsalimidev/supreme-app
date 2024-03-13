@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col items-center">
-    <nav aria-label="Progress" class="w-fit">
+    <nav
+      aria-label="Progress"
+      class="w-fit"
+    >
       <TransitionGroup
         tag="ol"
         role="list"
@@ -16,26 +19,37 @@
             'relative',
           ]"
         >
-          <template v-if="step.status === 'complete'" class="group">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <template
+            v-if="step.status === 'complete'"
+            class="group"
+          >
+            <div
+              class="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div class="h-0.5 w-full bg-indigo-600" />
             </div>
             <a
               class="relative w-8 h-8 flex items-center justify-center bg-indigo-600 rounded-full hover:bg-indigo-900"
             >
-              <CheckIcon class="w-5 h-5 text-white" aria-hidden="true" />
+              <CheckIcon
+                class="w-5 h-5 text-white"
+                aria-hidden="true"
+              />
               <span class="sr-only">{{ step.name }}</span>
               <span
                 class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold hidden group-hover:block"
-                >{{ step.name }}</span
-              >
+              >{{ step.name }}</span>
             </a>
           </template>
           <template
             v-else-if="step.status === 'current'"
             condition="step.status === 'current'"
           >
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div
+              class="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div class="h-0.5 w-full bg-gray-200 dark:bg-gray-700" />
             </div>
             <a
@@ -48,12 +62,17 @@
               />
               <span
                 class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold"
-                >{{ step.name }}</span
-              >
+              >{{ step.name }}</span>
             </a>
           </template>
-          <template v-else class="group">
-            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <template
+            v-else
+            class="group"
+          >
+            <div
+              class="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div class="h-0.5 w-full bg-gray-200 dark:bg-gray-700" />
             </div>
             <a
@@ -66,15 +85,14 @@
               <span class="sr-only">{{ step.name }}</span>
               <span
                 class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold hidden group-hover:block"
-                >{{ step.name }}</span
-              >
+              >{{ step.name }}</span>
             </a>
           </template>
         </li>
       </TransitionGroup>
     </nav>
 
-    <div class="w-full bg-gray-200 h-[1px] mt-14 dark:bg-gray-700"></div>
+    <div class="w-full bg-gray-200 h-[1px] mt-14 dark:bg-gray-700" />
 
     <CustomScrollbar
       class="w-full h-[31rem] p-4 overflow-y-scroll"
@@ -96,14 +114,14 @@
         appear-active-class="animate__animated animate__fadeIn"
       >
         <component
-          class="min-w-full basis-full"
-          :key="activeTabIndex"
           :is="activeComponent"
-        ></component>
+          :key="activeTabIndex"
+          class="min-w-full basis-full"
+        />
       </Transition>
     </CustomScrollbar>
 
-    <div class="w-full bg-gray-100 h-[1px] mt-1 dark:bg-gray-700"></div>
+    <div class="w-full bg-gray-100 h-[1px] mt-1 dark:bg-gray-700" />
     <div class="flex w-full">
       <div class="px-4 py-3 text-right sm:px-6 mt-auto">
         <button

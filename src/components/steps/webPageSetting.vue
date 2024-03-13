@@ -1,16 +1,18 @@
 <template>
   <div class="flex gap-4 flex-col w-full">
     <checkboxItem
-      :open="items[0]"
-      @update:open="openNew(0)"
-      label="swipe_refresh"
       v-model="appInfo.app_setting.swipe_refresh"
+      :open="items[0]"
+      label="swipe_refresh"
+      @update:open="openNew(0)"
     >
-      <template #description> you can have Swipe Refresh page </template>
+      <template #description>
+        you can have Swipe Refresh page
+      </template>
     </checkboxItem>
     <checkboxItem
       label="cache_mode"
-      disableCheckbox
+      disable-checkbox
       :open="items[1]"
       @update:open="openNew(1)"
     >
@@ -20,48 +22,50 @@
 
       <template #default>
         <radioList
+          v-model="appInfo.app_setting.cache_mode"
           :items="cacheModes"
           :default-value="1"
           label="sidebar_menu_header_color"
-          v-model="appInfo.app_setting.cache_mode"
-        ></radioList>
+        />
       </template>
     </checkboxItem>
     <checkboxItem
       label="no_internet_layout"
-      disableCheckbox
-      @update:open="openNew(2)"
+      disable-checkbox
       :open="items[2]"
+      @update:open="openNew(2)"
     >
-      <template #description> There are multi layout of no Internet</template>
+      <template #description>
+        There are multi layout of no Internet
+      </template>
       <template #default>
         <radioList
+          v-model="appInfo.app_setting.no_internet_layout.type"
           :items="noNetLayouts"
           :default-value="1"
           label="no internet layout"
-          v-model="appInfo.app_setting.no_internet_layout.type"
-        ></radioList>
+        />
 
         <div
           v-if="appInfo.app_setting.no_internet_layout.type === 2"
           class="mt-2"
         >
           <fileSelect
+            v-model="appInfo.app_setting.no_internet_layout.lottieFile"
             file-name="no_internet.json"
             label="select your lottie file"
             :accept="['json']"
-            v-model="appInfo.app_setting.no_internet_layout.lottieFile"
-          ></fileSelect>
+          />
         </div>
         <div
           v-if="appInfo.app_setting.no_internet_layout.type === 1"
           class="mt-2"
         >
           <fileSelect
+            v-model="appInfo.app_setting.no_internet_layout.image"
             file-name="no_internet.json"
             label="select your image"
-            v-model="appInfo.app_setting.no_internet_layout.image"
-          ></fileSelect>
+          />
         </div>
         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
           <div class="flex">
@@ -89,48 +93,53 @@
     </checkboxItem>
     <checkboxItem
       label="toolbar"
-      disableCheckbox
-      @update:open="openNew(3)"
+      disable-checkbox
       :open="items[3]"
       :error="v$.app_setting.toolbar.$errors.map((e) => e.$message).join(',')"
+      @update:open="openNew(3)"
     >
-      <template #description> You can have different type of toolbar </template>
+      <template #description>
+        You can have different type of toolbar
+      </template>
       <template #default>
         <radioList
+          v-model="appInfo.app_setting.toolbar.type"
           :items="toolbarsModes"
           :default-value="0"
           label="You can have different type of toolbar"
-          v-model="appInfo.app_setting.toolbar.type"
-        ></radioList>
+        />
 
-        <div v-if="appInfo.app_setting.toolbar.type === 1" class="mt-4">
+        <div
+          v-if="appInfo.app_setting.toolbar.type === 1"
+          class="mt-4"
+        >
           <textInput
+            v-model="appInfo.app_setting.toolbar.text"
             label="the text to be dispalyed"
             :value="appInfo.name"
             placeholder="my amazing app"
-            labelClass="dark:!bg-slate-700"
-            inputClass="dark:!bg-slate-700"
+            label-class="dark:!bg-slate-700"
+            input-class="dark:!bg-slate-700"
             :error="
               v$.app_setting.toolbar.text.$errors
                 .map((e) => e.$message)
                 .join(',')
             "
-            v-model="appInfo.app_setting.toolbar.text"
-          ></textInput>
+          />
         </div>
       </template>
     </checkboxItem>
     <checkboxItem
       v-if="appInfo.app_setting.toolbar.type === 1"
+      v-model="appInfo.app_setting.toolbar_custom_icon.enable"
       :open="items[4]"
       label="toolbar_custom_icon"
-      @update:open="openNew(4)"
-      v-model="appInfo.app_setting.toolbar_custom_icon.enable"
       :error="
         v$.app_setting.toolbar_custom_icon.$errors
           .map((e) => e.$message)
           .join(',')
       "
+      @update:open="openNew(4)"
     >
       <template #description>
         You can have icon that show url in web view when you click on it
@@ -138,6 +147,7 @@
       <template #default>
         <div class="gap-6 flex flex-col">
           <fileSelect
+            v-model="appInfo.app_setting.toolbar_custom_icon.first"
             file-name="toolbar_icon.png"
             :error="
               v$.app_setting.toolbar_custom_icon.first.$errors
@@ -145,10 +155,10 @@
                 .join(',')
             "
             label="icon to be dispalyed"
-            v-model="appInfo.app_setting.toolbar_custom_icon.first"
-          ></fileSelect>
+          />
 
           <textInput
+            v-model="appInfo.app_setting.toolbar_custom_icon.second"
             label="link to be open"
             :value="appInfo.name"
             :error="
@@ -157,21 +167,20 @@
                 .join(',')
             "
             placeholder="myapp.com"
-            labelClass="dark:!bg-slate-700"
-            inputClass="dark:!bg-slate-700"
-            v-model="appInfo.app_setting.toolbar_custom_icon.second"
-          ></textInput>
+            label-class="dark:!bg-slate-700"
+            input-class="dark:!bg-slate-700"
+          />
         </div>
       </template>
     </checkboxItem>
     <checkboxItem
+      v-model="appInfo.app_setting.sidebar_menu.enable"
       label="sidebar_menu"
       :open="items[5]"
-      @update:open="openNew(5)"
-      v-model="appInfo.app_setting.sidebar_menu.enable"
       :error="
         v$.app_setting.sidebar_menu.$errors.map((e) => e.$message).join(',')
       "
+      @update:open="openNew(5)"
     >
       <template #description>
         you can have sidebar menu (if you want to have menu its better to have
@@ -179,13 +188,15 @@
       </template>
       <template #default>
         <div class="flex flex-col gap-6">
-          <h2 class="dark:text-white text-lg">sidebar_menu_header_color</h2>
+          <h2 class="dark:text-white text-lg">
+            sidebar_menu_header_color
+          </h2>
           <radioList
+            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_header.type"
             :items="sidebarMenuHeaderModes"
             :default-value="0"
             label="sidebar_menu_header_color"
-            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_header.type"
-          ></radioList>
+          />
 
           <div
             v-if="
@@ -193,10 +204,10 @@
             "
           >
             <color-picker
-              label="select your colors"
               v-model="
                 appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
               "
+              label="select your colors"
             />
             <p class="mt-2 text-sm text-red-600">
               {{
@@ -206,71 +217,81 @@
               }}
             </p>
           </div>
-          <h2 class="dark:text-white text-lg">sidebar_menu_footer</h2>
+          <h2 class="dark:text-white text-lg">
+            sidebar_menu_footer
+          </h2>
           <radioList
+            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type"
             :items="sidebarMenuFooterModes"
             :default-value="0"
             label="you can change footer on slider"
-            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type"
-          ></radioList>
+          />
           <div>
             <textInput
+              v-model="
+                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
+              "
               label="the text to be dispalyed"
               placeholder="my amazing app"
-              labelClass="dark:!bg-slate-700"
-              inputClass="dark:!bg-slate-700"
+              label-class="dark:!bg-slate-700"
+              input-class="dark:!bg-slate-700"
               :error="
                 v$.app_setting.sidebar_menu.sidebar_menu_footer.text.$errors
                   .map((e) => e.$message)
                   .join(',')
               "
-              v-model="
-                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
-              "
-            ></textInput>
+            />
           </div>
-          <h2 class="dark:text-white text-lg">items</h2>
+          <h2 class="dark:text-white text-lg">
+            items
+          </h2>
           <ListItemMaker
             v-model="appInfo.app_setting.sidebar_menu.item_menu"
-          ></ListItemMaker>
+          />
         </div>
       </template>
     </checkboxItem>
     <checkboxItem
+      v-model="appInfo.app_setting.floating_action_button.enable"
       :open="items[6]"
       label="floating_action_button"
-      v-model="appInfo.app_setting.floating_action_button.enable"
-      @update:open="openNew(6)"
       :error="
         v$.app_setting.floating_action_button.$errors
           .map((e) => e.$message)
           .join(',')
       "
+      @update:open="openNew(6)"
     >
-      <template #description> floating action button menu </template>
+      <template #description>
+        floating action button menu
+      </template>
       <template #default>
         <div class="flex flex-col gap-6">
-          <h2 class="dark:text-white text-lg">items</h2>
+          <h2 class="dark:text-white text-lg">
+            items
+          </h2>
           <ListItemMaker
             v-model="appInfo.app_setting.floating_action_button.item_fab"
-          ></ListItemMaker>
+          />
         </div>
       </template>
     </checkboxItem>
     <checkboxItem
       :open="items[7]"
       label="loading"
+      disable-checkbox
       @update:open="openNew(7)"
-      disableCheckbox
     >
-      <template #description> loading lottie </template>
+      <template #description>
+        loading lottie
+      </template>
       <template #default>
         <fileSelect
+          v-model="appInfo.app_setting.loading"
           file-name="loading.json"
           label="select your lottie file"
           :accept="['json']"
-          v-model="appInfo.app_setting.loading"
-        ></fileSelect>
+        />
 
         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
           <div class="flex">

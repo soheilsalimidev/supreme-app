@@ -3,7 +3,10 @@
     <label class="text-sm font-bold text-gray-500 tracking-wide">{{
       label
     }}</label>
-    <div class="flex items-center justify-center w-full" ref="dropZoneRef">
+    <div
+      ref="dropZoneRef"
+      class="flex items-center justify-center w-full"
+    >
       <label
         v-if="!preview"
         class="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center"
@@ -14,28 +17,38 @@
           <div v-if="isOverDropZone">
             <span class="text-sm text-gray-500">Drop your icon here</span>
           </div>
-          <p class="pointer-none text-gray-500" v-else>
-            <span class="text-sm">Drag and drop</span> files here <br />
+          <p
+            v-else
+            class="pointer-none text-gray-500"
+          >
+            <span class="text-sm">Drag and drop</span> files here <br>
             or
-            <a class="text-indigo-600 hover:underline" @click="selectFile"
-              >select a file</a
-            >
+            <a
+              class="text-indigo-600 hover:underline"
+              @click="selectFile"
+            >select a file</a>
             from your computer
           </p>
         </div>
       </label>
-      <div class="flex flex-wrap justify-start flex-col" v-else>
+      <div
+        v-else
+        class="flex flex-wrap justify-start flex-col"
+      >
         <div
-          class="w-6/12 sm:w-4/12 px-4"
           v-if="accept.some((type) => type.includes('png'))"
+          class="w-6/12 sm:w-4/12 px-4"
         >
           <img
             :src="preview"
             alt="logo"
             class="shadow rounded-full max-w-full h-auto align-middle border-none"
-          />
+          >
         </div>
-        <span v-else class="text-start dark:text-slate-200">{{ preview }}</span>
+        <span
+          v-else
+          class="text-start dark:text-slate-200"
+        >{{ preview }}</span>
         <button
           class="mt-2 w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="modelValue = undefined"
@@ -45,7 +58,10 @@
       </div>
     </div>
 
-    <p class="mt-2 text-sm text-red-600" v-if="error">
+    <p
+      v-if="error"
+      class="mt-2 text-sm text-red-600"
+    >
       {{ error }}
     </p>
   </div>

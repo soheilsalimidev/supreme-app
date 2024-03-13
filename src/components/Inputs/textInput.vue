@@ -7,13 +7,12 @@
         :for="label"
         class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-sm font-medium text-gray-900 dark:text-slate-400 dark:bg-slate-800"
         :class="labelClass"
-        >{{ label }}</label
-      >
+      >{{ label }}</label>
       <input
-        @blur="$emit('blur')"
+        :id="label"
         type="text"
         :name="label"
-        :id="label"
+        v-model="modelValue"
         :disabled="disabled"
         :class="[
           error &&
@@ -21,9 +20,9 @@
           inputClass,
         ]"
         class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 dark:text-white dark:bg-slate-800 text-lg disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 dark:disabled:text-slate-500"
-        v-model="modelValue"
         :placeholder="placeholder"
-      />
+        @blur="$emit('blur')"
+      >
       <div
         v-if="error"
         class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
@@ -34,7 +33,10 @@
         />
       </div>
     </div>
-    <p class="mt-2 text-sm text-red-600" v-if="error">
+    <p
+      v-if="error"
+      class="mt-2 text-sm text-red-600"
+    >
       {{ error }}
     </p>
   </div>
