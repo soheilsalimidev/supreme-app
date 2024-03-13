@@ -25,6 +25,7 @@
     "notiwind": "^2.0.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.5",
+    "vue-i18n": "9",
     "vue3-colorpicker": "^2.2.3"
   },
   "devDependencies": {
