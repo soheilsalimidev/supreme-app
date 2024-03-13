@@ -305,3 +305,14 @@ onMounted(async () => {
   background-color: rgb(76 73 188);
 }
 </style>
+
+<i18n lang="json">
+{
+  "en": {
+    "hello": "hello world!"
+  },
+  "fa": {
+    "hello": "こんにちは、世界！"
+  }
+}
+</i18n>

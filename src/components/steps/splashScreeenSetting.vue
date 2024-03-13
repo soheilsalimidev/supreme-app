@@ -2,9 +2,7 @@
   <div class="flex flex-col">
     <div class="px-4 py-5 space-y-6 sm:p-6">
       <RadioGroup v-model="appInfo.app_setting.splash_screen.type">
-        <RadioGroupLabel class="sr-only">
-          Server size
-        </RadioGroupLabel>
+        <RadioGroupLabel class="sr-only"> Server size </RadioGroupLabel>
         <div class="space-y-4">
           <RadioGroup v-model="appInfo.app_setting.splash_screen.type">
             <RadioGroupLabel
@@ -97,8 +95,8 @@
 
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
+import { useI18nValidators } from "@/utils/i18n-validators";
 import useVuelidate from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
 import CheckCircleIcon from "~icons/heroicons/check-circle";
 const splashType = [
@@ -116,6 +114,7 @@ const splashType = [
   },
 ];
 
+const { required, requiredIf } = useI18nValidators();
 const { appInfo } = storeToRefs(useAppSettingStore());
 
 const rules = {
@@ -125,23 +124,13 @@ const rules = {
         required,
       },
       splash_screen_g_c: {
-        required: helpers.withMessage(
-          "enter valid package name",
-          (value: string) => {
-            if (appInfo.value.app_setting.splash_screen.type === 3)
-              return value ? true : false;
-            return true;
-          },
+        required: requiredIf(
+          appInfo.value.app_setting.splash_screen.type === 3,
         ),
       },
       image_path: {
-        required: helpers.withMessage(
-          "enter valid package name",
-          (value: string) => {
-            if (appInfo.value.app_setting.splash_screen.type === 2)
-              return value ? true : false;
-            return true;
-          },
+        required: requiredIf(
+          appInfo.value.app_setting.splash_screen.type === 2,
         ),
       },
     },

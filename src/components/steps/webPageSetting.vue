@@ -324,13 +324,14 @@
 import { useAppSettingStore } from "@/stores/appSetting";
 import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 import useVuelidate from "@vuelidate/core";
-import { requiredIf } from "@vuelidate/validators";
 import { storeToRefs } from "pinia";
+import { useI18nValidators } from "@/utils/i18n-validators";
 
 const { appInfo, selectedWebPageSetting: items } = storeToRefs(
   useAppSettingStore()
 );
 
+const {  requiredIf } = useI18nValidators();
 const openNew = (index: number) => {
   if (items.value[index]) {
     items.value[index] = false;

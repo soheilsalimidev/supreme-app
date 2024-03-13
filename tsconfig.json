@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "types": [
       "unplugin-icons/types/vue",
+      "@intlify/unplugin-vue-i18n/messages"
     ],
     "paths": {
       "@/*": [

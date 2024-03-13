@@ -50,11 +50,14 @@
 <script setup lang="ts">
 import { useAppSettingStore } from "@/stores/appSetting";
 import useVuelidate from "@vuelidate/core";
-import { required, helpers, url } from "@vuelidate/validators";
+import { useI18nValidators } from "@/utils/i18n-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+import { helpers } from "@vuelidate/validators";
 const { appInfo } = storeToRefs(useAppSettingStore());
 const isPackChangeed = ref(false);
+
+const { required , url } = useI18nValidators();
 
 const packageName = computed({
   get() {
