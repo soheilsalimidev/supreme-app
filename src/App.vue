@@ -2,22 +2,69 @@
   <div class="min-h-full overflow-hidden">
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div
-          class="relative py-5 flex items-center justify-center lg:justify-between"
-        >
-          <div class="absolute left-0 flex-shrink-0 lg:static">
+        <div class="py-5 flex items-center justify-center lg:justify-between">
+          <div class="">
             <a href="#">
               <span class="sr-only">Logo</span>
-              <img
-                class="h-8 w-auto"
-                :src="icon"
-                alt="Workflow"
-              >
+              <img class="h-8 w-auto" :src="icon" alt="Workflow" />
             </a>
           </div>
 
+          <div class="ms-auto mx-4">
+            <div class="inline-flex rounded-md shadow-sm rtl:flex-row-reverse">
+              <button
+                type="button"
+                class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              >
+                {{ t("lang") }}
+              </button>
+              <Menu as="div" class="relative -ml-px block">
+                <MenuButton
+                  class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  <span class="sr-only">Open langs</span>
+                  <HeroiconsChevronDown16Solid
+                    class="h-5 w-5"
+                    aria-hidden="true"
+                  />
+                </MenuButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <MenuItems
+                    class="absolute right-0 z-10 mt-2 -mr-1 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  >
+                    <div class="py-1">
+                      <MenuItem
+                        v-for="(item, index) in $i18n.availableLocales"
+                        :key="index"
+                        v-slot="{ active }"
+                      >
+                        <a
+                          :class="[
+                            active
+                              ? 'bg-gray-100 text-gray-900'
+                              : 'text-gray-700',
+                            'block px-4 py-2 text-sm',
+                          ]"
+                          @click="changeLocal(item)"
+                          >{{ item }}</a
+                        >
+                      </MenuItem>
+                    </div>
+                  </MenuItems>
+                </transition>
+              </Menu>
+            </div>
+          </div>
+
           <div
-            class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in ms-auto"
+            class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
           >
             <input
               id="toggle"
@@ -26,7 +73,7 @@
               :value="isDark"
               class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
               @change="toggleDark()"
-            >
+            />
             <label
               for="toggle"
               class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
@@ -37,9 +84,7 @@
     </header>
     <main class="-mt-24 pb-8">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="sr-only">
-          Page title
-        </h1>
+        <h1 class="sr-only">Page title</h1>
         <div
           ref="grid"
           class="gap-4 items-start grid"
@@ -54,12 +99,7 @@
             ]"
           >
             <section aria-labelledby="section-1-title">
-              <h2
-                id="section-1-title"
-                class="sr-only"
-              >
-                Steps
-              </h2>
+              <h2 id="section-1-title" class="sr-only">Steps</h2>
               <div class="rounded-lg bg-white dark:bg-slate-800 shadow">
                 <div class="p-6">
                   <steps />
@@ -71,18 +111,23 @@
           <!-- Right column -->
           <div class="gap-4 hidden lg:grid col-span-1">
             <Transition
-              enter-active-class="animate__animated animate__fadeInRightBig"
-              leave-active-class="animate__animated animate__fadeOutRight"
+              :enter-active-class="
+                isRtl
+                  ? 'animate__animated animate__fadeInRightBig'
+                  : 'animate__animated animate__fadeInLeftBig'
+              "
+              :leave-active-class="
+                isRtl
+                  ? 'animate__animated animate__fadeOutRight'
+                  : 'animate__animated animate__fadeOutLeft'
+              "
               :duration="{ enter: 1000, leave: 2000 }"
             >
               <section
                 v-if="activeComponentFrame"
                 aria-labelledby="section-2-title"
               >
-                <h2
-                  id="section-2-title"
-                  class="sr-only"
-                >
+                <h2 id="section-2-title" class="sr-only">
                   Phone frame preview
                 </h2>
                 <div class="rounded-lg bg-transparent overflow-hidden">
@@ -103,15 +148,15 @@
         <div
           class="text-sm text-gray-500 text-center sm:text-left dark:text-white"
         >
-          <span class="flex gap-1">Build with
-            <LineMdHeart
-              :key="refreshHeart"
-              class="text-red-500"
-            /> by
+          <span class="flex gap-1"
+            >{{ t("buildWith") }}
+            <LineMdHeart :key="refreshHeart" class="text-red-500" />
+            {{ t("by") }}
             <a
-              href="#"
+              href="https://github.com/soheilsalimidev/"
               class="hover:underline"
-            >soheil salimi</a>
+              >{{ t("soheil") }}</a
+            >
           </span>
         </div>
       </div>
@@ -120,13 +165,13 @@
 
   <modal
     v-model="noJavaModal"
-    ok-text="ok, i download"
-    cancel-text="ok"
-    title="No java"
+    :ok-text="t('okDown')"
+    :cancel-text="t('ok')"
+    :title="t('noJava')"
     :ok="() => {}"
     :cancel="() => {}"
   >
-    No Java found
+    {{ t("noJavaFound") }}
 
     <template #icon>
       <LineMdAlertLoop />
@@ -148,10 +193,7 @@
           move="transition duration-500"
           move-delay="delay-300"
         >
-          <div
-            v-for="notification in notifications"
-            :key="notification.id"
-          >
+          <div v-for="notification in notifications" :key="notification.id">
             <div
               v-if="notification.type === 'info'"
               class="flex w-full max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-md"
@@ -227,9 +269,13 @@ import { ref, unref } from "vue";
 import { save } from "@tauri-apps/api/dialog";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
+import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid";
 import { useNavigationStore } from "./stores/navigation";
 import { wrapGrid } from "animate-css-grid";
+import { useI18n } from "vue-i18n";
 
+const isRtl = ref(false);
+const { t } = useI18n();
 const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());
 const { activeComponentFrame } = storeToRefs(useNavigationStore());
@@ -291,7 +337,14 @@ onMounted(async () => {
   } catch (error) {}
   noJavaModal.value = true;
   wrapGrid(grid.value!, { duration: 600 });
+  isRtl.value = document.dir === "rtl";
 });
+const { locale } = useI18n({ useScope: "global" });
+const changeLocal = (item: string) => {
+  locale.value = item;
+  document.dir = item === "fa" ? "rtl" : "lrt";
+  document.documentElement.lang = item;
+};
 </script>
 
 <style scoped>
@@ -306,13 +359,24 @@ onMounted(async () => {
 }
 </style>
 
-<i18n lang="json">
+<i18n lang="josn">
 {
   "en": {
-    "hello": "hello world!"
+    "buildWith": "build with",
+    "by": "by",
+    "soheil": "soheil salimi",
+  "noJavaFound":"No Java found",
+  "noJava":"No java",
+  "okDown":"ok, i download" , "ok":"ok",
+  "lang":"lang"
   },
   "fa": {
-    "hello": "こんにちは、世界！"
+    "buildWith": "ساخته شده با",
+    "by": "توسط",
+    "soheil": "سهیل سلیمی",
+    "noJavaFound":"جاوا پیدا نشد",
+  "noJava":"No java",
+  "okDown":"ok, i download" , "ok":"ok",  "lang":"زبان"
   }
 }
 </i18n>

@@ -1,0 +1,103 @@
+{
+  "frames": {
+    "spash_screen_frame": {
+      "select_your_image": "Select your image"
+    },
+    "web_page_frame": {
+      "11_11": "11:11",
+      "w_h_o_o_o_p_s": "W h o o o p s !",
+      "your_site_content": "your site content"
+    }
+  },
+  "frame": {
+    "be_aware_that_this_just_pr": "be aware that this just preview",
+    "and_what_you_see_on_render": "and what you see on rendered app may be differnt"
+  },
+  "inputs": {
+    "file_select": {
+      "drop_your_icon_here": "Drop your icon here",
+      "drag_and_drop": "Drag and drop",
+      "files_here": "files here",
+      "or": "or",
+      "select_a_file": "select a file",
+      "from_your_computer": "from your computer",
+      "reset": "reset",
+      "logo": "logo"
+    }
+  },
+  "list_item_maker": {
+    "add": "Add",
+    "open_the_website": "open the website",
+    "mywebsite_com_hereigo": "mywebsite.com/hereIGo",
+    "name_of_item": "name of item",
+    "url_that_should_be_opened": "url that should be opened"
+  },
+  "steps": {
+    "app_info": {
+      "my_amazing_app": "my amazing app",
+      "com_app_webapp": "com.app.webapp",
+      "https_supermerapp_com": "https://supermerapp.com",
+      "app_name": "App name",
+      "app_packagename": "App packagename",
+      "website": "website",
+      "app_icon": "App icon"
+    },
+    "compile": {
+      "start": "Start"
+    },
+    "splash_screeen_setting": {
+      "server_size": "Server size",
+      "select_a_splash_screen": "Select a splash screen",
+      "image": "image",
+      "select_your_color": "select your color"
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "web_page_setting": {
+      "you_can_have_swipe_refresh": "you can have Swipe Refresh page",
+      "there_are_multi_type_of_ca": "There are multi type of cacheMode you can select",
+      "there_are_multi_layout_of": "There are multi layout of no Internet",
+      "if_you_don_t_select_anythi": "if you don't select anything",
+      "it_will_you_the_default_on": "it will you the default one for you",
+      "you_can_have_different_typ": "You can have different type of toolbar",
+      "you_can_have_icon_that_sho": "You can have icon that show url in web view when you click on it",
+      "you_can_have_sidebar_menu": "you can have sidebar menu (if you want to have menu its better to have",
+      "sidebar_menu_header_color": "sidebar_menu_header_color",
+      "sidebar_menu_footer": "sidebar_menu_footer",
+      "items": "items",
+      "floating_action_button_men": "floating action button menu",
+      "loading_lottie": "loading lottie",
+      "the_default_one_will_be_se": "the default one will be selected",
+      "my_amazing_app": "my amazing app",
+      "myapp_com": "myapp.com",
+      "swipe_refresh": "swipe_refresh",
+      "cache_mode": "cache_mode",
+      "no_internet_layout": "no_internet_layout",
+      "no_internet_layout2": "no internet layout",
+      "select_your_lottie_file": "select your lottie file",
+      "select_your_image": "select your image",
+      "toolbar": "toolbar",
+      "the_text_to_be_dispalyed": "the text to be dispalyed",
+      "toolbar_custom_icon": "toolbar_custom_icon",
+      "icon_to_be_dispalyed": "icon to be dispalyed",
+      "link_to_be_open": "link to be open",
+      "sidebar_menu": "sidebar_menu",
+      "select_your_colors": "select your colors",
+      "you_can_change_footer_on_s": "you can change footer on slider",
+      "floating_action_button": "floating_action_button",
+      "loading": "loading"
+    }
+  },
+  "validations": {
+    "required": "you should enter this filed",
+    "url": "please enter valid url",
+    "requiredIf": "you should enter this filed"
+  },
+  "stepsLabel": {
+    "splashScreen": "splash screen",
+    "webPageSettings": "web page settings",
+    "render": "render",
+    "appInfo": "app info",
+    "intro": "Step 4"
+  }
+}

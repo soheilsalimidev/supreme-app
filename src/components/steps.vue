@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <nav aria-label="Progress" class="w-fit">
+    <nav aria-label="Progress" class="w-fit ">
       <TransitionGroup
         tag="ol"
         role="list"
@@ -12,7 +12,7 @@
           v-for="(step, stepIdx) in steps"
           :key="step.name"
           :class="[
-            stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-20' : '',
+            stepIdx !== steps.length - 1 ? 'pe-8 sm:pe-20' : '',
             'relative',
           ]"
         >
@@ -111,7 +111,7 @@
           class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="previous"
         >
-          Previous
+          {{ $t("steps.previous") }}
         </button>
       </div>
       <div class="px-4 py-3 text-right sm:px-6 mt-auto ms-auto">
@@ -120,7 +120,7 @@
           class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="next"
         >
-          Next
+          {{ $t("steps.next") }}
         </button>
       </div>
     </div>

@@ -19,17 +19,15 @@
             :value="item.value"
             :checked="item.value === defaultValue"
             class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-          >
+          />
         </div>
-        <div class="ml-3 text-sm">
+        <div class="ms-3 text-sm">
           <label
             :for="item.title.toString()"
             class="font-medium text-gray-700 dark:text-slate-300"
-          >{{ item.title }}</label>
-          <p
-            :id="`${item.value}-description`"
-            class="text-gray-500"
+            >{{ item.title }}</label
           >
+          <p :id="`${item.value}-description`" class="text-gray-500">
             {{ item.description }}
           </p>
         </div>

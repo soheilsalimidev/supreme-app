@@ -52,34 +52,35 @@ const defaultItemsIcon = [
 
 <template>
   <div class="flex flex-col bg-white h-full w-full rounded-md">
-    <div class="bg-indigo-700 h-7 text-white px-2  rounded-t-md">
-      11:11
+    <div class="bg-indigo-700 h-7 text-white px-2 rounded-t-md">
+      {{ $t("frames.web_page_frame.11_11") }}
     </div>
     <div
       v-if="appInfo.app_setting.toolbar.type === 1"
       class="bg-indigo-500 h-[54px] flex items-center px-2"
     >
-      <HeroiconsBars3 class="h-8 w-8 text-white" />
-      <p class="text-white ms-2 text-lg font-bold">
-        {{ appInfo.app_setting.toolbar.text }}
-      </p>
-      <img
-        v-if="
-          appInfo.app_setting.toolbar_custom_icon.enable &&
+      <HeroiconsBars3 class="h-8 w-8 text-white">
+        <p class="text-white ms-2 text-lg font-bold">
+          {{ appInfo.app_setting.toolbar.text }}
+        </p>
+        <img
+          v-if="
+          appInfo.app_setting.toolbar_custom_icon.enable &amp;&amp;
             appInfo.app_setting.toolbar_custom_icon.first
         "
-        class="w-10 ms-auto"
-        :src="convertFileSrc(appInfo.app_setting.toolbar_custom_icon.first)"
-      >
+          class="w-10 ms-auto"
+          :src="convertFileSrc(appInfo.app_setting.toolbar_custom_icon.first)"
+        />
+      </HeroiconsBars3>
     </div>
     <div
       v-if="
-        selectedWebPageSetting.slice(1).every((item) => !item) &&
+        selectedWebPageSetting.slice(1).every((item) => !item) &amp;&amp;
           appInfo.app_setting.swipe_refresh
       "
       class="relative shadow-gray-200 h-8 w-8 rounded-full shadow-md bg-stone-200 top-5 left-1/2 -translate-x-1/2 flex justify-center items-center"
     >
-      <LineMdLoadingLoop />
+      <LineMdLoadingLoop> </LineMdLoadingLoop>
     </div>
     <div class="flex h-full w-full justify-center items-center flex-col">
       <div
@@ -93,7 +94,8 @@ const defaultItemsIcon = [
           :autoplay="true"
           :loop="true"
           :speed="1"
-        />
+        >
+        </DotLottieVue>
       </div>
 
       <div
@@ -108,7 +110,7 @@ const defaultItemsIcon = [
               ? convertFileSrc(appInfo.app_setting.no_internet_layout.image)
               : noInternet
           "
-        >
+        />
         <DotLottieVue
           v-else
           :key="getJsonDateForNoInter"
@@ -117,23 +119,21 @@ const defaultItemsIcon = [
           :autoplay="true"
           :loop="true"
           :speed="1"
-        />
-        <h2 class="font-bold text-indigo-500 text-2xl">
-          W h o o o p s !
-        </h2>
+        >
+          <h2 class="font-bold text-indigo-500 text-2xl">
+            {{ $t("frames.web_page_frame.w_h_o_o_o_p_s") }}
+          </h2>
+        </DotLottieVue>
       </div>
       <p v-else>
-        your site content
+        {{ $t("frames.web_page_frame.your_site_content") }}
       </p>
     </div>
     <div
       v-if="appInfo.app_setting.floating_action_button.enable"
       class="relative bottom-3 start-2 flex flex-col justify-center items-center w-14"
     >
-      <TransitionGroup
-        tag="div"
-        name="list"
-      >
+      <TransitionGroup tag="div" name="list">
         <button
           v-for="(item, index) in getFabItem"
           :key="index"
@@ -143,20 +143,18 @@ const defaultItemsIcon = [
             :is="defaultItemsIcon[item.Kind - 1]"
             v-if="item.Kind"
             class="text-white text-xl"
-          />
-          <LineMdExternalLinkRounded
-            v-else
-            class="text-white text-xl"
-          />
+          >
+            <LineMdExternalLinkRounded class="text-white text-xl">
+            </LineMdExternalLinkRounded
+          ></component>
         </button>
       </TransitionGroup>
 
       <button
         class="p-0 w-14 h-14 bg-indigo-600 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none flex justify-center items-center"
       >
-        <HeroiconsPlus20Solid
-          class="text-white text-2xl"
-        />
+        <HeroiconsPlus20Solid class="text-white text-2xl">
+        </HeroiconsPlus20Solid>
       </button>
     </div>
   </div>

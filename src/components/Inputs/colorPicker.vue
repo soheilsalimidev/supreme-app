@@ -14,11 +14,12 @@
       >
       <div style="direction: ltr">
         <ColorPicker
-          v-model:gradientColor="data"
+          v-model:gradientcolor="data"
           lang="En"
           use-type="gradient"
           :theme="isDark ? 'black' : 'white'"
-        />
+        >
+        </ColorPicker>
       </div>
     </div>
     <p v-if="error" class="mt-2 text-sm text-red-600">

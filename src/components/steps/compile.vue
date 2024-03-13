@@ -3,9 +3,9 @@
     <div
       ref="logsDiv"
       :class="[
-        state === 'running' &&
+        state === 'running' &amp;&amp;
           'w-full h-full m-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 duration-700 border-transparent',
-        state === 'start' &&
+        state === 'start' &amp;&amp;
           'w-52 h-12 btn text-inherit cursor-pointer text-base relative animate-[0.5s_collision_ease-in] overflow-hidden transition-[0.3s] duration-[0.1s] m-0 p-0 border-[none] border-2 border-solid border-indigo-300 dark:border-white',
       ]"
       class="text-white transition-all ease-in-out"
@@ -15,18 +15,11 @@
         v-if="state === 'start'"
         class="flex justify-center items-center h-full dark:text-white text-indigo-600 z-50 relative font-bold text-[1.2rem] transition-[1s] duration-[ease-in-out] hover:text-indigo-100 dark:hover:text-indigo-100"
       >
-        Start
+        {{ $t("steps.compile.start") }}
       </p>
       <div v-else>
-        <TransitionGroup
-          name="list"
-          tag="ul"
-        >
-          <li
-            v-for="(log, index) in logs"
-            :key="index"
-            class="text-black"
-          >
+        <TransitionGroup name="list" tag="ul">
+          <li v-for="(log, index) in logs" :key="index" class="text-black">
             {{ log }}
           </li>
         </TransitionGroup>

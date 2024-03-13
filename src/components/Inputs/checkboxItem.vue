@@ -23,19 +23,15 @@
             <label
               :for="label"
               class="font-medium text-gray-700 dark:text-white"
-            >{{ label }}</label>
-            <p
-              :id="description"
-              class="text-gray-500 dark:text-slate-400"
+              >{{ label }}</label
             >
-              <slot name="description" />
-              {{ description }}
+            <p :id="description" class="text-gray-500 dark:text-slate-400">
+              <slot name="description">
+                {{ description }}
+              </slot>
             </p>
           </div>
-          <div
-            v-if="!disableCheckbox"
-            class="ml-3 flex items-center h-5"
-          >
+          <div v-if="!disableCheckbox" class="ml-3 flex items-center h-5">
             <input
               :id="label"
               v-model="modelValue"
@@ -44,13 +40,10 @@
               type="checkbox"
               class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
               @click.stop=""
-            >
+            />
           </div>
         </div>
-        <p
-          v-if="error && !open"
-          class="mt-2 text-sm text-red-600"
-        >
+        <p v-if="error &amp;&amp; !open" class="mt-2 text-sm text-red-600">
           {{ error }}
         </p>
       </DisclosureButton>
@@ -62,13 +55,9 @@
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-        <DisclosurePanel
-          v-if="open"
-          class="p-4"
-          static
-        >
-          <slot />
-        </DisclosurePanel>
+        <DisclosurePanel v-if="open" class="p-4" static>
+          <slot> </slot
+        ></DisclosurePanel>
       </transition>
     </div>
   </Disclosure>

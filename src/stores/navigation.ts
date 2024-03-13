@@ -7,7 +7,10 @@ import compile from "@/components/steps/compile.vue";
 import introPage from "@/components/steps/introPage.vue";
 import spashScreenFrame from "@/components/frames/spashScreenFrame.vue";
 import webPageFrame from "@/components/frames/webPageFrame.vue";
+import { useI18n } from "vue-i18n";
+
 export const useNavigationStore = defineStore("navigation", () => {
+  const { t } = useI18n({ useScope: "global" });
   const componentsSteps = {
     appInfo,
     splashScreeenSetting,
@@ -33,33 +36,33 @@ export const useNavigationStore = defineStore("navigation", () => {
     }[]
   >([
     {
-      name: "app info",
+      name: t("stepsLabel.appInfo"),
       id: 1,
       status: "current",
       componentStep: "appInfo",
     },
     {
-      name: "splash screen",
+      name: t("stepsLabel.splashScreen"),
       id: 2,
       status: "upcoming",
       componentFrame: "spashScreenFrame",
       componentStep: "splashScreeenSetting",
     },
     {
-      name: "web page settings",
+      name: t("stepsLabel.webPageSettings"),
       id: 3,
       status: "upcoming",
       componentFrame: "webPageFrame",
       componentStep: "webPageSetting",
     },
     {
-      name: "Step 4",
+      name: t("stepsLabel.intro"),
       id: 4,
       status: "upcoming",
       componentStep: "introPage",
     },
     {
-      name: "Step 5",
+      name: t("stepsLabel.render"),
       id: 5,
       status: "upcoming",
       componentStep: "compile",

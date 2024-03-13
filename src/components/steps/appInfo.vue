@@ -4,46 +4,50 @@
       <div class="grid grid-cols-3 gap-6">
         <textInput
           v-model="appInfo.name"
-          label="App name"
-          placeholder="my amazing app"
-          :error="v$.name.$errors.map((e) => e.$message).join(',')"
+          :error="v$.name.$errors.map((e: any) => e.$message).join(',')"
           @blur="v$.name.$touch"
-        />
+          :placeholder="$t('steps.app_info.my_amazing_app')"
+          :label="$t('steps.app_info.app_name')"
+        >
+          ></textInput
+        >
         <textInput
           v-model="packageName"
           class="col-span-2"
-          label="App packagename"
-          placeholder="com.app.webapp"
-          :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
+          :error="v$.package_name.$errors.map((e: any) => e.$message).join(',')"
           @blur="v$.package_name.$touch"
-        />
+          :placeholder="$t('steps.app_info.com_app_webapp')"
+          :label="$t('steps.app_info.app_packagename')"
+        >
+        </textInput>
         <textInput
           v-model="url_site"
           class="col-span-2"
-          label="website"
-          placeholder="https://supermerapp.com"
           :error="
             v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
           "
           @blur="v$.app_setting.site_url.$touch"
-        />
+          :placeholder="$t('steps.app_info.https_supermerapp_com')"
+          :label="$t('steps.app_info.website')"
+        ></textInput>
       </div>
     </div>
 
     <fileSelect
       v-model="appInfo.icon_path"
-      label="App icon"
-      file-name="logo.png"
-      filter-warning-title="inviled image"
-      filter-warning-text="your image should be 512*512 size"
-      :error="v$.package_name.$errors.map((e) => e.$message).join(',')"
+      fileName="logo.png"
+      filterWarningTitle="inviled image"
+      filterWarningText="your image should be 512*512 size"
+      :error="v$.package_name.$errors.map((e: any) => e.$message).join(',')"
       :filter-condition="
         (width: number, height: number) =>
           (width === 512 && height === 512) ||
           (width === 48 && height === 48) ||
           (width === 192 && height === 192)
       "
-    />
+      :label="$t('steps.app_info.app_icon')"
+    >
+    </fileSelect>
   </div>
 </template>
 
@@ -54,10 +58,12 @@ import { useI18nValidators } from "@/utils/i18n-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { helpers } from "@vuelidate/validators";
+import { useI18n } from "vue-i18n";
+
 const { appInfo } = storeToRefs(useAppSettingStore());
 const isPackChangeed = ref(false);
-
-const { required , url } = useI18nValidators();
+const { t } = useI18n();
+const { required, url } = useI18nValidators();
 
 const packageName = computed({
   get() {
@@ -102,7 +108,7 @@ const rules = {
   package_name: {
     required,
     packname: helpers.withMessage(
-      "enter valid package name",
+      t("packname"),
       helpers.regex(/^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*[a-z0-9_]*$/),
     ),
   },
@@ -122,3 +128,14 @@ const rules = {
 
 const v$ = useVuelidate(rules, appInfo);
 </script>
+
+<i18n lang="json">
+{
+  "en": {
+    "packname": "enter valid package name"
+  },
+  "fa": {
+    "packname": "نام بسته معتبر را وارد کنید"
+  }
+}
+</i18n>

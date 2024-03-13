@@ -3,10 +3,7 @@
     <label class="text-sm font-bold text-gray-500 tracking-wide">{{
       label
     }}</label>
-    <div
-      ref="dropZoneRef"
-      class="flex items-center justify-center w-full"
-    >
+    <div ref="dropZoneRef" class="flex items-center justify-center w-full">
       <label
         v-if="!preview"
         class="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center"
@@ -15,53 +12,45 @@
           class="h-full w-full text-center flex flex-col items-center justify-center"
         >
           <div v-if="isOverDropZone">
-            <span class="text-sm text-gray-500">Drop your icon here</span>
+            <span class="text-sm text-gray-500">{{
+              $t("inputs.file_select.drop_your_icon_here")
+            }}</span>
           </div>
-          <p
-            v-else
-            class="pointer-none text-gray-500"
-          >
-            <span class="text-sm">Drag and drop</span> files here <br>
-            or
-            <a
-              class="text-indigo-600 hover:underline"
-              @click="selectFile"
-            >select a file</a>
-            from your computer
+          <p v-else class="pointer-none text-gray-500">
+            <span class="text-sm">{{
+              $t("inputs.file_select.drag_and_drop")
+            }}</span>
+            {{ $t("inputs.file_select.files_here") }} <br />
+            {{ $t("inputs.file_select.or") }}
+            <a class="text-indigo-600 hover:underline" @click="selectFile">{{
+              $t("inputs.file_select.select_a_file")
+            }}</a>
+            {{ $t("inputs.file_select.from_your_computer") }}
           </p>
         </div>
       </label>
-      <div
-        v-else
-        class="flex flex-wrap justify-start flex-col"
-      >
+      <div v-else class="flex flex-wrap justify-start flex-col">
         <div
           v-if="accept.some((type) => type.includes('png'))"
           class="w-6/12 sm:w-4/12 px-4"
         >
           <img
             :src="preview"
-            alt="logo"
             class="shadow rounded-full max-w-full h-auto align-middle border-none"
-          >
+            :alt="$t('inputs.file_select.logo')"
+          />
         </div>
-        <span
-          v-else
-          class="text-start dark:text-slate-200"
-        >{{ preview }}</span>
+        <span v-else class="text-start dark:text-slate-200">{{ preview }}</span>
         <button
           class="mt-2 w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="modelValue = undefined"
         >
-          reset
+          {{ $t("inputs.file_select.reset") }}
         </button>
       </div>
     </div>
 
-    <p
-      v-if="error"
-      class="mt-2 text-sm text-red-600"
-    >
+    <p v-if="error" class="mt-2 text-sm text-red-600">
       {{ error }}
     </p>
   </div>
@@ -143,8 +132,8 @@ const onDrop = async (files: string[] | null) => {
           5000,
         );
         return;
-      } 
-    } 
+      }
+    }
     modelValue.value = files[0];
   }
 };
@@ -167,7 +156,7 @@ const selectFile = async () => {
     multiple: false,
     filters: [
       {
-        name: props.accept.join(','),
+        name: props.accept.join(","),
         extensions: props.accept,
       },
     ],
