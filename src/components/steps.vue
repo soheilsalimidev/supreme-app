@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <nav aria-label="Progress" class="w-fit ">
+    <nav aria-label="Progress" class="w-fit">
       <TransitionGroup
         tag="ol"
         role="list"
@@ -151,12 +151,12 @@ const previous = () => {
 };
 
 const next = async () => {
-  // if (await v$.value.$validate()) {
-  tabDirectionXyzRight.value = true;
-  steps.value.find((step) => step.status === "current")!.status = "complete";
-  steps.value[++currentTab.value].status = "current";
-  activeTabIndex.value++;
-  // }
+  if (await v$.value.$validate()) {
+    tabDirectionXyzRight.value = true;
+    steps.value.find((step) => step.status === "current")!.status = "complete";
+    steps.value[++currentTab.value].status = "current";
+    activeTabIndex.value++;
+  }
 };
 </script>
 

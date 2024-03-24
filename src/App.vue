@@ -53,7 +53,7 @@
                             'block px-4 py-2 text-sm',
                           ]"
                           @click="changeLocal(item)"
-                          >{{ item }}</a
+                          >{{ langs[item as keyof typeof langs] }}</a
                         >
                       </MenuItem>
                     </div>
@@ -112,12 +112,12 @@
           <div class="gap-4 hidden lg:grid col-span-1">
             <Transition
               :enter-active-class="
-                isRtl
+                locale !== 'fa'
                   ? 'animate__animated animate__fadeInRightBig'
                   : 'animate__animated animate__fadeInLeftBig'
               "
               :leave-active-class="
-                isRtl
+                locale !== 'fa'
                   ? 'animate__animated animate__fadeOutRight'
                   : 'animate__animated animate__fadeOutLeft'
               "
@@ -270,11 +270,9 @@ import { save } from "@tauri-apps/api/dialog";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid";
-import { useNavigationStore } from "./stores/navigation";
+import { useNavigationStore } from "@/stores/navigation";
 import { wrapGrid } from "animate-css-grid";
 import { useI18n } from "vue-i18n";
-
-const isRtl = ref(false);
 const { t } = useI18n();
 const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());
@@ -283,7 +281,10 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const noJavaModal = ref(false);
 const keys = useMagicKeys();
-
+const langs = {
+  fa: "فارسی",
+  en: "english",
+};
 const grid = ref<HTMLElement | null>();
 whenever(keys.Ctrl_s, async () => {
   try {
@@ -337,7 +338,6 @@ onMounted(async () => {
   } catch (error) {}
   noJavaModal.value = true;
   wrapGrid(grid.value!, { duration: 600 });
-  isRtl.value = document.dir === "rtl";
 });
 const { locale } = useI18n({ useScope: "global" });
 const changeLocal = (item: string) => {

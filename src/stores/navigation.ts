@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import appInfo from "@/components/steps/appInfo.vue";
 import splashScreeenSetting from "@/components/steps/splashScreeenSetting.vue";
 import webPageSetting from "@/components/steps/webPageSetting.vue";
@@ -10,7 +10,7 @@ import webPageFrame from "@/components/frames/webPageFrame.vue";
 import { useI18n } from "vue-i18n";
 
 export const useNavigationStore = defineStore("navigation", () => {
-  const { t } = useI18n({ useScope: "global" });
+  const { t, locale } = useI18n({ useScope: "global" });
   const componentsSteps = {
     appInfo,
     splashScreeenSetting,
@@ -26,6 +26,7 @@ export const useNavigationStore = defineStore("navigation", () => {
 
   const activeTabIndex = ref(1);
   const currentTab = ref(0);
+
   const steps = ref<
     {
       name: string;
@@ -34,40 +35,48 @@ export const useNavigationStore = defineStore("navigation", () => {
       componentStep: keyof typeof componentsSteps;
       componentFrame?: keyof typeof componentsFrame;
     }[]
-  >([
-    {
-      name: t("stepsLabel.appInfo"),
-      id: 1,
-      status: "current",
-      componentStep: "appInfo",
+  >([]);
+
+  watch(
+    locale,
+    () => {
+      steps.value = [
+        {
+          name: t("stepsLabel.appInfo"),
+          id: 1,
+          status: "current",
+          componentStep: "appInfo",
+        },
+        {
+          name: t("stepsLabel.splashScreen"),
+          id: 2,
+          status: "upcoming",
+          componentFrame: "spashScreenFrame",
+          componentStep: "splashScreeenSetting",
+        },
+        {
+          name: t("stepsLabel.webPageSettings"),
+          id: 3,
+          status: "upcoming",
+          componentFrame: "webPageFrame",
+          componentStep: "webPageSetting",
+        },
+        {
+          name: t("stepsLabel.intro"),
+          id: 4,
+          status: "upcoming",
+          componentStep: "introPage",
+        },
+        {
+          name: t("stepsLabel.render"),
+          id: 5,
+          status: "upcoming",
+          componentStep: "compile",
+        },
+      ];
     },
-    {
-      name: t("stepsLabel.splashScreen"),
-      id: 2,
-      status: "upcoming",
-      componentFrame: "spashScreenFrame",
-      componentStep: "splashScreeenSetting",
-    },
-    {
-      name: t("stepsLabel.webPageSettings"),
-      id: 3,
-      status: "upcoming",
-      componentFrame: "webPageFrame",
-      componentStep: "webPageSetting",
-    },
-    {
-      name: t("stepsLabel.intro"),
-      id: 4,
-      status: "upcoming",
-      componentStep: "introPage",
-    },
-    {
-      name: t("stepsLabel.render"),
-      id: 5,
-      status: "upcoming",
-      componentStep: "compile",
-    },
-  ]);
+    { immediate: true },
+  );
 
   const activeComponentFrame = computed(() => {
     return steps.value[currentTab.value].componentFrame

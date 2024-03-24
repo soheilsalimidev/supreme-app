@@ -34,6 +34,7 @@ pub struct Web2app {
     keypass: String,
     sender: mpsc::Sender<String>,
 }
+
 impl Web2app {
     pub async fn new<T>(
         config: Config,
@@ -100,11 +101,9 @@ impl Web2app {
             self.out_path.to_str().context("failed")?,
             "-f",
         ];
-        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, move |line, _| {
-            let sender = sender.clone();
             Box::pin(async move {
-                let _ = sender.send(format!("{}", &line)).await;
+                info!("{}" , line);
                 Ok::<(), anyhow::Error>(())
             })
         })
@@ -264,16 +263,14 @@ impl Web2app {
             "-f",
         ];
 
-        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, move |line, _| {
-            let sender = sender.clone();
             Box::pin(async move {
-                let _ = sender.send(line).await;
+                info!("{}", line);
                 Ok::<(), anyhow::Error>(())
             })
         })
         .await?;
-
+        let _ = self.sender.send("Encodeing finshed".to_owned()).await;
         Ok(())
     }
 
@@ -341,9 +338,10 @@ impl Web2app {
             let (mut rx, _) = prosses.spawn()?;
             while let Some(event) = rx.recv().await {
                 if let tauri::api::process::CommandEvent::Stdout(line) = event {
-                    let _ = self.sender.send(line).await;
+                    info!("{}", line);
                 }
             }
+            let _ = self.sender.send("aligning done".into()).await;
         }
         Ok(())
     }
@@ -373,7 +371,7 @@ impl Web2app {
                 }
             })
             .await;
-        let _ = self.sender.send("finshed moving resources".into()).await;
+        let _ = self.sender.send("done moving resources".into()).await;
         Ok(())
     }
 
@@ -406,14 +404,13 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
-        let sender = self.sender.clone();
         run_java_command(&args, &self.jar_path, |line, _| {
-            let sender = sender.clone();
             Box::pin(async move {
-                let _ = sender.send(format!("{}", &line)).await;
+                info!("{}", line);
             })
         })
         .await?;
+        let _ = self.sender.send("done signing the app".into()).await;
         Ok(())
     }
 
@@ -516,7 +513,7 @@ impl Web2app {
             )
             .await?;
         }
-        let _ = self.sender.send("moving resources".into()).await;
+        let _ = self.sender.send("done moving resources".into()).await;
 
         Ok(())
     }
@@ -611,8 +608,9 @@ impl Web2app {
         let mut reader = BufReader::new(stdout).lines();
 
         while let Some(line) = reader.next_line().await? {
-            let _ = self.sender.send(line).await;
+            info!("{}" , line);
         }
+        let _ = self.sender.send("done generating key".into()).await;
 
         Ok(())
     }
