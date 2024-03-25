@@ -81,55 +81,55 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     ],
   };
   const appInfo = ref<AppInfo>(
-    test,
-    // {
-    //   name: "",
-    //   package_name: "",
-    //   icon_path: "",
-    //   app_setting: {
-    //     site_url: "",
-    //     splash_screen: {
-    //       type: 0,
-    //     },
-    //     cache_mode: 0,
-    //     no_internet_layout: {
-    //       type: 1,
-    //     },
-    //     toolbar: {
-    //       type: 0,
-    //     },
-    //     toolbar_custom_icon: {
-    //       enable: false,
-    //     },
-    //     swipe_refresh: false,
-    //     sidebar_menu: {
-    //       enable: false,
-    //       sidebar_menu_header: {
-    //         type: 0,
-    //       },
-    //       sidebar_menu_footer: {
-    //         type: 0,
-    //       },
-    //       item_menu: [],
-    //     },
-    //     admob: 0,
-    //     admob_banner: 0,
-    //     floating_action_button: {
-    //       enable: false,
-    //       item_fab: [],
-    //     },
-    //     googleService: undefined,
-    //     introPage: {
-    //       enable: false,
-    //       pages: [],
-    //     },
-    //     aboutUs: {
-    //       enable: false,
-    //       text: "",
-    //     },
-    //   },
-    //   paths: [],
-    // },
+    // test,
+    {
+      name: "",
+      package_name: "",
+      icon_path: "",
+      app_setting: {
+        site_url: "",
+        splash_screen: {
+          type: 0,
+        },
+        cache_mode: 0,
+        no_internet_layout: {
+          type: 1,
+        },
+        toolbar: {
+          type: 0,
+        },
+        toolbar_custom_icon: {
+          enable: false,
+        },
+        swipe_refresh: false,
+        sidebar_menu: {
+          enable: false,
+          sidebar_menu_header: {
+            type: 0,
+          },
+          sidebar_menu_footer: {
+            type: 0,
+          },
+          item_menu: [],
+        },
+        admob: 0,
+        admob_banner: 0,
+        floating_action_button: {
+          enable: false,
+          item_fab: [],
+        },
+        googleService: undefined,
+        introPage: {
+          enable: false,
+          pages: [],
+        },
+        aboutUs: {
+          enable: false,
+          text: "",
+        },
+      },
+      paths: [],
+    },
   );
 
   watch(appInfo, () => console.log(appInfo.value));

@@ -199,62 +199,59 @@
             :default-value="0"
             :label="$t('steps.web_page_setting.sidebar_menu_header_color')"
           >
-            <div
-              v-if="
-                appInfo.app_setting.sidebar_menu.sidebar_menu_header.type === 1
-              "
-            >
-              <color-picker
-                v-model="
-                  appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
-                "
-                :label="$t('steps.web_page_setting.select_your_colors')"
-              >
-                <p class="mt-2 text-sm text-red-600">
-                  {{
-                    v$.app_setting.sidebar_menu.sidebar_menu_header.color.$errors
-                      .map((e) => e.$message)
-                      .join(",")
-                  }}
-                </p>
-              </color-picker>
-            </div>
-            <h2 class="dark:text-white text-lg">
-              {{ $t("steps.web_page_setting.sidebar_menu_footer") }}
-            </h2>
-            <radioList
+          </radioList>
+          <div
+            v-if="
+              appInfo.app_setting.sidebar_menu.sidebar_menu_header.type === 1
+            "
+          >
+            <color-picker
               v-model="
-                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type
+                appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
               "
-              :items="sidebarMenuFooterModes"
-              :default-value="0"
-              :label="$t('steps.web_page_setting.you_can_change_footer_on_s')"
+              :label="$t('steps.web_page_setting.select_your_colors')"
             >
-              <div>
-                <textInput
-                  v-model="
-                    appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
-                  "
-                  label-class="dark:!bg-slate-700"
-                  input-class="dark:!bg-slate-700"
-                  :error="
-                    v$.app_setting.sidebar_menu.sidebar_menu_footer.text.$errors
-                      .map((e) => e.$message)
-                      .join(',')
-                  "
-                  :placeholder="$t('steps.web_page_setting.my_amazing_app')"
-                  :label="$t('steps.web_page_setting.the_text_to_be_dispalyed')"
-                >
-                </textInput>
-              </div>
-              <h2 class="dark:text-white text-lg">
-                {{ $t("steps.web_page_setting.items") }}
-              </h2>
-              <ListItemMaker
-                v-model="appInfo.app_setting.sidebar_menu.item_menu"
-              >
-              </ListItemMaker></radioList
-          ></radioList>
+              <p class="mt-2 text-sm text-red-600">
+                {{
+                  v$.app_setting.sidebar_menu.sidebar_menu_header.color.$errors
+                    .map((e) => e.$message)
+                    .join(",")
+                }}
+              </p>
+            </color-picker>
+          </div>
+          <h2 class="dark:text-white text-lg">
+            {{ $t("steps.web_page_setting.sidebar_menu_footer") }}
+          </h2>
+          <radioList
+            v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type"
+            :items="sidebarMenuFooterModes"
+            :default-value="0"
+            :label="$t('steps.web_page_setting.you_can_change_footer_on_s')"
+          >
+          </radioList>
+          <div>
+            <textInput
+              v-if="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type ===1"
+              v-model="
+                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
+              "
+              label-class="dark:!bg-slate-700"
+              input-class="dark:!bg-slate-700"
+              :error="
+                v$.app_setting.sidebar_menu.sidebar_menu_footer.text.$errors
+                  .map((e) => e.$message)
+                  .join(',')
+              "
+              :placeholder="$t('steps.web_page_setting.my_amazing_app')"
+              :label="$t('steps.web_page_setting.the_text_to_be_dispalyed')"
+            >
+            </textInput>
+          </div>
+          <h2 class="dark:text-white text-lg">
+            {{ $t("steps.web_page_setting.items") }}
+          </h2>
+          <ListItemMaker v-model="appInfo.app_setting.sidebar_menu.item_menu" />
         </div>
       </template>
     </checkboxItem>

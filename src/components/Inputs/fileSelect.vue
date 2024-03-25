@@ -87,11 +87,15 @@ const dropZoneRef = ref<HTMLDivElement>();
 
 const preview = computed(() => {
   if (modelValue.value) {
-    const fileUrl = convertFileSrc(modelValue.value);
-    if (["png", "jpg", "jpeg"].includes(getUrlFileType(fileUrl) ?? "")) {
-      return fileUrl;
-    } else {
-      return fileUrl.split("/").pop();
+    try {
+      const fileUrl = convertFileSrc(modelValue.value);
+      if (["png", "jpg", "jpeg"].includes(getUrlFileType(fileUrl) ?? "")) {
+        return fileUrl;
+      } else {
+        return fileUrl.split("/").pop();
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 });

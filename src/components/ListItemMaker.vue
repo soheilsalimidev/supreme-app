@@ -81,7 +81,7 @@
               v-slot="{ active }"
               @click="
               item.name !== 'custom'
-                ? (item.added = true) &amp;&amp; modelValue.push({ Kind: item.value })
+                ? (item.added = true) && modelValue.push({ Kind: item.value })
                 : modelValue.push({ Pair: { first: '', second: '' } })
               "
             >

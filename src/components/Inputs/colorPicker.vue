@@ -14,7 +14,7 @@
       >
       <div style="direction: ltr">
         <ColorPicker
-          v-model:gradientcolor="data"
+          v-model:gradientColor="data"
           lang="En"
           use-type="gradient"
           :theme="isDark ? 'black' : 'white'"

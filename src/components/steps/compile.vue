@@ -22,7 +22,7 @@
           <li
             v-for="(log, index) in logs"
             :key="index"
-            class="text-black dark:text-white"
+            class="text-black dark:text-white text-left list-inside list-disc " style="direction: ltr;"
           >
             {{ log }}
           </li>

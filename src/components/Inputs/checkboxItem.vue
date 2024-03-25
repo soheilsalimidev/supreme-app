@@ -43,7 +43,7 @@
             />
           </div>
         </div>
-        <p v-if="error &amp;&amp; !open" class="mt-2 text-sm text-red-600">
+        <p v-if="error && !open" class="mt-2 text-sm text-red-600">
           {{ error }}
         </p>
       </DisclosureButton>
