@@ -119,10 +119,10 @@ import LineMdPhone from "~icons/line-md/phone";
 import LineMdStarAltFilled from "~icons/line-md/star-alt-filled";
 import LineMdExternalLink from "~icons/line-md/external-link";
 import LineMdExternalLinkRounded from "~icons/line-md/external-link-rounded";
-import { useI18n } from "vue-i18n";
+// import { useI18n } from "vue-i18n";
 // import useVuelidate from "@vuelidate/core";
 // import { helpers, required, url } from "@vuelidate/validators";
-const { t } = useI18n()
+// const { t } = useI18n()
 const modelValue = defineModel<ItemMenu[]>({ required: true });
 
 const defaultItems = [
