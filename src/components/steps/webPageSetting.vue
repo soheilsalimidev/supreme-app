@@ -46,55 +46,54 @@
           :default-value="1"
           :label="$t('steps.web_page_setting.no_internet_layout2')"
         >
-          <div
-            v-if="appInfo.app_setting.no_internet_layout.type === 2"
-            class="mt-2"
+        </radioList>
+
+        <div
+          v-if="appInfo.app_setting.no_internet_layout.type === 2"
+          class="mt-2"
+        >
+          <fileSelect
+            v-model="appInfo.app_setting.no_internet_layout.lottieFile"
+            file-name="no_internet.json"
+            :accept="['json']"
+            :label="$t('steps.web_page_setting.select_your_lottie_file')"
           >
-            <fileSelect
-              v-model="appInfo.app_setting.no_internet_layout.lottieFile"
-              file-name="no_internet.json"
-              :accept="['json']"
-              :label="$t('steps.web_page_setting.select_your_lottie_file')"
-            >
-            </fileSelect>
-          </div>
-          <div
-            v-if="appInfo.app_setting.no_internet_layout.type === 1"
-            class="mt-2"
+          </fileSelect>
+        </div>
+        <div
+          v-if="appInfo.app_setting.no_internet_layout.type === 1"
+          class="mt-2"
+        >
+          <fileSelect
+            v-model="appInfo.app_setting.no_internet_layout.image"
+            file-name="no_internet.json"
+            :label="$t('steps.web_page_setting.select_your_image')"
           >
-            <fileSelect
-              v-model="appInfo.app_setting.no_internet_layout.image"
-              file-name="no_internet.json"
-              :label="$t('steps.web_page_setting.select_your_image')"
-            >
-            </fileSelect>
-          </div>
-          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
-            <div class="flex">
-              <div class="flex-shrink-0">
-                <ExclamationTriangleIcon
-                  class="h-5 w-5 text-yellow-400"
-                  aria-hidden="true"
+          </fileSelect>
+        </div>
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <ExclamationTriangleIcon
+                class="h-5 w-5 text-yellow-400"
+                aria-hidden="true"
+              >
+              </ExclamationTriangleIcon>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-yellow-700">
+                {{ $t("steps.web_page_setting.if_you_don_t_select_anythi")
+                }}<a
+                  href="#"
+                  class="font-medium underline text-yellow-700 hover:text-yellow-600"
                 >
-                </ExclamationTriangleIcon>
-              </div>
-              <div class="ml-3">
-                <p class="text-sm text-yellow-700">
-                  {{ $t("steps.web_page_setting.if_you_don_t_select_anythi")
-                  }}<a
-                    href="#"
-                    class="font-medium underline text-yellow-700 hover:text-yellow-600"
-                  >
-                    {{
-                      $t("steps.web_page_setting.it_will_you_the_default_on")
-                    }}
-                  </a>
-                </p>
-              </div>
+                  {{ $t("steps.web_page_setting.it_will_you_the_default_on") }}
+                </a>
+              </p>
             </div>
           </div>
-        </radioList></template
-      >
+        </div>
+      </template>
     </checkboxItem>
     <checkboxItem
       disable-checkbox
@@ -113,23 +112,24 @@
           :default-value="0"
           :label="$t('steps.web_page_setting.you_can_have_different_typ')"
         >
-          <div v-if="appInfo.app_setting.toolbar.type === 1" class="mt-4">
-            <textInput
-              v-model="appInfo.app_setting.toolbar.text"
-              :value="appInfo.name"
-              label-class="dark:!bg-slate-700"
-              input-class="dark:!bg-slate-700"
-              :error="
-                v$.app_setting.toolbar.text.$errors
-                  .map((e) => e.$message)
-                  .join(',')
-              "
-              :placeholder="$t('steps.web_page_setting.my_amazing_app')"
-              :label="$t('steps.web_page_setting.the_text_to_be_dispalyed')"
-            >
-            </textInput>
-          </div> </radioList
-      ></template>
+        </radioList>
+        <div v-if="appInfo.app_setting.toolbar.type === 1" class="mt-4">
+          <textInput
+            v-model="appInfo.app_setting.toolbar.text"
+            :value="appInfo.name"
+            label-class="dark:!bg-slate-700"
+            input-class="dark:!bg-slate-700"
+            :error="
+              v$.app_setting.toolbar.text.$errors
+                .map((e) => e.$message)
+                .join(',')
+            "
+            :placeholder="$t('steps.web_page_setting.my_amazing_app')"
+            :label="$t('steps.web_page_setting.the_text_to_be_dispalyed')"
+          >
+          </textInput>
+        </div>
+      </template>
     </checkboxItem>
     <checkboxItem
       v-if="appInfo.app_setting.toolbar.type === 1"
@@ -232,7 +232,9 @@
           </radioList>
           <div>
             <textInput
-              v-if="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type ===1"
+              v-if="
+                appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type === 1
+              "
               v-model="
                 appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
               "

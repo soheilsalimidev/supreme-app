@@ -1,8 +1,13 @@
-import { url, required, createI18nMessage, requiredIf } from "@vuelidate/validators";
+import {
+  url,
+  required,
+  createI18nMessage,
+  requiredIf,
+} from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 
 export const useI18nValidators = () => {
-  const $i18n = useI18n();
+  const $i18n = useI18n({ useScope: "global" });
   const messagePath = ({ $validator }: { $validator: string }) =>
     `validations.${$validator}`;
 
@@ -14,6 +19,6 @@ export const useI18nValidators = () => {
   return {
     required: withI18nMessage(required),
     url: withI18nMessage(url),
-    requiredIf: withI18nMessage(requiredIf , { withArguments: true })
+    requiredIf: withI18nMessage(requiredIf, { withArguments: true }),
   };
 };

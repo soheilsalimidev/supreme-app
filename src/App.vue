@@ -165,6 +165,7 @@
 
   <modal
     v-model="noJavaModal"
+    color="error"
     :ok-text="t('okDown')"
     :cancel-text="t('ok')"
     :title="t('noJava')"
