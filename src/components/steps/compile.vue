@@ -76,7 +76,7 @@ import "highlight.js/styles/github-dark.css";
 // import LineMdClipboardPlus from "~icons/line-md/clipboard-plus";
 hljs.registerLanguage("json", json);
 
-const complieFinish = ref(true);
+const complieFinish = ref(false);
 const logsDiv = ref<HTMLElement | null>(null);
 const { y } = useScroll(logsDiv, { behavior: "smooth" });
 const { t } = useI18n();
@@ -128,9 +128,12 @@ const startRender = async () => {
 
       await listen<string>("render_fineshed", (event) => {
         complieFinish.value = true;
-        assetes.value = hljs.highlight(event.payload, {
-          language: "json",
-        }).value;
+        assetes.value = hljs.highlight(
+          JSON.stringify(JSON.parse(event.payload), null, 4),
+          {
+            language: "json",
+          },
+        ).value;
       });
     } catch (error) {
       console.error(error);
