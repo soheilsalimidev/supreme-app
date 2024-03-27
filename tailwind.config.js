@@ -4,9 +4,14 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
-    darkMode: 'class',
+  darkMode: 'class',
   theme: {
     extend: {},
+    fontFamily: {
+      'sans': ['AnjomanMaxVF', {
+          fontVariationSettings: '"wght" 400'
+        },],
+    }
   },
   plugins: [require('@tailwindcss/forms')],
 }
