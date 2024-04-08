@@ -3,7 +3,6 @@ use async_recursion::async_recursion;
 use colors_transform::Rgb;
 use futures_util::StreamExt;
 use image::io::Reader as ImageReader;
-use log::{error, info};
 use passwords::PasswordGenerator;
 use std::env;
 use std::future::Future;
@@ -17,8 +16,9 @@ use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncSeekExt, AsyncWriteExt, BufR
 use tokio::process::{ChildStdin, Command};
 use tokio::sync::mpsc;
 use tokio::task::JoinSet;
+use tracing::{error, info, instrument};
 
-use super::{Assetlinks, Config, Target};
+use super::{Assetlinks, Config, OutType, Target};
 
 const DEFAULT_APP_URL: &str = "iapp.com";
 const DEFAULT_APP_NAME: &str = "I App";
@@ -26,6 +26,7 @@ const DEFAULT_PACKGENAME: &str = "com.app.webapp";
 const DEFAULT_PACKGENAME_DIR: &str = "com/app/webapp";
 const DEFAULT_PACKGENAME_SMALI: &str = "Lcom/app/webapp";
 
+#[derive(Debug)]
 pub struct Web2app {
     config: Config,
     apk_path: PathBuf,
@@ -79,8 +80,8 @@ impl Web2app {
         set.spawn(self.clone().move_resourses());
         set.spawn(self.clone().save_settings());
         set.spawn(self.clone().create_gridinat_colors());
-        while let Some(res) = set.join_next().await {
-            res??;
+        while let Some(Ok(res)) = set.join_next().await {
+            res.inspect_err(|e| error!("{:?}", e))?
         }
         self.encode().await?;
         self.alignzip().await?;
@@ -89,6 +90,7 @@ impl Web2app {
         // Ok("asd".into())
     }
 
+    #[instrument(skip(self))]
     async fn decode(self: Arc<Self>) -> Result<()> {
         let apk_tool = self.jar_path.join("apktool.jar");
 
@@ -101,10 +103,14 @@ impl Web2app {
             self.out_path.to_str().context("failed")?,
             "-f",
         ];
-        run_java_command(&args, &self.jar_path, move |line, _| {
+        run_java_command(&args, &self.jar_path, move |_, _, out_type| {
             Box::pin(async move {
-                info!("{}" , line);
-                Ok::<(), anyhow::Error>(())
+                match out_type {
+                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
+                    OutType::StdErr => Err(anyhow!(
+                        "failed at decodeing the apk, check logs for more info"
+                    )),
+                }
             })
         })
         .await?;
@@ -113,6 +119,7 @@ impl Web2app {
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn change_android_manifest(self: Arc<Self>) -> Result<()> {
         let mut manifest = File::options()
             .write(true)
@@ -136,6 +143,7 @@ impl Web2app {
                     .as_bytes(),
             )
             .await?;
+        info!("changing the Android Manifest");
         let _ = self
             .sender
             .send("changing the Android Manifest".into())
@@ -143,6 +151,7 @@ impl Web2app {
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn change_folders_name(self: Arc<Self>) -> Result<()> {
         let mut set = JoinSet::new();
         let path = Arc::new(self.out_path.to_owned());
@@ -203,9 +212,11 @@ impl Web2app {
                 .await;
         }
 
+        info!("finshed job smali transforms");
         Ok(())
     }
 
+    #[instrument]
     #[async_recursion]
     async fn rename_package_in_smali(path: &Path, name: Arc<String>) -> Result<()> {
         if path.is_file() && path.extension().is_some_and(|file| file == "smali") {
@@ -232,6 +243,7 @@ impl Web2app {
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn change_name_string_xml(self: Arc<Self>) -> Result<()> {
         let mut file = File::options()
             .write(true)
@@ -249,10 +261,11 @@ impl Web2app {
         )
         .await?;
         let _ = self.sender.send("names and strings changed".into()).await;
-
+        info!("names and strings changed");
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn encode(&self) -> Result<()> {
         let apk_tool = self.jar_path.join("apktool.jar");
         let args = [
@@ -263,17 +276,23 @@ impl Web2app {
             "-f",
         ];
 
-        run_java_command(&args, &self.jar_path, move |line, _| {
+        run_java_command(&args, &self.jar_path, move |_, _, out_type| {
             Box::pin(async move {
-                info!("{}", line);
-                Ok::<(), anyhow::Error>(())
+                match out_type {
+                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
+                    OutType::StdErr => Err(anyhow!(
+                        "failed at Encodeing the apk, check logs for more info"
+                    )),
+                }
             })
         })
         .await?;
         let _ = self.sender.send("Encodeing finshed".to_owned()).await;
+
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn alignzip(&self) -> Result<()> {
         let out_path_apk_in = self.out_path.join("dist/app.apk");
         let out_path_apk_out = self.out_path.join("dist/app-align.apk");
@@ -308,12 +327,12 @@ impl Web2app {
 
             let mut reader = BufReader::new(stdout).lines();
 
-            #[cfg(debug_assertions)]
+            let mut reader_std_err = BufReader::new(stderr).lines();
             tokio::spawn(async move {
-                let mut reader = BufReader::new(stderr).lines();
-                while let Some(line) = reader.next_line().await.unwrap() {
-                    error!("{}", line)
+                while let Some(line) = reader_std_err.next_line().await? {
+                    error!("{:?}", line)
                 }
+                anyhow::Ok(())
             });
 
             while let Some(line) = reader.next_line().await? {
@@ -346,6 +365,7 @@ impl Web2app {
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn move_resourses(self: Arc<Self>) -> Result<()> {
         let dest = Arc::new(self.out_path.join("res"));
         futures_util::stream::iter(self.config.paths.iter())
@@ -372,9 +392,12 @@ impl Web2app {
             })
             .await;
         let _ = self.sender.send("done moving resources".into()).await;
+        info!("done moving resources");
+
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn save_settings(self: Arc<Self>) -> Result<()> {
         fs::write(
             self.out_path.join("res/raw/setting.json"),
@@ -382,9 +405,11 @@ impl Web2app {
         )
         .await?;
         let _ = self.sender.send("applaying the setting".into()).await;
+        info!("applaying the setting");
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn sign_apk(&self) -> Result<()> {
         let path = self
             .out_path
@@ -404,16 +429,24 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
-        run_java_command(&args, &self.jar_path, |line, _| {
+        run_java_command(&args, &self.jar_path, |_, _, out_type| {
             Box::pin(async move {
-                info!("{}", line);
+                match out_type {
+                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
+                    OutType::StdErr => Err(anyhow!(
+                        "failed at signing the apk, check logs for more info"
+                    )),
+                }
             })
         })
         .await?;
         let _ = self.sender.send("done signing the app".into()).await;
+        info!("done signing the app");
+
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn create_gridinat_colors(self: Arc<Self>) -> Result<()> {
         let extract_values = |css_gridaint: &str| -> (String, Vec<String>) {
             let mut count = 0;
@@ -514,10 +547,12 @@ impl Web2app {
             .await?;
         }
         let _ = self.sender.send("done moving resources".into()).await;
+        info!("done moving resources");
 
         Ok(())
     }
 
+    #[instrument(skip(self))]
     async fn get_sha256(&self) -> Result<String> {
         let path = self
             .out_path
@@ -540,8 +575,20 @@ impl Web2app {
             .args(args)
             .stderr(Stdio::piped())
             .stdout(Stdio::piped())
-            .stdin(Stdio::piped())
             .spawn()?;
+
+        let stderr = child
+            .stderr
+            .take()
+            .with_context(|| "child did not have a handle to stdout")?;
+
+        tokio::spawn(async {
+            let mut reader = BufReader::new(stderr).lines();
+            while let Some(line) = reader.next_line().await? {
+                error!("{}", line);
+            }
+            anyhow::Ok(())
+        });
 
         let stdout = child
             .stdout
@@ -559,6 +606,7 @@ impl Web2app {
         Err(anyhow!("failed to find sha256 of sign"))
     }
 
+    #[instrument(skip(self))]
     async fn gen_assetis_link(&self) -> Result<String> {
         let finger_print = self.get_sha256().await?;
         Ok(serde_json::to_string(&Assetlinks::new(Target::new(
@@ -567,6 +615,7 @@ impl Web2app {
         )))?)
     }
 
+    #[instrument(skip(self))]
     async fn gen_keys(&self, out_path: &Path) -> Result<()> {
         let dname = "CN=Unspecified, OU=Unspecified, O=Unspecified, L=Unspecified, ST=Unspecified, C=Unspecified";
 
@@ -597,8 +646,20 @@ impl Web2app {
             .args(args)
             .stderr(Stdio::piped())
             .stdout(Stdio::piped())
-            .stdin(Stdio::piped())
             .spawn()?;
+
+        let stderr = child
+            .stderr
+            .take()
+            .with_context(|| "child did not have a handle to stdout")?;
+
+        tokio::spawn(async {
+            let mut reader = BufReader::new(stderr).lines();
+            while let Some(line) = reader.next_line().await? {
+                error!("{}", line);
+            }
+            anyhow::Ok(())
+        });
 
         let stdout = child
             .stdout
@@ -608,7 +669,7 @@ impl Web2app {
         let mut reader = BufReader::new(stdout).lines();
 
         while let Some(line) = reader.next_line().await? {
-            info!("{}" , line);
+            info!("{}", line);
         }
         let _ = self.sender.send("done generating key".into()).await;
 
@@ -618,19 +679,24 @@ impl Web2app {
 
 pub async fn check_java(jar_path: &Path) -> Result<Option<String>> {
     let mut is_java = None;
-    run_java_command(&["-version"], &jar_path, |f, _| {
+    run_java_command(&["-version"], &jar_path, |f, _, _| {
         if is_java == None && (f.starts_with("java version") || f.starts_with("openjdk version")) {
             is_java = Some(f.as_str()[f.find("\"").unwrap()..f.len() - 1].to_string());
         }
-        Box::pin(async {})
+        Box::pin(async { Ok(()) })
     })
     .await?;
     Ok(is_java)
 }
 
+#[instrument(skip_all, fields(args, working_dir))]
 async fn run_java_command<T, F>(args: &[&str], working_dir: &Path, mut new_line: F) -> Result<()>
 where
-    F: for<'a> FnMut(String, &'a mut ChildStdin) -> Pin<Box<dyn Future<Output = T> + Send + 'a>>,
+    F: for<'a> FnMut(
+        String,
+        &'a mut ChildStdin,
+        OutType,
+    ) -> Pin<Box<dyn Future<Output = anyhow::Result<T>> + Send + 'a>>,
 {
     let mut child = Command::new("java")
         .current_dir(working_dir)
@@ -656,12 +722,14 @@ where
 
     let mut reader = BufReader::new(stderr).lines();
     while let Some(line) = reader.next_line().await.unwrap() {
-        new_line(line, &mut stdin).await;
+        error!("{}", &line);
+        new_line(line, &mut stdin, OutType::StdErr).await?;
     }
 
     let mut reader = BufReader::new(stdout).lines();
     while let Some(line) = reader.next_line().await? {
-        new_line(line, &mut stdin).await;
+        info!("{}", &line);
+        new_line(line, &mut stdin, OutType::StdOut).await?;
     }
     Ok(())
 }
@@ -733,20 +801,13 @@ fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
 mod tests {
     use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
-    use flexi_logger::{AdaptiveFormat, Logger};
     use std::{path::PathBuf, sync::Once};
 
     static INIT: Once = Once::new();
 
     /// Setup function that is only run once, even if called multiple times.
     fn setup() {
-        INIT.call_once(|| {
-            Logger::try_with_env_or_str("info")
-                .unwrap()
-                .adaptive_format_for_stderr(AdaptiveFormat::Detailed)
-                .start()
-                .unwrap();
-        });
+        INIT.call_once(|| {});
     }
 
     #[tokio::test]

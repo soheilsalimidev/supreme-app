@@ -153,7 +153,8 @@
             <LineMdHeart :key="refreshHeart" class="text-red-500" />
             {{ t("by") }}
             <a
-              href="https://github.com/soheilsalimidev/"
+              target="_blank"
+              href="https://soheilsalimidev.ir"
               class="hover:underline"
               >{{ t("soheil") }}</a
             >

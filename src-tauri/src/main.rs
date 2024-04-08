@@ -3,23 +3,19 @@
 use std::{
     fs::{self, File},
     io::Write,
-    path::PathBuf,
+    path::{Path, PathBuf},
+    sync::Arc,
 };
 
-use flexi_logger::Logger;
 use tauri::Manager;
 use tokio::sync::mpsc;
+use tracing_subscriber::{self, filter, layer::SubscriberExt, util::SubscriberInitExt, Layer};
 use zip::write::FileOptions;
 
 mod convert;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    Logger::try_with_env_or_str("info")
-        .unwrap()
-        .start()
-        .unwrap();
-
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     tauri::Builder::default()
@@ -30,6 +26,26 @@ async fn main() -> anyhow::Result<()> {
             move_app,
             get_file
         ])
+        .setup(|app| {
+            let stdout_log = tracing_subscriber::fmt::layer().pretty();
+            if !Path::exists(&app.path_resolver().app_log_dir().unwrap()) {
+                fs::create_dir_all(&app.path_resolver().app_log_dir().unwrap())?;
+            }
+            let file = File::create(app.path_resolver().app_log_dir().unwrap().join(format!(
+                "{}.log",
+                std::time::UNIX_EPOCH.elapsed().unwrap().as_millis()
+            )))?;
+            let debug_log = tracing_subscriber::fmt::layer().with_writer(Arc::new(file));
+
+            tracing_subscriber::registry()
+                .with(
+                    stdout_log
+                        .with_filter(filter::LevelFilter::INFO)
+                        .and_then(debug_log),
+                )
+                .init();
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
@@ -157,6 +173,7 @@ async fn check_java(app_handle: tauri::AppHandle) -> Result<Option<String>, Stri
 
 #[tauri::command]
 async fn get_file(path: String) -> Result<String, String> {
-    tokio::fs::read_to_string(path).await.map_err(|e| e.to_string())
+    tokio::fs::read_to_string(path)
+        .await
+        .map_err(|e| e.to_string())
 }
-

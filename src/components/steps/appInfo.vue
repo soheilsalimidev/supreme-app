@@ -35,10 +35,10 @@
 
     <fileSelect
       v-model="appInfo.icon_path"
-      fileName="logo.png"
-      filterWarningTitle="inviled image"
-      filterWarningText="your image should be 512*512 size"
-      :error="v$.package_name.$errors.map((e: any) => e.$message).join(',')"
+      file-name="logo.png"
+      filter-warning-title="inviled image"
+      filter-warning-text="your image should be 512*512 size"
+      :error="v$.icon_path.$errors.map((e: any) => e.$message).join(',')"
       :filter-condition="
         (width: number, height: number) =>
           (width === 512 && height === 512) ||
@@ -67,7 +67,7 @@ const { required, url } = useI18nValidators();
 
 const packageName = computed({
   get() {
-    if (!isPackChangeed.value) {
+    if (!isPackChangeed.value && /^[a-zA-Z0-9]+$/.test(appInfo.value.name)) {
       return (
         "com.app.webapp." +
         appInfo.value.name
@@ -82,8 +82,8 @@ const packageName = computed({
     }
   },
   set(value) {
-    isPackChangeed.value = true;
-    appInfo.value.package_name = "com.app.webapp." + value;
+      isPackChangeed.value = true;
+      appInfo.value.package_name = "com.app.webapp." + value;
   },
 });
 

@@ -136,6 +136,7 @@ const startRender = async () => {
         ).value;
       });
     } catch (error) {
+      console.log(":asd")
       console.error(error);
     }
   }
