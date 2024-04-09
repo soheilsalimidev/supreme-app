@@ -7,12 +7,14 @@ use std::{
     sync::Arc,
 };
 
-use tauri::Manager;
+use tauri::{ClipboardManager, Manager};
 use tokio::sync::mpsc;
 use tracing_subscriber::{self, filter, layer::SubscriberExt, util::SubscriberInitExt, Layer};
 use zip::write::FileOptions;
 
 mod convert;
+
+struct Logs(PathBuf);
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -24,6 +26,7 @@ async fn main() -> anyhow::Result<()> {
             check_java,
             save_config,
             move_app,
+            copy_logs,
             get_file
         ])
         .setup(|app| {
@@ -31,10 +34,13 @@ async fn main() -> anyhow::Result<()> {
             if !Path::exists(&app.path_resolver().app_log_dir().unwrap()) {
                 fs::create_dir_all(&app.path_resolver().app_log_dir().unwrap())?;
             }
-            let file = File::create(app.path_resolver().app_log_dir().unwrap().join(format!(
+            let log_path = app.path_resolver().app_log_dir().unwrap().join(format!(
                 "{}.log",
                 std::time::UNIX_EPOCH.elapsed().unwrap().as_millis()
-            )))?;
+            ));
+
+            let file = File::create(&log_path)?;
+            app.manage(Logs(log_path));
             let debug_log = tracing_subscriber::fmt::layer().with_writer(Arc::new(file));
 
             tracing_subscriber::registry()
@@ -44,6 +50,7 @@ async fn main() -> anyhow::Result<()> {
                         .and_then(debug_log),
                 )
                 .init();
+
             Ok(())
         })
         .run(tauri::generate_context!())
@@ -94,7 +101,7 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
     tokio::spawn(async move {
         match converter.run().await {
             Ok(assets_link) => app_handle.emit_all("render_fineshed", assets_link),
-            Err(e) => app_handle.emit_all("render_fineshed", e.to_string()),
+            Err(e) => app_handle.emit_all("error", e.to_string()),
         }
     });
 
@@ -165,7 +172,14 @@ fn save_config(mut config: convert::Config, path: String) -> Result<(), String> 
 }
 
 #[tauri::command]
-async fn check_java(app_handle: tauri::AppHandle) -> Result<Option<String>, String> {
+fn copy_logs(state: tauri::State<Logs>, app_handle: tauri::AppHandle) {
+    app_handle
+        .clipboard_manager()
+        .write_text(fs::read_to_string(&state.inner().0).unwrap());
+}
+
+#[tauri::command]
+async fn check_java(app_handle: tauri::AppHandle) -> Result<bool, String> {
     convert::web2app::check_java(&app_handle.path_resolver().resource_dir().unwrap())
         .await
         .map_err(|e| e.to_string())

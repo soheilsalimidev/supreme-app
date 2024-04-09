@@ -6,10 +6,6 @@ use std::path::PathBuf;
 pub mod web2app;
 
 
-enum OutType {
-    StdOut,
-    StdErr,
-}
 
 #[derive(Serialize, Deserialize, new)]
 pub struct Assetlinks<'a> {

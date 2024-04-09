@@ -18,7 +18,7 @@ use tokio::sync::mpsc;
 use tokio::task::JoinSet;
 use tracing::{error, info, instrument};
 
-use super::{Assetlinks, Config, OutType, Target};
+use super::{Assetlinks, Config, Target};
 
 const DEFAULT_APP_URL: &str = "iapp.com";
 const DEFAULT_APP_NAME: &str = "I App";
@@ -103,15 +103,8 @@ impl Web2app {
             self.out_path.to_str().context("failed")?,
             "-f",
         ];
-        run_java_command(&args, &self.jar_path, move |_, _, out_type| {
-            Box::pin(async move {
-                match out_type {
-                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
-                    OutType::StdErr => Err(anyhow!(
-                        "failed at decodeing the apk, check logs for more info"
-                    )),
-                }
-            })
+        run_java_command(&args, &self.jar_path, move |_, _| {
+            Box::pin(async { Ok(()) })
         })
         .await?;
         let _ = self.sender.send("decoding app finshed".into()).await;
@@ -276,15 +269,8 @@ impl Web2app {
             "-f",
         ];
 
-        run_java_command(&args, &self.jar_path, move |_, _, out_type| {
-            Box::pin(async move {
-                match out_type {
-                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
-                    OutType::StdErr => Err(anyhow!(
-                        "failed at Encodeing the apk, check logs for more info"
-                    )),
-                }
-            })
+        run_java_command(&args, &self.jar_path, move |_, _| {
+            Box::pin(async move { Ok(()) })
         })
         .await?;
         let _ = self.sender.send("Encodeing finshed".to_owned()).await;
@@ -429,15 +415,8 @@ impl Web2app {
             &format!("pass:{}", self.keypass),
             out_apk_path.to_str().context("")?,
         ];
-        run_java_command(&args, &self.jar_path, |_, _, out_type| {
-            Box::pin(async move {
-                match out_type {
-                    OutType::StdOut => Ok::<(), anyhow::Error>(()),
-                    OutType::StdErr => Err(anyhow!(
-                        "failed at signing the apk, check logs for more info"
-                    )),
-                }
-            })
+        run_java_command(&args, &self.jar_path, |_, _| {
+            Box::pin(async move { Ok(()) })
         })
         .await?;
         let _ = self.sender.send("done signing the app".into()).await;
@@ -677,11 +656,11 @@ impl Web2app {
     }
 }
 
-pub async fn check_java(jar_path: &Path) -> Result<Option<String>> {
-    let mut is_java = None;
-    run_java_command(&["-version"], &jar_path, |f, _, _| {
-        if is_java == None && (f.starts_with("java version") || f.starts_with("openjdk version")) {
-            is_java = Some(f.as_str()[f.find("\"").unwrap()..f.len() - 1].to_string());
+pub async fn check_java(jar_path: &Path) -> Result<bool> {
+    let mut is_java = false;
+    run_java_command(&["--version"], &jar_path, |f, _| {
+        if is_java == false && (f.starts_with("java version") || f.starts_with("openjdk")) {
+            is_java = true
         }
         Box::pin(async { Ok(()) })
     })
@@ -695,7 +674,6 @@ where
     F: for<'a> FnMut(
         String,
         &'a mut ChildStdin,
-        OutType,
     ) -> Pin<Box<dyn Future<Output = anyhow::Result<T>> + Send + 'a>>,
 {
     let mut child = Command::new("java")
@@ -720,16 +698,18 @@ where
         .take()
         .with_context(|| "child did not have a handle to stdout")?;
 
-    let mut reader = BufReader::new(stderr).lines();
-    while let Some(line) = reader.next_line().await.unwrap() {
-        error!("{}", &line);
-        new_line(line, &mut stdin, OutType::StdErr).await?;
+    let mut err_str = String::new();
+    BufReader::new(stderr).read_to_string(&mut err_str).await?;
+
+    if !err_str.is_empty() {
+        error!("{}" , &err_str);
+        return Err(anyhow!(err_str));
     }
 
     let mut reader = BufReader::new(stdout).lines();
     while let Some(line) = reader.next_line().await? {
         info!("{}", &line);
-        new_line(line, &mut stdin, OutType::StdOut).await?;
+        new_line(line, &mut stdin).await?;
     }
     Ok(())
 }
