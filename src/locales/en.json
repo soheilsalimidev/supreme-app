@@ -99,5 +99,13 @@
     "render": "render",
     "appInfo": "app info",
     "intro": "Step 4"
+  },
+  "items":{
+    "home_page":"home_page",
+    "about_us":"about_us",
+    "rate_us":"rate_us",
+    "share_app": "share_app",
+    "exit": "exit",
+    "custom": "custom"
   }
 }

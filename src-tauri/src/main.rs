@@ -172,10 +172,11 @@ fn save_config(mut config: convert::Config, path: String) -> Result<(), String> 
 }
 
 #[tauri::command]
-fn copy_logs(state: tauri::State<Logs>, app_handle: tauri::AppHandle) {
+fn copy_logs(state: tauri::State<Logs>, app_handle: tauri::AppHandle) -> Result<(), String> {
     app_handle
         .clipboard_manager()
-        .write_text(fs::read_to_string(&state.inner().0).unwrap());
+        .write_text(fs::read_to_string(&state.inner().0).map_err(|e| e.to_string())?)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]

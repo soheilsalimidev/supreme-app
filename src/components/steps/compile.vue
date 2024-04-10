@@ -34,6 +34,23 @@
     </div>
 
     <modal
+      v-model="isErr"
+      :ok-text="t('ok')"
+      color="error"
+      :cancel-text="t('CopyLogFile')"
+      :title="t('ErrorRendering')"
+      :cancel="copyLog"
+    >
+      <div class="w-full flex flex-col">
+        <h3 class="text-black">{{ t("errorRec") }}</h3>
+        <span>{{ t("seeLogs") }}</span>
+      </div>
+      <template #icon>
+        <LineMdAlertLoop />
+      </template>
+    </modal>
+
+    <modal
       v-model="complieFinish"
       :ok-text="t('save')"
       color="info"
@@ -62,6 +79,7 @@
 <script setup lang="ts">
 import { ref, unref } from "vue";
 import { invoke } from "@tauri-apps/api/tauri";
+import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
 import { listen } from "@tauri-apps/api/event";
@@ -83,7 +101,7 @@ const { t } = useI18n();
 const logs = ref<string[]>(["start rendering"]);
 const { appInfo } = storeToRefs(useAppSettingStore());
 const state = ref<"start" | "running" | "finished">("start");
-
+const isErr = ref(false);
 const assetes = ref("");
 
 const saveApk = async () => {
@@ -99,8 +117,8 @@ const saveApk = async () => {
     notify(
       {
         group: "generic",
-        title: "saving app failed",
-        text: "the app is in your desktop now",
+        title: t("saveFailed"),
+        text: t("saveDesk"),
         type: "warning",
       },
       3000,
@@ -115,11 +133,30 @@ const saveApk = async () => {
   });
 };
 
+const copyLog = async () => {
+  await invoke("copy_logs");
+  notify(
+    {
+      group: "generic",
+      title: t("LogsCopyed"),
+      text: t("copyed"),
+      type: "info",
+    },
+    3000,
+  );
+};
+
 const startRender = async () => {
   if (state.value === "start") {
     state.value = "running";
     try {
       await invoke("render_app", { config: unref(appInfo) });
+
+      await listen<string>("error", (_) => {
+        logs.value.push("Failed to produce the apk");
+        y.value = logsDiv.value!.scrollHeight;
+        isErr.value = true;
+      });
 
       await listen<string>("render", (event) => {
         logs.value.push(event.payload);
@@ -136,7 +173,7 @@ const startRender = async () => {
         ).value;
       });
     } catch (error) {
-      console.log(":asd")
+      console.log(":asd");
       console.error(error);
     }
   }
@@ -147,7 +184,14 @@ const startRender = async () => {
   {
   "en":{
     "save":"save the app",
-    "finishedCom":"finshed rendering"
+    "finishedCom":"finshed rendering",
+    "seeLogs":"see the logs for more info",
+    "ErrorRendering":"Error rendering",
+    "LogsCopyed":"Logs copyed",
+    "copyed":"The logs copyed to your clipboard",
+    "errorRec":"we encorech an error",
+  "saveFailed":"saving app failed" ,
+  "saveDesk":"the app is in your desktop now"
   },
   "fa":{
     "save":"save the app",

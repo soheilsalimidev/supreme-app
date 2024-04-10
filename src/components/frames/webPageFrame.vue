@@ -16,8 +16,14 @@ import loadingJson from "@/assets/loading.json";
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
 import { invoke } from "@tauri-apps/api";
 import { computedAsync } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDateFormat, useNow } from '@vueuse/core'
+
+const formattedTime = useDateFormat(useNow(), 'HH:mm')
 const { appInfo, selectedWebPageSetting } = storeToRefs(useAppSettingStore());
+
+const { t } = useI18n({useScope:"global"});
 
 const getJsonDateForLoaing = computedAsync(async () => {
   return appInfo.value.app_setting.loading
@@ -47,31 +53,22 @@ const getFabItem = computed(() => {
     : [];
 });
 
-const defaultItems = [
-  {
-    name: "home_page",
-    icon: LineMdHomeMd,
-  },
-  {
-    name: "about_us",
-    icon: LineMdPhone,
-  },
-  {
-    name: "rate_us",
-    icon: LineMdStarAltFilled,
-  },
-  {
-    name: "share_app",
-    icon: LineMdExternalLink,
-  },
-  {
-    name: "exit",
-    icon: LineMdExternalLinkRounded,
-  },
-  {
-    name: "custom",
-  },
+const defaultItemsIcons = [
+  LineMdHomeMd,
+  LineMdPhone,
+  LineMdStarAltFilled,
+  LineMdExternalLink,
+  LineMdExternalLinkRounded,
 ];
+
+const defaultItems = ref([
+  t("item.home_page"),
+  t("item.about_us"),
+  t("item.rate_us"),
+  t("item.share_app"),
+  t("item.exit"),
+  t("item.custom"),
+]);
 </script>
 
 <template>
@@ -106,17 +103,14 @@ const defaultItems = [
               >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <component
-                  :is="defaultItems[item.Kind - 1].icon"
-                  v-if="item.Kind"
+                  :is="item.Kind ? defaultItemsIcons[item.Kind - 1] : LineMdExternalLinkRounded"
                   class="material-icons mdc-deprecated-list-item__graphic"
                 >
-                  <LineMdExternalLinkRounded class="text-white text-xl">
-                  </LineMdExternalLinkRounded
-                ></component>
+                </component>
 
                 <span class="mdc-deprecated-list-item__text">{{
                   item.Kind
-                    ? defaultItems[item.Kind - 1].name
+                    ? defaultItems[item.Kind - 1] 
                     : item.Pair?.first
                 }}</span>
               </a>
@@ -144,7 +138,7 @@ const defaultItems = [
 
     <div class="flex flex-col bg-white h-full w-full rounded-md z-10">
       <div class="bg-indigo-700 h-7 text-white px-2 rounded-t-md">
-        {{ $t("frames.web_page_frame.11_11") }}
+        {{ formattedTime }}
       </div>
       <div
         v-if="appInfo.app_setting.toolbar.type === 1"
@@ -234,13 +228,13 @@ const defaultItems = [
             class="p-0 m-2 w-10 h-10 bg-indigo-500 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none flex justify-center items-center"
           >
             <component
-              :is="defaultItems[item.Kind - 1].icon"
               v-if="item.Kind"
+              :is="defaultItemsIcons[item.Kind - 1]"
               class="text-white text-xl"
             >
-              <LineMdExternalLinkRounded class="text-white text-xl">
-              </LineMdExternalLinkRounded
-            ></component>
+            </component>
+            <LineMdExternalLinkRounded class="text-white text-xl" v-else>
+            </LineMdExternalLinkRounded>
           </button>
         </TransitionGroup>
 
@@ -251,7 +245,12 @@ const defaultItems = [
           </HeroiconsPlus20Solid>
         </button>
       </div>
-      <div class="bg-black/20 w-full h-full absolute top-0 start-0 transition"  v-if="appInfo.app_setting.sidebar_menu.enable && selectedWebPageSetting[5]"></div>
+      <div
+        class="bg-black/20 w-full h-full absolute top-0 start-0 transition"
+        v-if="
+          appInfo.app_setting.sidebar_menu.enable && selectedWebPageSetting[5]
+        "
+      ></div>
     </div>
   </div>
 </template>
@@ -277,3 +276,4 @@ const defaultItems = [
   transform: translateX(30px);
 }
 </style>
+

@@ -92,14 +92,20 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  title: string;
-  okText: string;
-  cancelText: string;
-  color: "warn" | "error" | "info";
-  ok: () => void;
-  cancel: () => void;
-}>();
+withDefaults(
+  defineProps<{
+    title: string;
+    okText: string;
+    cancelText: string;
+    color: "warn" | "error" | "info";
+    ok?: () => void;
+    cancel?: () => void;
+  }>(),
+  {
+    ok: () => {},
+    cancel: () => {},
+  },
+);
 
 const colors = {
   warn: {

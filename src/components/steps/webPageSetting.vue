@@ -466,6 +466,9 @@ const cacheModes = [
     value: 2,
   },
 ];
+
+const $v = useVuelidate({})
+
 </script>
 
 <i18n lang="json">
