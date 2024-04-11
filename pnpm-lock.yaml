@@ -94,6 +94,9 @@ devDependencies:
   '@tauri-apps/cli':
     specifier: ^1.5.9
     version: 1.5.9
+  '@types/animejs':
+    specifier: ^3.1.12
+    version: 3.1.12
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.4.0
     version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -1160,6 +1163,10 @@ packages:
       '@tauri-apps/cli-win32-arm64-msvc': 1.5.9
       '@tauri-apps/cli-win32-ia32-msvc': 1.5.9
       '@tauri-apps/cli-win32-x64-msvc': 1.5.9
+    dev: true
+
+  /@types/animejs@3.1.12:
+    resolution: {integrity: sha512-fpdH+ZtlO0kqjTOqRaBdsEmvpRNOayI8k4EVkEtitL5l6wducDOXk0rgQgfZqWf/ZX9DzXrHf257S5i9xTcISQ==}
     dev: true
 
   /@types/estree@1.0.5:
