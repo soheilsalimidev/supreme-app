@@ -22,6 +22,7 @@
     "@vueuse/core": "^10.7.2",
     "animate-css-grid": "^1.5.1",
     "animate.css": "^4.1.1",
+    "animejs": "^3.2.2",
     "custom-vue-scrollbar": "^0.0.8",
     "highlight.js": "^11.9.0",
     "lottie-web-vue": "^2.0.7",

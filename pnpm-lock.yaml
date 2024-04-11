@@ -41,6 +41,9 @@ dependencies:
   animate.css:
     specifier: ^4.1.1
     version: 4.1.1
+  animejs:
+    specifier: ^3.2.2
+    version: 3.2.2
   custom-vue-scrollbar:
     specifier: ^0.0.8
     version: 0.0.8(lodash-es@4.17.21)(vue@3.4.5)
@@ -1546,6 +1549,10 @@ packages:
 
   /animate.css@4.1.1:
     resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
+
+  /animejs@3.2.2:
+    resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==}
     dev: false
 
   /ansi-regex@5.0.1:

@@ -1,11 +1,15 @@
 <template>
-  <div>
-    <div class="flex justify-center items-center h-full">
+  <div class="h-full">
+    <div
+      ref="progressDiv"
+      class="flex justify-center items-center h-full rounded-md transition drop-shadow-lg"
+      :class="[state === 'running' && 'progress-color']"
+    >
       <div
         ref="logsDiv"
         :class="[
           state === 'running' &&
-            'w-full h-full m-5 rounded-lg bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 duration-700 border-transparent',
+            'w-[98%] h-[98%] rounded-lg bg-white p-6 dark:bg-neutral-700 duration-700 border-transparent',
           state === 'start' &&
             'w-52 h-12 btn text-inherit cursor-pointer text-base relative animate-[0.5s_collision_ease-in] overflow-hidden transition-[0.3s] duration-[0.1s] m-0 p-0 border-[none] border-2 border-solid border-indigo-300 dark:border-white',
         ]"
@@ -88,6 +92,7 @@ import { notify } from "notiwind";
 import { useScroll } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import LineMdDownloadLoop from "~icons/line-md/download-loop";
+import anime from "animejs/lib/anime.es.js";
 import hljs from "highlight.js/lib/core";
 import json from "highlight.js/lib/languages/json";
 import "highlight.js/styles/github-dark.css";
@@ -96,6 +101,7 @@ hljs.registerLanguage("json", json);
 
 const complieFinish = ref(false);
 const logsDiv = ref<HTMLElement | null>(null);
+const progressDiv = ref<HTMLElement | null>(null);
 const { y } = useScroll(logsDiv, { behavior: "smooth" });
 const { t } = useI18n();
 const logs = ref<string[]>(["start rendering"]);
@@ -103,6 +109,41 @@ const { appInfo } = storeToRefs(useAppSettingStore());
 const state = ref<"start" | "running" | "finished">("start");
 const isErr = ref(false);
 const assetes = ref("");
+
+let progressBarObject = {
+  progressBarStartValue: 0,
+  progressBarEndValue: 100,
+  progressBarAnimationValue: 0 * 3.6, 
+};
+
+const updateProgressBar = (percentage: number, color = "#6366f1") => {
+  let newValue = 0;
+  if (progressBarObject.progressBarStartValue != 100) {
+    newValue =
+      Math.ceil(
+        (progressBarObject.progressBarStartValue + percentage) / percentage,
+      ) * percentage;
+  }
+  if (newValue > 100) {
+    newValue = 100;
+  }
+  anime({
+    targets: progressBarObject,
+    progressBarStartValue: newValue,
+    progressBarAnimationValue: newValue * 3.6,
+    easing: "easeInOutExpo",
+    round: 1,
+    update: () => {
+      progressDiv.value!.style.backgroundImage = `conic-gradient(
+          ${color} ${progressBarObject.progressBarAnimationValue}deg,
+          ${color} 5%,
+          rgba(99, 102, 241, ${progressBarObject.progressBarAnimationValue}),
+          transparent, 
+          transparent ${progressBarObject.progressBarAnimationValue + 10}deg)`;
+    },
+    duration: 750,
+  });
+};
 
 const saveApk = async () => {
   let selected = await save({
@@ -150,15 +191,23 @@ const startRender = async () => {
   if (state.value === "start") {
     state.value = "running";
     try {
+      let steps = 1;
+      const totalSteps = 10;
       await invoke("render_app", { config: unref(appInfo) });
+      setTimeout(()=>{
+        updateProgressBar((steps * 100) / totalSteps);
+      } , 750)
 
       await listen<string>("error", (_) => {
+        updateProgressBar((steps * 100) / totalSteps, "#ef4444");
         logs.value.push("Failed to produce the apk");
         y.value = logsDiv.value!.scrollHeight;
         isErr.value = true;
       });
 
       await listen<string>("render", (event) => {
+        steps = +1;
+        updateProgressBar((steps * 100) / totalSteps);
         logs.value.push(event.payload);
         y.value = logsDiv.value!.scrollHeight;
       });
@@ -173,7 +222,6 @@ const startRender = async () => {
         ).value;
       });
     } catch (error) {
-      console.log(":asd");
       console.error(error);
     }
   }
@@ -190,8 +238,8 @@ const startRender = async () => {
     "LogsCopyed":"Logs copyed",
     "copyed":"The logs copyed to your clipboard",
     "errorRec":"we encorech an error",
-  "saveFailed":"saving app failed" ,
-  "saveDesk":"the app is in your desktop now"
+    "saveFailed":"saving app failed" ,
+    "saveDesk":"the app is in your desktop now"
   },
   "fa":{
     "save":"save the app",

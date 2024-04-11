@@ -142,8 +142,6 @@ const { t } = useI18n({ useScope: "global" });
 
 const modelValue = defineModel<ItemMenu[]>({ required: true });
 
-
-
 const defaultItemsIcons = [
   LineMdHomeMd,
   LineMdPhone,
@@ -223,6 +221,3 @@ const v$ = useVuelidate(
 );
 </script>
 
-<i18n>
-
-</i18n>
