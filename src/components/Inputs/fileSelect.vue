@@ -27,6 +27,9 @@
             }}</a>
             {{ $t("inputs.file_select.from_your_computer") }}
           </p>
+          <p v-if="error" class="mt-2 text-sm text-red-600">
+            {{ error }}
+          </p>
         </div>
       </label>
       <div v-else class="flex flex-wrap justify-start flex-col">
@@ -49,10 +52,6 @@
         </button>
       </div>
     </div>
-
-    <p v-if="error" class="mt-2 text-sm text-red-600">
-      {{ error }}
-    </p>
   </div>
 </template>
 
@@ -66,7 +65,9 @@ import { open } from "@tauri-apps/api/dialog";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 let props = withDefaults(
   defineProps<{
     label: string;
@@ -97,7 +98,7 @@ const preview = computed(() => {
     } catch (error) {
       console.error(error);
     }
-  }
+  } else return undefined;
 });
 
 const getUrlFileType = (url: string) => {
@@ -114,8 +115,8 @@ const onDrop = async (files: string[] | null) => {
       notify(
         {
           group: "generic",
-          title: "wrong format",
-          text: "please drop currect format",
+          title: t("wrong_format"),
+          text: t("please_drop_currect_format"),
           type: "warning",
         },
         5000,
@@ -186,3 +187,16 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
   dataTypes: props.accept,
 });
 </script>
+
+<i18n lang="json">
+  {
+  "en":{
+    "wrong_format":"wrong format",
+    "please_drop_currect_format":"please drop currect format"
+  },
+  "fa":{
+   "wrong_format":"فرمت اشتباه است",          
+   "please_drop_currect_format":"لطفا از فرمت jpg یا png استفاده کنید." 
+  }
+}
+</i18n>

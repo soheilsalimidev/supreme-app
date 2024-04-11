@@ -8,8 +8,16 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:vue/vue3-strongly-recommended",
+    "plugin:@intlify/vue-i18n/recommended",
+    "plugin:jsonc/recommended-with-jsonc",
     "plugin:prettier-vue/recommended"
   ],
+  "settings": {
+    "vue-i18n": {
+      "localeDir": "./src/locales/*.{json,json5,yaml,yml}",
+      "messageSyntaxVersion": "^9.0.0"
+    }
+  },
   "parser": "vue-eslint-parser",
   "parserOptions": {
     "ecmaVersion": "latest",

@@ -145,6 +145,7 @@ const defaultItems = ref([
         class="bg-indigo-500 h-[54px] flex items-center px-2"
       >
         <HeroiconsBars3 class="h-8 w-8 text-white">
+        </HeroiconsBars3>
           <p class="text-white ms-2 text-lg font-bold">
             {{ appInfo.app_setting.toolbar.text }}
           </p>
@@ -156,16 +157,17 @@ const defaultItems = ref([
             class="w-10 ms-auto"
             :src="convertFileSrc(appInfo.app_setting.toolbar_custom_icon.first)"
           />
-        </HeroiconsBars3>
       </div>
       <div
         v-if="
           selectedWebPageSetting.slice(1).every((item) => !item) &&
           appInfo.app_setting.swipe_refresh
         "
-        class="relative shadow-gray-200 h-8 w-8 rounded-full shadow-md bg-stone-200 top-5 left-1/2 -translate-x-1/2 flex justify-center items-center"
+        class="top-5 w-full flex justify-center items-center left-0 relative"
       >
-        <LineMdLoadingLoop> </LineMdLoadingLoop>
+        <div class="shadow-gray-200 h-8 w-8 rounded-full shadow-md bg-stone-200 flex justify-center items-center">
+          <LineMdLoadingLoop> </LineMdLoadingLoop>
+        </div>
       </div>
       <div
         class="flex h-full w-full justify-center items-center flex-col relative"
