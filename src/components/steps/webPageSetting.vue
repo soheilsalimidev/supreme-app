@@ -467,7 +467,7 @@ const cacheModes = [
   },
 ];
 
-const $v = useVuelidate({})
+useVuelidate({})
 
 </script>
 
