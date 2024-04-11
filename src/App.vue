@@ -6,7 +6,7 @@
           <div class="">
             <a href="#">
               <span class="sr-only">Logo</span>
-              <img class="h-8 w-auto" :src="icon" alt="Workflow" />
+              <img class="h-8 w-auto" :src="icon"  />
             </a>
           </div>
 
@@ -361,7 +361,7 @@ const changeLocal = (item: string) => {
 }
 </style>
 
-<i18n lang="josn">
+<i18n>
 {
   "en": {
     "buildWith": "build with",
