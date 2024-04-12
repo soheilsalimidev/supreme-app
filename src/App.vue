@@ -6,7 +6,7 @@
           <div class="">
             <a href="#">
               <span class="sr-only">Logo</span>
-              <img class="h-8 w-auto" :src="icon"  />
+              <img class="h-8 w-auto" src="/icon.svg"  />
             </a>
           </div>
 
@@ -260,7 +260,6 @@
 
 <script setup lang="ts">
 import LineMdHeart from "~icons/line-md/heart";
-import icon from "@/assets/vue.svg";
 import { useDark, useToggle } from "@vueuse/core";
 import { Notification, NotificationGroup, notify } from "notiwind";
 import { useMagicKeys, whenever } from "@vueuse/core";

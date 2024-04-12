@@ -11,35 +11,29 @@ import { storeToRefs } from "pinia";
 import HeroiconsBars3 from "~icons/heroicons/bars-3";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import LineMdLoadingLoop from "~icons/line-md/loading-loop";
-import noInternetJson from "@/assets/no_internet.json";
-import loadingJson from "@/assets/loading.json";
+// import noInternetJson from "@/assets/no_internet.json";
+// import loadingJson from "@/assets/loading.json";
 import { DotLottieVue } from "@lottiefiles/dotlottie-vue";
-import { invoke } from "@tauri-apps/api";
-import { computedAsync } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDateFormat, useNow } from '@vueuse/core'
+import { useDateFormat, useNow } from "@vueuse/core";
 
-const formattedTime = useDateFormat(useNow(), 'HH:mm')
+const formattedTime = useDateFormat(useNow(), "HH:mm");
 const { appInfo, selectedWebPageSetting } = storeToRefs(useAppSettingStore());
 
-const { t } = useI18n({useScope:"global"});
+const { t } = useI18n({ useScope: "global" });
 
-const getJsonDateForLoaing = computedAsync(async () => {
+const getJsonDateForLoaing = computed(() => {
   return appInfo.value.app_setting.loading
-    ? await invoke<string>("get_file", {
-        path: appInfo.value.app_setting.loading,
-      })
-    : JSON.stringify(loadingJson);
-}, JSON.stringify(loadingJson));
+    ? convertFileSrc(appInfo.value.app_setting.loading)
+    : "/loading.lottie";
+});
 
-const getJsonDateForNoInter = computedAsync(async () => {
+const getJsonDateForNoInter = computed(() => {
   return appInfo.value.app_setting.no_internet_layout.lottieFile
-    ? await invoke<string>("get_file", {
-        path: appInfo.value.app_setting.no_internet_layout.lottieFile,
-      })
-    : JSON.stringify(noInternetJson);
-}, JSON.stringify(noInternetJson));
+    ? convertFileSrc(appInfo.value.app_setting.no_internet_layout.lottieFile)
+    : "/no_internet.lottie";
+});
 
 const getMenuItem = computed(() => {
   return selectedWebPageSetting.value[5]
@@ -103,15 +97,17 @@ const defaultItems = ref([
               >
                 <span class="mdc-deprecated-list-item__ripple"></span>
                 <component
-                  :is="item.Kind ? defaultItemsIcons[item.Kind - 1] : LineMdExternalLinkRounded"
+                  :is="
+                    item.Kind
+                      ? defaultItemsIcons[item.Kind - 1]
+                      : LineMdExternalLinkRounded
+                  "
                   class="material-icons mdc-deprecated-list-item__graphic"
                 >
                 </component>
 
                 <span class="mdc-deprecated-list-item__text">{{
-                  item.Kind
-                    ? defaultItems[item.Kind - 1] 
-                    : item.Pair?.first
+                  item.Kind ? defaultItems[item.Kind - 1] : item.Pair?.first
                 }}</span>
               </a>
 
@@ -144,19 +140,18 @@ const defaultItems = ref([
         v-if="appInfo.app_setting.toolbar.type === 1"
         class="bg-indigo-500 h-[54px] flex items-center px-2"
       >
-        <HeroiconsBars3 class="h-8 w-8 text-white">
-        </HeroiconsBars3>
-          <p class="text-white ms-2 text-lg font-bold">
-            {{ appInfo.app_setting.toolbar.text }}
-          </p>
-          <img
-            v-if="
-              appInfo.app_setting.toolbar_custom_icon.enable &&
-              appInfo.app_setting.toolbar_custom_icon.first
-            "
-            class="w-10 ms-auto"
-            :src="convertFileSrc(appInfo.app_setting.toolbar_custom_icon.first)"
-          />
+        <HeroiconsBars3 class="h-8 w-8 text-white"> </HeroiconsBars3>
+        <p class="text-white ms-2 text-lg font-bold">
+          {{ appInfo.app_setting.toolbar.text }}
+        </p>
+        <img
+          v-if="
+            appInfo.app_setting.toolbar_custom_icon.enable &&
+            appInfo.app_setting.toolbar_custom_icon.first
+          "
+          class="w-10 ms-auto"
+          :src="convertFileSrc(appInfo.app_setting.toolbar_custom_icon.first)"
+        />
       </div>
       <div
         v-if="
@@ -165,7 +160,9 @@ const defaultItems = ref([
         "
         class="top-5 w-full flex justify-center items-center left-0 relative"
       >
-        <div class="shadow-gray-200 h-8 w-8 rounded-full shadow-md bg-stone-200 flex justify-center items-center">
+        <div
+          class="shadow-gray-200 h-8 w-8 rounded-full shadow-md bg-stone-200 flex justify-center items-center"
+        >
           <LineMdLoadingLoop> </LineMdLoadingLoop>
         </div>
       </div>
@@ -179,7 +176,7 @@ const defaultItems = ref([
           <DotLottieVue
             :key="getJsonDateForLoaing"
             class="h-64"
-            :data="getJsonDateForLoaing"
+            :src="getJsonDateForLoaing"
             :autoplay="true"
             :loop="true"
             :speed="1"
@@ -204,7 +201,7 @@ const defaultItems = ref([
             v-else
             :key="getJsonDateForNoInter"
             class="h-64"
-            :data="getJsonDateForNoInter"
+            :src="getJsonDateForNoInter"
             :autoplay="true"
             :loop="true"
             :speed="1"
@@ -278,4 +275,3 @@ const defaultItems = ref([
   transform: translateX(30px);
 }
 </style>
-

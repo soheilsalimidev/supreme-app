@@ -6,7 +6,7 @@ import { HeadlessUiFloatResolver } from "@headlessui-float/vue";
 import Icons from "unplugin-icons/vite";
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
-
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 export default defineConfig(async () => ({
   plugins: [
     vue(),
@@ -15,7 +15,10 @@ export default defineConfig(async () => ({
     }),
     Icons({}),
     VueI18nPlugin({
-      include: [new URL('./src/locales/**', import.meta.url).pathname],
+      include: [new URL("./src/locales/**", import.meta.url).pathname],
+    }),
+    ViteImageOptimizer({
+      includePublic:true
     }),
   ],
   resolve: {
