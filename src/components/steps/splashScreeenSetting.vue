@@ -8,7 +8,7 @@
         <div class="space-y-4">
           <RadioGroup v-model="appInfo.app_setting.splash_screen.type">
             <RadioGroupLabel
-              class="text-base font-medium text-gray-900 dark:text-white"
+              class="text-lg font-medium text-gray-900 dark:text-white font-display"
             >
               {{ $t("steps.splash_screeen_setting.select_a_splash_screen") }}
             </RadioGroupLabel>
@@ -34,7 +34,7 @@
                     <div class="flex flex-col">
                       <RadioGroupLabel
                         as="span"
-                        class="block text-sm font-medium text-gray-900 dark:text-white"
+                        class="block text-base font-medium text-gray-700 dark:text-slate-200"
                       >
                         {{ splashList.title }}
                       </RadioGroupLabel>
@@ -82,7 +82,7 @@
           </div>
           <div v-else-if="appInfo.app_setting.splash_screen.type === 3">
             <color-picker
-              v-model="appInfo.app_setting.splash_screen.splash_screen_g_c"
+              v-model="appInfo.app_setting.splash_screen.splash_screen_g_c!"
               :error="
                 v$.app_setting.splash_screen.splash_screen_g_c.$errors
                   .map((e) => e.$message)

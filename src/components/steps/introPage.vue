@@ -5,7 +5,9 @@
         v-if="!appInfo.app_setting.introPage.enable"
         class="flex flex-col justify-center items-center"
       >
-        <span class="text-slate-800 dark:text-slate-200 mb-10 text-center">
+        <span
+          class="text-slate-800 dark:text-slate-200 mb-10 text-center text-base"
+        >
           Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
           enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
           exercitation amet. Nisi anim cupidatat excepteur officia.
@@ -13,31 +15,29 @@
           voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
           officia. Sit irure elit esse ea nulla sunt ex
         </span>
-        <div class="flex items-start mb-5">
-          <div class="flex items-center h-5">
-            <input
-              id="pageIntro"
-              type="checkbox"
-              value=""
-              v-model="appInfo.app_setting.introPage.enable"
-              @change="
-                appInfo.app_setting.introPage.pages.push({
-                  title: '',
-                  description: '',
-                  background:
-                    'linear-gradient(315deg, rgba(59, 44, 231, 1) 0%, rgba(55, 245, 245, 1) 100%)',
-                  image_name: '',
-                })
-              "
-              class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-              required
-            />
-          </div>
+        <div class="flex items-center mb-5 justify-center">
           <label
             for="pageIntro"
-            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            class="me-2 text-lg font-bold text-gray-900 dark:text-gray-300 font-display"
             >I need Intro</label
           >
+          <input
+            id="pageIntro"
+            type="checkbox"
+            value=""
+            v-model="appInfo.app_setting.introPage.enable"
+            @change="
+              appInfo.app_setting.introPage.pages.push({
+                title: '',
+                description: '',
+                background:
+                  'linear-gradient(315deg, rgba(59, 44, 231, 1) 0%, rgba(55, 245, 245, 1) 100%)',
+                imageName: '',
+              })
+            "
+            class="w-5 h-5 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+            required
+          />
         </div>
       </div>
 
@@ -166,4 +166,4 @@ const removePage = (index: number) => {
     "page":"Page {page}"
   }
 }
-</i18n>  
+</i18n>

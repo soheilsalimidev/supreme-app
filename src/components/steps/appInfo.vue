@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col h-full">
     <div class="px-4 py-5 space-y-6 sm:p-6">
       <div class="grid grid-cols-3 gap-6">
         <textInput
@@ -35,6 +35,7 @@
 
     <fileSelect
       v-model="appInfo.icon_path"
+      class="grow"
       file-name="logo.png"
       filter-warning-title="inviled image"
       filter-warning-text="your image should be 512*512 size"

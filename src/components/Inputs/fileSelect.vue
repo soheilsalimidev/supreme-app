@@ -1,12 +1,12 @@
 <template>
-  <div class="grid grid-cols-1 space-y-2">
-    <label class="text-sm font-bold text-gray-500 tracking-wide">{{
+  <div class="flex flex-col space-y-2">
+    <label class="font-bold text-gray-500 tracking-wide font-display text-base h-fit">{{
       label
     }}</label>
-    <div ref="dropZoneRef" class="flex items-center justify-center w-full">
+    <div ref="dropZoneRef" class="flex items-center justify-center w-full grow">
       <label
         v-if="!preview"
-        class="flex flex-col rounded-lg border-4 border-dashed w-full  p-10 group text-center"
+        class="flex flex-col rounded-lg border-4 border-dashed w-full  p-10 group text-center h-full"
       >
         <div
           class="h-full w-full text-center flex flex-col items-center justify-center"
@@ -16,13 +16,13 @@
               $t("inputs.file_select.drop_your_icon_here")
             }}</span>
           </div>
-          <p v-else class="pointer-none text-gray-500">
-            <span class="text-sm">{{
+          <p v-else class="pointer-none text-gray-500 text-lg">
+            <span class="text-lg">{{
               $t("inputs.file_select.drag_and_drop")
             }}</span>
             {{ $t("inputs.file_select.files_here") }} <br />
             {{ $t("inputs.file_select.or") }}
-            <a class="text-indigo-600 hover:underline" @click="selectFile">{{
+            <a class="text-indigo-600 hover:underline font-display font-bold" @click="selectFile">{{
               $t("inputs.file_select.select_a_file")
             }}</a>
             {{ $t("inputs.file_select.from_your_computer") }}

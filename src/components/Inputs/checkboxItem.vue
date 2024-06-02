@@ -28,7 +28,7 @@
             >
               <label
                 :for="label"
-                class="font-medium text-gray-700 dark:text-white w-fit"
+                class="font-bold text-gray-700 dark:text-slate-100 w-fit font-display text-base"
                 >{{ label }}</label
               >
               <p

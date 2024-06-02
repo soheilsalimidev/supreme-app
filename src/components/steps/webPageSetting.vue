@@ -207,7 +207,7 @@
           >
             <color-picker
               v-model="
-                appInfo.app_setting.sidebar_menu.sidebar_menu_header.color
+                appInfo.app_setting.sidebar_menu.sidebar_menu_header.color!
               "
               :label="$t('steps.web_page_setting.select_your_colors')"
             >

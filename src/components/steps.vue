@@ -47,7 +47,7 @@
                 aria-hidden="true"
               />
               <span
-                class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-bold"
+                class="mt-20 bg-indigo-300/60 text-indigo-600 whitespace-nowrap p-1 rounded-md dark:text-indigo-100 dark:bg-indigo-500/90 font-black font-display"
                 >{{ step.name }}</span
               >
             </a>
@@ -108,7 +108,7 @@
       <div class="px-4 py-3 text-right sm:px-6 mt-auto">
         <button
           v-if="currentTab !== 0"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="previous"
         >
           {{ $t("steps.previous") }}
@@ -117,7 +117,7 @@
       <div class="px-4 py-3 text-right sm:px-6 mt-auto ms-auto">
         <button
           v-if="currentTab !== 4"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="next"
         >
           {{ $t("steps.next") }}

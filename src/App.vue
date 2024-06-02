@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-full overflow-hidden">
+  <div class="h-full overflow-hidden flex flex-col">
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="py-5 flex items-center justify-center lg:justify-between">
           <div class="">
             <a href="#">
               <span class="sr-only">Logo</span>
-              <img class="h-8 w-auto" src="/icon.svg"  />
+              <img class="h-8 w-auto" src="/icon.svg" />
             </a>
           </div>
 
@@ -14,7 +14,7 @@
             <div class="inline-flex rounded-md shadow-sm rtl:flex-row-reverse">
               <button
                 type="button"
-                class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-display"
               >
                 {{ t("lang") }}
               </button>
@@ -82,7 +82,7 @@
         </div>
       </div>
     </header>
-    <main class="-mt-24 pb-8">
+    <main class="-mt-24">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 class="sr-only">Page title</h1>
         <div
@@ -141,23 +141,21 @@
         </div>
       </div>
     </main>
-    <footer>
-      <div
-        class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl bg-gray-100 dark:bg-gray-900"
-      >
+    <footer class="mt-auto mb-3">
+      <div class="px-4 bg-gray-100 dark:bg-gray-900 font-display">
         <div
           class="text-sm text-gray-500 text-center sm:text-left dark:text-white"
         >
-          <span class="flex gap-1"
+          <span class="flex gap-1 text-base"
             >{{ t("buildWith") }}
             <LineMdHeart :key="refreshHeart" class="text-red-500" />
             {{ t("by") }}
             <a
               target="_blank"
               href="https://soheilsalimidev.ir"
-              class="hover:underline"
-              >{{ t("soheil") }}</a
-            >
+              class="border-b-2 border-indigo-500 border-dashed"
+              >{{ t("soheil") }}
+            </a>
           </span>
         </div>
       </div>

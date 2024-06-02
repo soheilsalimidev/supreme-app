@@ -3,7 +3,8 @@ import { IntroPage, useAppSettingStore } from "@/stores/appSetting";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const { appInfo, openedPageIndexIntro } = storeToRefs(useAppSettingStore());
 
 const page = computed<IntroPage | undefined>(
@@ -12,13 +13,14 @@ const page = computed<IntroPage | undefined>(
 
 const getImage = computed(() => {
   try {
-    return convertFileSrc(page.value?.image_name ?? "");
+    return convertFileSrc(page.value?.imageName ?? "");
   } catch (error) {}
 });
 </script>
 
 <template>
   <div
+    v-if="page"
     :style="{
       backgroundImage: page?.background,
     }"
@@ -29,13 +31,33 @@ const getImage = computed(() => {
     </h3>
     <img :src="getImage" />
     <p class="text-slate-800 text-lg text-center">{{ page?.description }}</p>
-    <div class="mt-auto flex flex-row-reverse justify-center items-center relative w-full gap-2 mb-2 ">
+    <div
+      class="mt-auto flex flex-row-reverse justify-center items-center relative w-full gap-2 mb-2"
+    >
       <span
         class="h-2 w-2 border-white border rounded-full"
         v-for="(_, index) in appInfo.app_setting.introPage.pages"
         :class="index === openedPageIndexIntro && 'bg-white'"
       ></span>
-      <span class="start-2 text-white p-3 font-medium absolute cursor-pointer">Next</span>
+      <span class="start-2 text-white p-3 font-medium absolute cursor-pointer"
+        >Next</span
+      >
     </div>
   </div>
+  <div
+    v-else
+    class="h-full w-full overflow-hidden flex items-center justify-center flex-col pt-4 from-teal-200 to-teal-500 bg-gradient-135"
+  >
+    <h3 class="font-display text-lg font-bold p-3 text-center text-slate-900">
+      {{ t("selectPage") }}
+    </h3>
+  </div>
 </template>
+
+<i18n>
+  {
+  "en":{
+  "selectPage":"Please select page to preview"
+  }
+  }
+</i18n>
