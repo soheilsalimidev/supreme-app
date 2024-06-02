@@ -20,6 +20,17 @@ use tracing::{error, info, instrument};
 
 use super::{Assetlinks, Config, Target};
 
+const DEFAULT_GRA_XML: &str = r###"<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:endColor="#4568DC"
+        android:startColor="#B06AB3"
+        android:type="linear" />
+
+</shape>
+"###;
 const DEFAULT_APP_URL: &str = "iapp.com";
 const DEFAULT_APP_NAME: &str = "I App";
 const DEFAULT_PACKGENAME: &str = "com.app.webapp";
@@ -333,6 +344,7 @@ impl Web2app {
             #[cfg(target_os = "linux")]
             {
                 use std::collections::HashMap;
+                println!("{:?}", self.jar_path);
                 let mut env = HashMap::with_capacity(1);
                 env.insert(
                     "LD_LIBRARY_PATH".to_string(),
@@ -342,8 +354,8 @@ impl Web2app {
             }
             let (mut rx, _) = prosses.spawn()?;
             while let Some(event) = rx.recv().await {
-                if let tauri::api::process::CommandEvent::Stdout(line) = event {
-                    info!("{}", line);
+                if let tauri::api::process::CommandEvent::Stderr(line) = event {
+                    error!("{}", line);
                 }
             }
             let _ = self.sender.send("aligning done".into()).await;
@@ -453,7 +465,6 @@ impl Web2app {
             let colors = rest
                 .splitn(2, "%")
                 .map(|text| {
-                    println!("{:?}", text);
                     text.char_indices()
                         .skip_while(|f| f.1 != '(')
                         .skip(1)
@@ -471,10 +482,7 @@ impl Web2app {
 
         let replace_file = |path: PathBuf, str: String| async move {
             let gir = extract_values(&str);
-            let mut file = File::options().write(true).read(true).open(path).await?;
-            let mut gridaint = String::new();
-            file.read_to_string(&mut gridaint).await?;
-            file.rewind().await?;
+            let mut file = File::options().write(true).create(true).open(path).await?;
             let kind_replace = (
                 if gir.0.parse::<u32>().is_ok() {
                     "315"
@@ -486,7 +494,7 @@ impl Web2app {
                     .map_or_else(|_| "radial".to_owned(), |f| f.to_string()),
             );
             file.write_all(
-                &gridaint
+                &DEFAULT_GRA_XML
                     .replace(kind_replace.0, &kind_replace.1)
                     .replace("#4568DC", &gir.1[0])
                     .replace("#B06AB3", &gir.1[1])
@@ -498,7 +506,7 @@ impl Web2app {
 
         if self.config.app_setting.splash_screen.type_field == 3 {
             replace_file(
-                self.out_path.join("drawable/bg_gradient_splash.xml"),
+                self.out_path.join("res/drawable/bg_gradient_splash.xml"),
                 self.config
                     .app_setting
                     .splash_screen
@@ -518,13 +526,31 @@ impl Web2app {
             == 1
         {
             replace_file(
-                self.out_path.join("drawable/bg_gradient_menu_header.xml"),
+                self.out_path.join("res/drawable/bg_gradient_menu_header.xml"),
                     self.config.app_setting.sidebar_menu.sidebar_menu_header.color
                     .clone()
                     .or(Some("linear-gradient(106deg, rgba(235, 65, 101, 1) 0%, rgba(207, 147, 217, 1) 99%)".to_owned())).unwrap(),
             )
             .await?;
         }
+
+        if self.config.app_setting.intro_page.enable {
+            futures_util::stream::iter(&self.config.app_setting.intro_page.pages)
+                .enumerate()
+                .for_each(|(i, f)| {
+                    let sel = self.clone();
+                    async move {
+                        let _ = replace_file(
+                            sel.out_path.join(format!("res/drawable/page{i}.xml")),
+                            f.background.clone(),
+                        )
+                        .await
+                        .inspect_err(|e| error!("{:?}" , e));
+                    }
+                })
+                .await;
+        }
+
         let _ = self.sender.send("done moving resources".into()).await;
         info!("done moving resources");
 
@@ -702,7 +728,7 @@ where
     BufReader::new(stderr).read_to_string(&mut err_str).await?;
 
     if !err_str.is_empty() {
-        error!("{}" , &err_str);
+        error!("{}", &err_str);
         return Err(anyhow!(err_str));
     }
 
@@ -781,19 +807,14 @@ fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
 mod tests {
     use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
-    use std::{path::PathBuf, sync::Once};
+    use std::path::PathBuf;
+    use tracing_test::traced_test;
 
-    static INIT: Once = Once::new();
-
-    /// Setup function that is only run once, even if called multiple times.
-    fn setup() {
-        INIT.call_once(|| {});
-    }
-
+    #[traced_test]
     #[tokio::test]
     async fn change_app() -> Result<()> {
-        setup();
         let d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        dbg!(&d);
         Web2app::new(
             super::Config {
                 name: "giigle".into(),

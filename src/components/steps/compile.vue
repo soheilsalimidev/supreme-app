@@ -193,6 +193,7 @@ const startRender = async () => {
     try {
       let steps = 1;
       const totalSteps = 10;
+      console.log(appInfo.value)
       await invoke("render_app", { config: unref(appInfo) });
       setTimeout(()=>{
         updateProgressBar((steps * 100) / totalSteps);

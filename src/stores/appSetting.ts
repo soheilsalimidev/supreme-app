@@ -214,5 +214,5 @@ export interface IntroPage {
   title: string;
   description: string;
   background: string;
-  image_name: string;
+  imageName: string;
 }

@@ -5,8 +5,6 @@ use std::path::PathBuf;
 
 pub mod web2app;
 
-
-
 #[derive(Serialize, Deserialize, new)]
 pub struct Assetlinks<'a> {
     #[serde(rename = "relation")]
@@ -230,7 +228,16 @@ pub struct FloatingActionButton {
 #[serde(rename_all = "camelCase")]
 pub struct IntroPage {
     pub enable: bool,
-    pub pages: Vec<Value>,
+    pub pages: Vec<Page>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Page{
+    title: String,
+    description: String,
+    background: String,
+    image_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

@@ -106,8 +106,8 @@
 
                   <FileSelect
                     class="col-span-12 h-40"
-                    v-model="page.image_name"
-                    :file-name="`page${index}`"
+                    v-model="page.imageName"
+                    :file-name="`pageImage${index}`"
                     :label="$t('steps.splash_screeen_setting.image')"
                   >
                   </FileSelect>
@@ -126,7 +126,7 @@
               description: '',
               background:
                 'linear-gradient(315deg, rgba(59, 44, 231, 1) 0%, rgba(55, 245, 245, 1) 100%)',
-              image_name: '',
+              imageName: '',
             })
           "
         >
