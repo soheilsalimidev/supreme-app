@@ -1,23 +1,34 @@
 {
   "site_url": "https://docs.rs/tokio/latest/tokio/sync/mpsc/struct.Sender.html",
+  "aboutUs": {
+    "enable": false,
+    "text": ""
+  },
   "splash_screen": {
-    "type": 0
+    "type": 0,
+    "splash_screen_g_c": null
   },
   "cache_mode": 0,
   "no_internet_layout": {
-    "type": 1
+    "type": 1,
+    "lottieFile": null,
+    "image": null
   },
   "toolbar": {
-    "type": 0
+    "type": 0,
+    "text": null
   },
   "toolbar_custom_icon": {
-    "enable": false
+    "enable": false,
+    "first": null,
+    "second": null
   },
   "swipe_refresh": false,
   "sidebar_menu": {
     "enable": true,
     "sidebar_menu_header": {
-      "type": 0
+      "type": 0,
+      "color": null
     },
     "sidebar_menu_footer": {
       "type": 1,
@@ -25,9 +36,11 @@
     },
     "item_menu": [
       {
-        "Kind": 2
+        "Kind": 2,
+        "Pair": null
       },
       {
+        "Kind": null,
         "Pair": {
           "first": "asdf",
           "second": "sadf"
@@ -42,11 +55,13 @@
     "item_fab": []
   },
   "introPage": {
-    "enable": false,
-    "pages": []
+    "enable": true,
+    "pages": [{
+      "background": 1,
+      "description": "asdfasdf",
+      "image_name": "logo",
+      "title": "dasfads"
+    }]
   },
-  "aboutUs": {
-    "enable": false,
-    "text": ""
-  }
+  "googleService": null
 }

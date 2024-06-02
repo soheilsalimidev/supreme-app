@@ -138,6 +138,8 @@ if you need it write "true" if not write "false"
 
 import android.annotation.SuppressLint
 import android.content.Context
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.Json
 import java.io.BufferedReader
@@ -173,39 +175,43 @@ open class Config(context: Context) {
         @SerialName("floating_action_button")
         val floatingActionButton: FloatingActionButton,
         val introPage: IntroPage,
-        val aboutUs:AboutUs
+        val aboutUs: AboutUs
     )
 
     @kotlinx.serialization.Serializable
     data class AboutUs(
         val enable: Boolean,
-
         val text: String?,
     )
 
     @kotlinx.serialization.Serializable
-    data class SplashScreen(
+    data class SplashScreen @OptIn(ExperimentalSerializationApi::class) constructor(
         val type: Int,
+        @EncodeDefault(EncodeDefault.Mode.NEVER)
         @SerialName("splash_screen_g_c")
-        val splashScreenGC: String?,
+        val splashScreenGC: String? = "",
     )
+
     @kotlinx.serialization.Serializable
     data class NoInternetLayout(
         val type: Int,
         val lottieFile: String?,
         val image: String?,
     )
+
     @kotlinx.serialization.Serializable
     data class Toolbar(
         val type: Int,
         val text: String?,
     )
+
     @kotlinx.serialization.Serializable
     data class ToolbarCustomIcon(
         val enable: Boolean,
         val first: String?,
         val second: String?,
     )
+
     @kotlinx.serialization.Serializable
     data class SidebarMenu(
         val enable: Boolean,
@@ -216,16 +222,19 @@ open class Config(context: Context) {
         @SerialName("item_menu")
         val itemMenu: List<ItemMenu>,
     )
+
     @kotlinx.serialization.Serializable
     data class SidebarMenuHeader(
         val type: Int,
         val color: String?,
     )
+
     @kotlinx.serialization.Serializable
     data class SidebarMenuFooter(
         val type: Int,
         val text: String?,
     )
+
     @kotlinx.serialization.Serializable
     data class ItemMenu(
         @SerialName("Kind")
@@ -233,17 +242,20 @@ open class Config(context: Context) {
         @SerialName("Pair")
         val pair: Pair?,
     )
+
     @kotlinx.serialization.Serializable
     data class Pair(
         val first: String,
         val second: String,
     )
+
     @kotlinx.serialization.Serializable
     data class FloatingActionButton(
         val enable: Boolean,
         @SerialName("item_fab")
         val itemFab: List<ItemFab>,
     )
+
     @kotlinx.serialization.Serializable
     data class ItemFab(
         @SerialName("Kind")
@@ -251,6 +263,7 @@ open class Config(context: Context) {
         @SerialName("Pair")
         val pair: Pair2?,
     )
+
     @kotlinx.serialization.Serializable
     data class Pair2(
         val first: String,
@@ -261,33 +274,21 @@ open class Config(context: Context) {
     data class IntroPage(
         val enable: Boolean,
         val pages: List<IntroPages?>,
-    ) {
-
-    }
-
+    )
 
     @kotlinx.serialization.Serializable
-data class IntroPages(
-    val background: Int,
-    val description: String,
-    val image_name: String,
-    val title: String
-) {
-    fun background_grident(): Int {
-        return when (this.background) {
-            1 -> R.drawable.bg_gradient_slide1
-            2 -> R.drawable.bg_gradient_slide2
-            3 -> R.drawable.bg_gradient_slide3
-            4 -> R.drawable.bg_gradient_slide4
-            else -> R.drawable.bg_gradient_slide5
-        }
-    }
-}
+    data class IntroPages(
+        val background: String,
+        val description: String,
+        @SerialName("image_name")
+        val imageName: String,
+        val title: String
+    )
 
     init {
         val raw: InputStream = context.resources.openRawResource(R.raw.setting)
         val rd: Reader = BufferedReader(InputStreamReader(raw))
-        configType = Json{
+        configType = Json {
             ignoreUnknownKeys = true
         }.decodeFromString(rd.readText())
         rd.close()

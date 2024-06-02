@@ -20,18 +20,21 @@ class IntroActivity : AppIntro() {
             i++
             if (item != null) {
                 val resId = this.resources.getIdentifier(
-                    item.image_name,
+                    item.imageName,
                     "drawable",
                     this.packageName
                 )
-                    .toLong()
-
+             val bgID =    this.resources.getIdentifier(
+                    item.background,
+                    "drawable",
+                    this.packageName
+                )
                 addSlide(
                     AppIntroFragment.newInstance(
                         title = item.title,
                         description = item.description,
-                        imageDrawable = resId.toInt(),
-                        backgroundDrawable = item.background_grident()
+                        imageDrawable = resId,
+                        backgroundDrawable = bgID
                     )
                 )
             }

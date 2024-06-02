@@ -6,6 +6,7 @@ import webPageSetting from "@/components/steps/webPageSetting.vue";
 import compile from "@/components/steps/compile.vue";
 import introPage from "@/components/steps/introPage.vue";
 import spashScreenFrame from "@/components/frames/spashScreenFrame.vue";
+import introFrame from "@/components/frames/introFrame.vue";
 import webPageFrame from "@/components/frames/webPageFrame.vue";
 import { useI18n } from "vue-i18n";
 
@@ -22,10 +23,11 @@ export const useNavigationStore = defineStore("navigation", () => {
   const componentsFrame = {
     spashScreenFrame,
     webPageFrame,
+    introFrame,
   };
 
   const activeTabIndex = ref(1);
-  const currentTab = ref(0);
+  const currentTab = ref(3);
 
   const steps = ref<
     {
@@ -66,6 +68,7 @@ export const useNavigationStore = defineStore("navigation", () => {
           id: 4,
           status: "upcoming",
           componentStep: "introPage",
+          componentFrame: "introFrame",
         },
         {
           name: t("stepsLabel.render"),

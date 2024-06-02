@@ -7,10 +7,10 @@ import { computed } from "vue";
 const { appInfo } = storeToRefs(useAppSettingStore());
 const getLogo = computed(() => {
   try {
-    return convertFileSrc(appInfo.value.icon_path)
+    return convertFileSrc(appInfo.value.icon_path);
   } catch (error) {
-    console.error(error)
-    return "" 
+    console.error(error);
+    return "";
   }
 });
 </script>
