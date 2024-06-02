@@ -8,18 +8,13 @@
         <span
           class="text-slate-800 dark:text-slate-200 mb-10 text-center text-base"
         >
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex
+          {{ t("introExplain") }}
         </span>
         <div class="flex items-center mb-5 justify-center">
           <label
             for="pageIntro"
             class="me-2 text-lg font-bold text-gray-900 dark:text-gray-300 font-display"
-            >I need Intro</label
+            >{{ t("needIntro") }}</label
           >
           <input
             id="pageIntro"
@@ -49,77 +44,17 @@
             leave-to-class="translate-x-[150%] opacity-0"
             leave-active-class="transition duration-300"
           >
-            <checkboxItem
+            <IntroPageItem
               v-for="(page, index) in appInfo.app_setting.introPage.pages"
-              disable-checkbox
-              :key="index"
-              :open="openedPageIndexIntro === index"
-              @update:open="
-                $event
-                  ? (openedPageIndexIntro = index)
-                  : (openedPageIndexIntro = -1)
-              "
-              class="w-full h-fit"
-              :label="t('page', { page: index + 1 })"
-            >
-              <template #end="">
-                <HeroiconsXMark
-                  class="w-8 h-8 text-slate-700 dark:text-slate-200"
-                  @click="removePage(index)"
-                />
-              </template>
-
-              <template #description="">
-                {{ openedPageIndexIntro !== index ? t("pageInfo", page) : "" }}
-              </template>
-              <template #default="">
-                <div class="grid grid-cols-12 gap-4">
-                  <textInput
-                    v-model="page.title"
-                    class="col-span-5"
-                    label-class="dark:!bg-slate-700"
-                    input-class="dark:!bg-slate-700"
-                    :placeholder="t('pageTitle')"
-                    :label="t('pageTitleHint')"
-                  >
-                  </textInput>
-                  <textInput
-                    v-model="page.description"
-                    class="col-span-7"
-                    label-class="dark:!bg-slate-700"
-                    input-class="dark:!bg-slate-700"
-                    :placeholder="t('pageDescriptionHint')"
-                    :label="t('pageDescription')"
-                  >
-                  </textInput>
-
-                  <color-picker
-                    label-class="dark:!bg-slate-700"
-                    input-class="dark:!bg-slate-700"
-                    class="col-span-9"
-                    v-model="page.background"
-                    :label="
-                      $t('steps.splash_screeen_setting.select_your_color')
-                    "
-                  >
-                  </color-picker>
-
-                  <FileSelect
-                    class="col-span-12 h-40"
-                    v-model="page.imageName"
-                    :file-name="`pageImage${index}`"
-                    :label="$t('steps.splash_screeen_setting.image')"
-                  >
-                  </FileSelect>
-                </div>
-              </template>
-            </checkboxItem>
+              :page
+              :index
+            />
           </TransitionGroup>
         </div>
 
         <button
           v-if="appInfo.app_setting.introPage.enable"
-          class="text-gray-900 dark:text-slate-100 rounded-3xl px-2 max-w-40 py-2 text-base font-medium bottom-4 end-4 absolute bg-indigo-500 flex justify-center items-center gap-2 group transition-all duration-500 ease-in-out"
+          class="text-gray-900 dark:text-slate-100 rounded-3xl px-2 max-w-16 hover:max-w-40 py-2 text-base font-medium bottom-4 end-4 absolute bg-indigo-500 flex justify-center items-center gap-2 group transition-all duration-500 ease-in-out"
           @click="
             appInfo.app_setting.introPage.pages.push({
               title: '',
@@ -130,7 +65,7 @@
             })
           "
         >
-          <span class="group-hover:block hidden"> Add more </span>
+          <span class="group-hover:block hidden min-w-20"> Add more </span>
           <HeroiconsPlus16Solid class="w-8 h-8" />
         </button>
       </div>
@@ -139,31 +74,22 @@
 </template>
 
 <script setup lang="ts">
-import { useAppSettingStore } from "@/stores/appSetting";
-import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import HeroiconsPlus16Solid from "~icons/heroicons/plus-16-solid";
-import HeroiconsXMark from "~icons/heroicons/x-mark";
-const { appInfo, openedPageIndexIntro } = storeToRefs(useAppSettingStore());
+import { useAppSettingStore } from "@/stores/appSetting";
+import { storeToRefs } from "pinia";
+import IntroPageItem from "../introPageItem.vue";
+
+const { appInfo } = storeToRefs(useAppSettingStore());
 
 const { t } = useI18n();
-
-const removePage = (index: number) => {
-  appInfo.value.app_setting.introPage.pages.splice(index, 1);
-  if (appInfo.value.app_setting.introPage.pages.length === 0)
-    appInfo.value.app_setting.introPage.enable = false;
-};
 </script>
 
 <i18n>
   {
   "en":{
-    "pageInfo":"Page with title '{title}' and description of '{description}'",
-    "pageTitleHint":"Enter the page title",
-    "pageTitle":"Page title",
-    "pageDescriptionHint":"Enter the page description",
-    "pageDescription":"Page description",
-    "page":"Page {page}"
+    "introExplain":"Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.",
+    "needIntro":"I need intro",
   }
 }
 </i18n>

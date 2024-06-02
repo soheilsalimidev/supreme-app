@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col">
     <div class="device device-google-pixel-6-pro">
-      <div class="device-frame">
+      <div class="device-frame overflow-clip">
         <component
           :is="activeComponentFrame"
           :key="activeTabIndex"
-          class="min-w-full"
+          class="min-w-full overflow-hidden"
         >
         </component>
       </div>

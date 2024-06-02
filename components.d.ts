@@ -22,6 +22,7 @@ declare module 'vue' {
     Frame: typeof import('./src/components/frame.vue')['default']
     IntroFrame: typeof import('./src/components/frames/introFrame.vue')['default']
     IntroPage: typeof import('./src/components/steps/introPage.vue')['default']
+    IntroPageItem: typeof import('./src/components/introPageItem.vue')['default']
     ListItemMaker: typeof import('./src/components/ListItemMaker.vue')['default']
     Menu: typeof import('@headlessui/vue')['Menu']
     MenuButton: typeof import('@headlessui/vue')['MenuButton']

@@ -151,7 +151,7 @@ const previous = () => {
 };
 
 const next = async () => {
-  if (await v$.value.$validate() || import.meta.env.DEV) {
+  if (await v$.value.$validate() ) {
     tabDirectionXyzRight.value = true;
     steps.value.find((step) => step.status === "current")!.status = "complete";
     steps.value[++currentTab.value].status = "current";

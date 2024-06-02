@@ -6,7 +6,7 @@
     <div ref="dropZoneRef" class="flex items-center justify-center w-full grow">
       <label
         v-if="!preview"
-        class="flex flex-col rounded-lg border-4 border-dashed w-full  p-10 group text-center h-full"
+        class="flex flex-col rounded-lg border-4 border-dashed w-full  group text-center h-full"
       >
         <div
           class="h-full w-full text-center flex flex-col items-center justify-center"
