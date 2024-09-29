@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="relative z-10" @close="open = false">
@@ -48,9 +47,13 @@
                           {{ title }}
                         </DialogTitle>
                         <div class="mt-2">
-                          <p class="text-sm text-gray-500 dark:text-slate-400">
+                          <p
+                            class="text-sm text-gray-500 dark:text-slate-400"
+                            v-if="!$slots.text"
+                          >
                             <slot> </slot>
                           </p>
+                          <slot v-else name="text"> </slot>
                         </div>
                       </div>
                     </div>

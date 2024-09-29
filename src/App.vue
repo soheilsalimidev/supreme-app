@@ -171,8 +171,36 @@
     :ok="() => {}"
     :cancel="() => {}"
   >
-    {{ t("noJavaFound") }}
+    <template #text>
+      <h2 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+        {{ t("noJavaFound") }}
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-slate-300">
+        The minimum version required is 17
+      </p>
+      <ul
+        class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400"
+      >
+        <li>
+          <a href="https://www.oracle.com/java/technologies/downloads/"
+            >oracle</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://soft98.ir/software/692-sun-java-se-runtime-environment.html"
+            >soft98</a
+          >
+        </li>
 
+        <li>
+          <a
+            href="https://p30download.ir/fa/entry/74697/jdk-java-se-development-kit"
+            >p30download</a
+          >
+        </li>
+      </ul>
+    </template>
     <template #icon>
       <LineMdAlertLoop />
     </template>
@@ -364,17 +392,17 @@ const changeLocal = (item: string) => {
     "buildWith": "build with",
     "by": "by",
     "soheil": "soheil salimi",
-  "noJavaFound":"No Java found",
-  "noJava":"No java",
+  "noJavaFound":"No Java JDK found, You can download it from the any  of following links",
+  "noJava":"No Java JDK found",
   "okDown":"ok, i download" , "ok":"ok",
   "lang":"lang"
   },
   "fa": {
-    "buildWith": "ساخته شده با",
-    "by": "توسط",
+  "buildWith": "ساخته شده با",
+  "by": "توسط",
     "soheil": "سهیل سلیمی",
-    "noJavaFound":"جاوا پیدا نشد",
-  "noJava":"No java",
+  "noJavaFound":"try to download from the following sources:",
+  "noJava":"No Java JDK found",
   "okDown":"ok, i download" , "ok":"ok",  "lang":"زبان"
   }
 }
