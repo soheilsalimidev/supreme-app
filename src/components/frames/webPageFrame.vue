@@ -9,7 +9,7 @@ import noInternet from "@/assets/no_internet.png";
 import HeroiconsPlus20Solid from "~icons/heroicons/plus-20-solid";
 import { storeToRefs } from "pinia";
 import HeroiconsBars3 from "~icons/heroicons/bars-3";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { convertFileSrc } from "@tauri-apps/api/core";
 import LineMdLoadingLoop from "~icons/line-md/loading-loop";
 // import noInternetJson from "@/assets/no_internet.json";
 // import loadingJson from "@/assets/loading.json";

@@ -1,4 +1,6 @@
 use anyhow::{anyhow, Context, Result};
+use tauri_plugin_shell::process::CommandEvent;
+use tauri_plugin_shell::ShellExt;
 use async_recursion::async_recursion;
 use colors_transform::Rgb;
 use futures_util::StreamExt;
@@ -82,7 +84,7 @@ impl Web2app {
         })
     }
 
-    pub async fn run(self: Arc<Self>) -> Result<String> {
+    pub async fn run(self: Arc<Self>,app: &tauri::AppHandle) -> Result<String> {
         self.clone().decode().await?;
         let mut set = JoinSet::new();
         set.spawn(self.clone().change_android_manifest());
@@ -95,7 +97,7 @@ impl Web2app {
             res.inspect_err(|e| error!("{:?}", e))?
         }
         self.encode().await?;
-        self.alignzip().await?;
+        self.alignzip(&app).await?;
         self.sign_apk().await?;
         self.gen_assetis_link().await
         // Ok("asd".into())
@@ -290,7 +292,7 @@ impl Web2app {
     }
 
     #[instrument(skip(self))]
-    async fn alignzip(&self) -> Result<()> {
+    async fn alignzip(&self,app:&tauri::AppHandle) -> Result<()> {
         let out_path_apk_in = self.out_path.join("dist/app.apk");
         let out_path_apk_out = self.out_path.join("dist/app-align.apk");
         let args = [
@@ -339,7 +341,7 @@ impl Web2app {
 
         #[cfg(not(test))]
         {
-            let mut prosses = tauri::api::process::Command::new_sidecar("zipalign")?.args(args);
+            let mut prosses =app.shell().sidecar("zipalign")?.args(args);
 
             #[cfg(target_os = "linux")]
             {
@@ -354,8 +356,8 @@ impl Web2app {
             }
             let (mut rx, _) = prosses.spawn()?;
             while let Some(event) = rx.recv().await {
-                if let tauri::api::process::CommandEvent::Stderr(line) = event {
-                    error!("{}", line);
+                if let CommandEvent::Stderr(line) = event {
+                    error!("{:#?}", line);
                 }
             }
             let _ = self.sender.send("aligning done".into()).await;
@@ -545,7 +547,7 @@ impl Web2app {
                             f.background.clone(),
                         )
                         .await
-                        .inspect_err(|e| error!("{:?}" , e));
+                        .inspect_err(|e| error!("{:?}", e));
                     }
                 })
                 .await;

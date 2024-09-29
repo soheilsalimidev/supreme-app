@@ -18,7 +18,7 @@
               >
                 {{ t("lang") }}
               </button>
-              <Menu as="div" class="relative -ml-px block">
+              <Menu as="div" class="relative -ml-px block w-full">
                 <MenuButton
                   class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
@@ -261,11 +261,11 @@ import LineMdHeart from "~icons/line-md/heart";
 import { useDark, useToggle } from "@vueuse/core";
 import { Notification, NotificationGroup, notify } from "notiwind";
 import { useMagicKeys, whenever } from "@vueuse/core";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/core";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
 import { ref, unref } from "vue";
-import { save } from "@tauri-apps/api/dialog";
+import { save } from "@tauri-apps/plugin-dialog";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IntroPage, useAppSettingStore } from "@/stores/appSetting";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { convertFileSrc } from "@tauri-apps/api/core";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

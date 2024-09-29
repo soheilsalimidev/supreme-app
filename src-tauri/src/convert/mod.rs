@@ -233,7 +233,7 @@ pub struct IntroPage {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Page{
+pub struct Page {
     title: String,
     description: String,
     background: String,

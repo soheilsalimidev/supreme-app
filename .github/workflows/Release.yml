@@ -51,7 +51,6 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install # Change this to npm, yarn or pnpm.
 
-
       - name: Build the app for mac arm
         uses: tauri-apps/tauri-action@v0
         if: matrix.platform == 'macos-latest'

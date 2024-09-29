@@ -82,12 +82,12 @@
 
 <script setup lang="ts">
 import { ref, unref } from "vue";
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/core";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
 import { listen } from "@tauri-apps/api/event";
-import { save } from "@tauri-apps/api/dialog";
+import { save } from "@tauri-apps/plugin-dialog";
 import { notify } from "notiwind";
 import { useScroll } from "@vueuse/core";
 import { useI18n } from "vue-i18n";

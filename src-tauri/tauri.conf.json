@@ -2,74 +2,47 @@
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "web2app",
-    "version": "0.0.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "dialog": {
-        "open": true,
-        "save": true
-      },
-      "protocol": {
-        "asset": true,
-        "assetScope": [
-          "**/*"
-        ]
-      },
-      "fs": {
-        "scope": [
-          "$RESOURCE/*"
-        ]
-      },
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "clipboard": {
-        "all": false, 
-        "writeText": true
-      }
-    },
-    "bundle": {
+  "bundle": {
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [
+      "./resources/*.jar",
+      "./resources/lib64-linux/*"
+    ],
+    "externalBin": [
+      "./binaries/zipalign"
+    ],
+    "active": true,
+    "targets": [
+      "deb",
+      "msi",
+      "nsis",
+      "app",
+      "dmg"
+    ],
+    "linux": {
       "deb": {
         "files": {
           "/usr/lib64": "./resources/lib64-linux/"
         }
-      },
-      "resources": [
-        "./resources/*.jar",
-        "./resources/lib64-linux/*"
-      ],
-      "externalBin": [
-        "./binaries/zipalign"
-      ],
-      "active": true,
-      "targets": [
-        "deb",
-        "msi",
-        "nsis",
-        "app",
-        "dmg"
-      ],
-      "identifier": "com.soheilsalimi.iapp",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ]
-    },
-    "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost; object-src 'self' asset: https://asset.localhost"
-    },
+      }
+    }
+  },
+  "productName": "web2app",
+  "mainBinaryName": "web2app",
+  "version": "0.0.0",
+  "identifier": "com.soheilsalimi.iapp",
+  "plugins": {},
+  "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "fullscreen": false,
@@ -79,6 +52,15 @@
         "minWidth": 720,
         "minHeight": 900
       }
-    ]
+    ],
+    "security": {
+      "assetProtocol": {
+        "scope": [
+          "**/*"
+        ],
+        "enable": true
+      },
+      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost; object-src 'self' asset: https://asset.localhost; connect-src ipc: http://ipc.localhost"
+    }
   }
 }

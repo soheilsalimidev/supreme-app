@@ -1,5 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use tauri::{ Emitter, Manager};
 use std::{
     fs::{self, File},
     io::Write,
@@ -7,7 +8,7 @@ use std::{
     sync::Arc,
 };
 
-use tauri::{ClipboardManager, Manager};
+use tauri_plugin_clipboard_manager::ClipboardExt;
 use tokio::sync::mpsc;
 use tracing_subscriber::{self, filter, layer::SubscriberExt, util::SubscriberInitExt, Layer};
 use zip::write::FileOptions;
@@ -21,6 +22,10 @@ async fn main() -> anyhow::Result<()> {
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             render_app,
             check_java,
@@ -31,10 +36,10 @@ async fn main() -> anyhow::Result<()> {
         ])
         .setup(|app| {
             let stdout_log = tracing_subscriber::fmt::layer().pretty();
-            if !Path::exists(&app.path_resolver().app_log_dir().unwrap()) {
-                fs::create_dir_all(&app.path_resolver().app_log_dir().unwrap())?;
+            if !Path::exists(&app.path().app_log_dir().unwrap()) {
+                fs::create_dir_all(&app.path().app_log_dir().unwrap())?;
             }
-            let log_path = app.path_resolver().app_log_dir().unwrap().join(format!(
+            let log_path = app.path().app_log_dir().unwrap().join(format!(
                 "{}.log",
                 std::time::UNIX_EPOCH.elapsed().unwrap().as_millis()
             ));
@@ -62,12 +67,12 @@ async fn main() -> anyhow::Result<()> {
 #[tauri::command]
 async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Result<(), String> {
     let res_dir = app_handle
-        .path_resolver()
+        .path()
         .resource_dir()
         .unwrap()
         .join("resources");
     let out_dir = app_handle
-        .path_resolver()
+        .path()
         .app_data_dir()
         .unwrap()
         .join("out");
@@ -81,7 +86,7 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
         config,
         res_dir.join("app.apk"),
         app_handle
-            .path_resolver()
+            .path()
             .app_data_dir()
             .unwrap()
             .join("out"),
@@ -93,15 +98,15 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
     let app_handle_c = app_handle.clone();
     tokio::spawn(async move {
         while let Some(msg) = rt.recv().await {
-            let _ = app_handle_c.emit_all("render", msg);
+            let _ = app_handle_c.emit("render", msg);
         }
     });
 
     let app_handle = app_handle.clone();
     tokio::spawn(async move {
-        match converter.run().await {
-            Ok(assets_link) => app_handle.emit_all("render_fineshed", assets_link),
-            Err(e) => app_handle.emit_all("error", e.to_string()),
+        match converter.run(&app_handle).await {
+            Ok(assets_link) => app_handle.emit("render_fineshed", assets_link),
+            Err(e) => app_handle.emit("error", e.to_string()),
         }
     });
 
@@ -115,14 +120,14 @@ async fn move_app(
     app_handle: tauri::AppHandle,
 ) -> Result<(), String> {
     let path = if path == "desk.apk" {
-        tauri::api::path::desktop_dir().unwrap()
+        app_handle.path().desktop_dir().map_err(|f| f.to_string())?
     } else {
         path.into()
     };
 
     tokio::fs::rename(
         app_handle
-            .path_resolver()
+            .path()
             .app_data_dir()
             .unwrap()
             .join("out/dist/app-align.apk"),
@@ -174,14 +179,14 @@ fn save_config(mut config: convert::Config, path: String) -> Result<(), String> 
 #[tauri::command]
 fn copy_logs(state: tauri::State<Logs>, app_handle: tauri::AppHandle) -> Result<(), String> {
     app_handle
-        .clipboard_manager()
+        .clipboard()
         .write_text(fs::read_to_string(&state.inner().0).map_err(|e| e.to_string())?)
         .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 async fn check_java(app_handle: tauri::AppHandle) -> Result<bool, String> {
-    convert::web2app::check_java(&app_handle.path_resolver().resource_dir().unwrap())
+    convert::web2app::check_java(&app_handle.path().resource_dir().unwrap())
         .await
         .map_err(|e| e.to_string())
 }
