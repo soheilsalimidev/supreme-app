@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex flex-col items-center justify-center">
+  <div class="w-full h-full flex flex-col items-center justify-center overflow-x-clip">
     <Transition name="fade">
       <div
         v-if="!appInfo.app_setting.introPage.enable"
@@ -88,7 +88,7 @@ const { t } = useI18n();
 <i18n>
   {
   "en":{
-    "introExplain":"Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et culpa duis.",
+    "introExplain":"An intro, short for \"introduction\", is a section at the beginning of an application that briefly explains its purpose, features, and usage to the user. It's a onboarding process that helps new users understand how to navigate and utilize the app. The intro is usually displayed once, after which it is skipped to prevent repetition. Its goal is to provide a smooth and engaging user experience, setting the stage for the user's interaction with the app. It's often visual, interactive, and concise.",
     "needIntro":"I need intro",
   }
 }

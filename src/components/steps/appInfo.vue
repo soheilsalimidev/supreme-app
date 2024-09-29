@@ -68,7 +68,7 @@ const { required, url } = useI18nValidators();
 
 const packageName = computed({
   get() {
-    if (!isPackChangeed.value && /^[a-zA-Z0-9]+$/.test(appInfo.value.name)) {
+    if (!isPackChangeed.value && /^[a-zA-Z]+$/.test(appInfo.value.name)) {
       return (
         "com.app.webapp." +
         appInfo.value.name
@@ -79,18 +79,21 @@ const packageName = computed({
           .join("")
       );
     } else {
-      return appInfo.value.package_name.substring(15);
+      console.log(appInfo.value.package_name);
+      return appInfo.value.package_name.startsWith("com.app.webapp.")
+        ? appInfo.value.package_name.substring(15)
+        : appInfo.value.package_name;
     }
   },
   set(value) {
-      isPackChangeed.value = true;
-      appInfo.value.package_name = "com.app.webapp." + value;
+    isPackChangeed.value = true;
+    appInfo.value.package_name = "com.app.webapp." + value;
   },
 });
 
 const url_site = computed({
   get() {
-    return appInfo.value.app_setting.site_url;
+    return appInfo.value.app_setting.site_url.replace("https://", "");
   },
   set(value: string) {
     appInfo.value.app_setting.site_url = withHttp(value);

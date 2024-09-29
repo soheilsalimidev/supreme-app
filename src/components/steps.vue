@@ -43,7 +43,7 @@
               aria-current="step"
             >
               <span
-                class="h-2.5 w-2.5 bg-indigo-600 rounded-full dark:bg-gray-900"
+                class="h-2.5 w-2.5 bg-indigo-600 rounded-full dark:bg-gray-900 absolute"
                 aria-hidden="true"
               />
               <span
@@ -151,7 +151,7 @@ const previous = () => {
 };
 
 const next = async () => {
-  if (await v$.value.$validate() || import.meta.env.DEV) {
+  if ((await v$.value.$validate()) || import.meta.env.DEV) {
     tabDirectionXyzRight.value = true;
     steps.value.find((step) => step.status === "current")!.status = "complete";
     steps.value[++currentTab.value].status = "current";
