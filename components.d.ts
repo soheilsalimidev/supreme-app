@@ -41,6 +41,7 @@ declare module 'vue' {
     Toolbar: typeof import('./src/components/toolbar.vue')['default']
     TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
+    VMenu: typeof import('./src/components/VMenu.vue')['default']
     WebPageFrame: typeof import('./src/components/frames/webPageFrame.vue')['default']
     WebPageSetting: typeof import('./src/components/steps/webPageSetting.vue')['default']
   }

@@ -10,76 +10,6 @@
               <img class="h-8 w-auto" src="/icon.svg" />
             </a>
           </div>
-
-          <div class="ms-auto mx-4">
-            <div class="inline-flex rounded-md shadow-sm rtl:flex-row-reverse">
-              <button
-                type="button"
-                class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-display"
-              >
-                {{ t("lang") }}
-              </button>
-              <Menu as="div" class="relative -ml-px block w-full">
-                <MenuButton
-                  class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                >
-                  <span class="sr-only">Open langs</span>
-                  <HeroiconsChevronDown16Solid
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                  />
-                </MenuButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="absolute right-0 z-10 mt-2 -mr-1 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  >
-                    <div class="py-1">
-                      <MenuItem
-                        v-for="(item, index) in $i18n.availableLocales"
-                        :key="index"
-                        v-slot="{ active }"
-                      >
-                        <a
-                          :class="[
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700',
-                            'block px-4 py-2 text-sm',
-                          ]"
-                          @click="changeLocal(item)"
-                          >{{ langs[item as keyof typeof langs] }}</a
-                        >
-                      </MenuItem>
-                    </div>
-                  </MenuItems>
-                </transition>
-              </Menu>
-            </div>
-          </div>
-
-          <div
-            class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
-          >
-            <input
-              id="toggle"
-              type="checkbox"
-              name="toggle"
-              :value="isDark"
-              class="bg-yellow-300 border-yellow-500 mr-1 focus:ring-transparent toggle-checkbox absolute block w-6 h-6 rounded-full border-2 appearance-none cursor-pointer"
-              @change="toggleDark()"
-            />
-            <label
-              for="toggle"
-              class="toggle-label block h-8 -ml-1 -mt-1 rounded-full bg-green-400 cursor-pointer"
-            />
-          </div>
         </div>
       </div>
     </header>
@@ -323,7 +253,6 @@
 <script setup lang="ts">
 import LineMdHeart from "~icons/line-md/heart";
 import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
-import { useDark, useToggle } from "@vueuse/core";
 import { Notification, NotificationGroup } from "notiwind";
 import { useMagicKeys, whenever } from "@vueuse/core";
 import { invoke } from "@tauri-apps/api/core";
@@ -331,7 +260,6 @@ import { storeToRefs } from "pinia";
 import { RendererElement, ref } from "vue";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
-import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid";
 import { useNavigationStore } from "@/stores/navigation";
 import { wrapGrid } from "animate-css-grid";
 import { useI18n } from "vue-i18n";
@@ -344,14 +272,8 @@ const isSm = breakpoints.isGreater("lg");
 const { t } = useI18n();
 const refreshHeart = ref(1);
 const { activeComponentFrame } = storeToRefs(useNavigationStore());
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
 const noJavaModal = ref(false);
 const keys = useMagicKeys();
-const langs = {
-  fa: "فارسی",
-  en: "english",
-};
 const grid = ref<HTMLElement | null>();
 const previewWaring = ref(true);
 
@@ -372,24 +294,7 @@ onMounted(async () => {
   noJavaModal.value = true;
 });
 const { locale } = useI18n({ useScope: "global" });
-const changeLocal = (item: string) => {
-  locale.value = item;
-  document.dir = item === "fa" ? "rtl" : "lrt";
-  document.documentElement.lang = item;
-};
 </script>
-
-<style scoped>
-.toggle-checkbox:checked {
-  right: 0;
-  border: none;
-  background-color: rgb(129 124 214);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' className='h-10 w-10' fill='%23FFF' viewBox='0 0 24 24' stroke='rgb(129 124 214)' > <path strokeLinecap='round' strokeLinejoin='round' d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z' /> </svg>");
-}
-.toggle-checkbox:checked + .toggle-label {
-  background-color: rgb(76 73 188);
-}
-</style>
 
 <i18n>
 {
