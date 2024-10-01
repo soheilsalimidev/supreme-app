@@ -38,6 +38,7 @@ declare module 'vue' {
     SplashScreeenSetting: typeof import('./src/components/steps/splashScreeenSetting.vue')['default']
     Steps: typeof import('./src/components/steps.vue')['default']
     TextInput: typeof import('./src/components/Inputs/textInput.vue')['default']
+    Toolbar: typeof import('./src/components/toolbar.vue')['default']
     TransitionChild: typeof import('@headlessui/vue')['TransitionChild']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
     WebPageFrame: typeof import('./src/components/frames/webPageFrame.vue')['default']

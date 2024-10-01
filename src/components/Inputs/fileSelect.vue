@@ -45,7 +45,7 @@
         </div>
         <span v-else class="text-start dark:text-slate-200">{{ preview }}</span>
         <button
-          class="mt-2 w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="mt-2 min-w-20 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="modelValue = undefined"
         >
           {{ $t("inputs.file_select.reset") }}

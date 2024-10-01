@@ -687,7 +687,8 @@ impl Web2app {
 pub async fn check_java(jar_path: &Path) -> Result<bool> {
     let mut is_java = false;
     run_java_command(&["--version"], &jar_path, |f, _| {
-        if is_java == false && (f.starts_with("java version") || f.starts_with("openjdk")) {
+        dbg!(&f);
+        if is_java == false && (f.starts_with("java version") || f.starts_with("openjdk") || f.starts_with("Java")) {
             is_java = true
         }
         Box::pin(async { Ok(()) })

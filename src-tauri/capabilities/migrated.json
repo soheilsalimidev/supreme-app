@@ -1,17 +1,14 @@
 {
+  "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "migrated",
   "description": "permissions that were migrated from v1",
   "local": true,
-  "windows": [
-    "main"
-  ],
+  "windows": ["main"],
   "permissions": [
     "core:default",
     {
       "identifier": "fs:scope",
-      "allow": [
-        "$RESOURCE/*"
-      ]
+      "allow": ["$RESOURCE/*"]
     },
     "shell:allow-open",
     "dialog:allow-open",
@@ -20,6 +17,11 @@
     "shell:default",
     "dialog:default",
     "fs:default",
-    "clipboard-manager:default"
+    "clipboard-manager:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-close",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize"
   ]
 }
+

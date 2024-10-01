@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui-float/vue": "^0.13.2",
     "@headlessui/vue": "^1.7.19",
+    "@iconify-json/solar": "^1.2.0",
     "@lottiefiles/dotlottie-vue": "^0.1.8",
     "@lottiefiles/vue-lottie-player": "^1.1.0",
     "@material/drawer": "^14.0.0",
@@ -23,7 +24,8 @@
     "@tauri-apps/plugin-shell": "2.0.0-rc.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "@vueuse/core": "^10.7.2",
+    "@vueuse/components": "^11.1.0",
+    "@vueuse/core": "^11.1.0",
     "animate-css-grid": "^1.5.1",
     "animate.css": "^4.1.1",
     "animejs": "^3.2.2",

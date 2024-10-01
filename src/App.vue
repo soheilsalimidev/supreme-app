@@ -1,5 +1,6 @@
 <template>
   <div class="h-full overflow-hidden flex flex-col">
+    <toolbar></toolbar>
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="py-5 flex items-center justify-center lg:justify-between">
@@ -360,11 +361,12 @@ setInterval(() => {
 }, 10000);
 
 onMounted(async () => {
+  wrapGrid(grid.value!, { duration: 600 });
   try {
     if (await invoke<string>("check_java")) return;
+  console.log(await invoke<string>("check_java"))
   } catch (error) {}
   noJavaModal.value = true;
-  wrapGrid(grid.value!, { duration: 600 });
 });
 const { locale } = useI18n({ useScope: "global" });
 const changeLocal = (item: string) => {

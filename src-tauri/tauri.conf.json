@@ -13,21 +13,10 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "resources": [
-      "./resources/*.jar",
-      "./resources/lib64-linux/*"
-    ],
-    "externalBin": [
-      "./binaries/zipalign"
-    ],
+    "resources": ["./resources/*.jar", "./resources/lib64-linux/*"],
+    "externalBin": ["./binaries/zipalign"],
     "active": true,
-    "targets": [
-      "deb",
-      "msi",
-      "nsis",
-      "app",
-      "dmg"
-    ],
+    "targets": ["deb", "msi", "nsis", "app", "dmg"],
     "linux": {
       "deb": {
         "files": {
@@ -50,17 +39,17 @@
         "title": "web2app",
         "width": 1080,
         "minWidth": 720,
-        "minHeight": 900
+        "minHeight": 900,
+        "decorations": false
       }
     ],
     "security": {
       "assetProtocol": {
-        "scope": [
-          "**/*"
-        ],
+        "scope": ["**/*"],
         "enable": true
       },
       "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost; object-src 'self' asset: https://asset.localhost; connect-src ipc: http://ipc.localhost"
     }
   }
 }
+
