@@ -1,289 +1,57 @@
 <template>
-  <div class="flex flex-col">
-    <div class="device device-google-pixel-6-pro">
-      <div class="device-frame overflow-clip">
-        <component
-          :is="activeComponentFrame"
-          :key="activeTabIndex"
-          class="min-w-full overflow-hidden"
-        >
-        </component>
-      </div>
-    </div>
-    <div class="device-stripe"></div>
-    <div class="device-header"></div>
-    <div class="device-sensors"></div>
-    <div class="device-btns"></div>
-    <div class="device-power"></div>
-    <div class="device-home"></div>
-    <Transition
-      enter-active-class="animate__animated animate__bounceIn"
-      leave-active-class="animate__animated animate__bounceOut"
+  <svg
+    viewBox="0 0 366 729"
+    role="img"
+    class="mx-auto max-w-[70%] 2xl:max-w-[85%] drop-shadow-xl"
+  >
+    <title>App Preview</title>
+    <defs>
+      <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
+        <rect width="316" height="684" rx="36" />
+      </clipPath>
+    </defs>
+    <path
+      fill="#4B5563"
+      d="M363.315 64.213C363.315 22.99 341.312 1 300.092 1H66.751C25.53 1 3.528 22.99 3.528 64.213v44.68l-.857.143A2 2 0 0 0 1 111.009v24.611a2 2 0 0 0 1.671 1.973l.95.158a2.26 2.26 0 0 1-.093.236v26.173c.212.1.398.296.541.643l-1.398.233A2 2 0 0 0 1 167.009v47.611a2 2 0 0 0 1.671 1.973l1.368.228c-.139.319-.314.533-.511.653v16.637c.221.104.414.313.56.689l-1.417.236A2 2 0 0 0 1 237.009v47.611a2 2 0 0 0 1.671 1.973l1.347.225c-.135.294-.302.493-.49.607v377.681c0 41.213 22 63.208 63.223 63.208h95.074c.947-.504 2.717-.843 4.745-.843l.141.001h.194l.086-.001 33.704.005c1.849.043 3.442.37 4.323.838h95.074c41.222 0 63.223-21.999 63.223-63.212v-394.63c-.259-.275-.48-.796-.63-1.47l-.011-.133 1.655-.276A2 2 0 0 0 366 266.62v-77.611a2 2 0 0 0-1.671-1.973l-1.712-.285c.148-.839.396-1.491.698-1.811V64.213Z"
+    />
+    <path
+      fill="#343E4E"
+      d="M16 59c0-23.748 19.252-43 43-43h246c23.748 0 43 19.252 43 43v615c0 23.196-18.804 42-42 42H58c-23.196 0-42-18.804-42-42V59Z"
+    />
+    <foreignObject
+      width="316"
+      height="684"
+      transform="translate(24 24)"
+      clip-path="url(#2ade4387-9c63-4fc4-b754-10e687a0d332)"
+      class="relative"
     >
-      <div
-        v-if="previewWaring"
-        class="bg-yellow-50 border-s-4 border-yellow-400 p-4 m-4"
+      <Transition
+        :enter-from-class="
+          nextOrPrev ? 'translate-x-[100%] ' : '-translate-x-[100%]'
+        "
+        :leave-active-class="
+          nextOrPrev
+            ? '-translate-x-[100%] transition duration-1000'
+            : 'translate-x-[100%] transition duration-1000'
+        "
+        enter-active-class="transition duration-1000"
       >
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <ExclamationTriangleIcon
-              class="h-5 w-5 text-yellow-400"
-              aria-hidden="true"
-            >
-            </ExclamationTriangleIcon>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-yellow-700">
-              {{ $t("frame.be_aware_that_this_just_pr")
-              }}<a
-                href="#"
-                class="font-medium underline text-yellow-700 hover:text-yellow-600"
-              >
-                {{ $t("frame.and_what_you_see_on_render") }}
-              </a>
-            </p>
-          </div>
+        <div class="absolute inset-0" :key="activeTabIndex">
+          <component
+            :is="activeComponentFrame"
+            class="min-w-full overflow-hidden"
+          >
+          </component>
         </div>
-      </div>
-    </Transition>
-  </div>
+      </Transition>
+    </foreignObject>
+  </svg>
 </template>
 
 <script setup lang="ts">
 import { useNavigationStore } from "@/stores/navigation";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
-import { ref } from "vue";
-import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 
-const { activeComponentFrame, activeTabIndex } =
+const { activeComponentFrame, activeTabIndex, nextOrPrev } =
   storeToRefs(useNavigationStore());
-
-const previewWaring = ref(true);
-
-onMounted(() => {
-  setInterval(() => {
-    previewWaring.value = !previewWaring.value;
-  }, 360000);
-});
 </script>
-
-<style scoped lang="scss">
-.device {
-  --devices-scale: 0.7;
-}
-
-.device,
-.device::before,
-.device::after,
-.device *::before,
-.device *::after {
-  box-sizing: border-box;
-  display: block;
-}
-
-.device {
-  position: relative;
-  transform: scale(1);
-  z-index: 1;
-}
-
-.device .device-frame {
-  z-index: 1;
-}
-
-.device .device-screen {
-  background-color: #000;
-  background-position: center center;
-  background-size: cover;
-  object-fit: cover;
-  position: relative;
-}
-
-.device-google-pixel-6-pro {
-  height: calc(var(--devices-scale) * 862px);
-  width: calc(var(--devices-scale) * 404px);
-}
-
-.device-google-pixel-6-pro .device-frame {
-  background: #121212;
-  border-radius: calc(var(--devices-scale) * 28px);
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) #8d8d86,
-    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
-      #fdfdfc,
-    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
-      #fdfdfc;
-  height: calc(var(--devices-scale) * 862px);
-  margin: 0 calc(var(--devices-scale) * 2px);
-  padding: calc(var(--devices-scale) * 20px) calc(var(--devices-scale) * 12px)
-    calc(var(--devices-scale) * 26px) calc(var(--devices-scale) * 12px);
-  width: calc(var(--devices-scale) * 400px);
-}
-
-.device-google-pixel-6-pro .device-screen {
-  border-radius: calc(var(--devices-scale) * 27px);
-  height: calc(var(--devices-scale) * 816px);
-  width: calc(var(--devices-scale) * 376px);
-}
-
-.device-google-pixel-6-pro .device-header {
-  background: linear-gradient(to bottom, #8d8d86 0, #cbcbc8 30%, #cbcbc8 100%);
-  height: calc(var(--devices-scale) * 10px);
-  left: 50%;
-  margin-left: calc(var(--devices-scale) * -147px);
-  position: absolute;
-  top: 0;
-  width: calc(var(--devices-scale) * 294px);
-}
-
-.device-google-pixel-6-pro .device-stripe::after {
-  background: linear-gradient(to top, #121212, #666661);
-  border-radius: calc(var(--devices-scale) * 50px)
-    calc(var(--devices-scale) * 50px) 0 0;
-  bottom: 0;
-  content: "";
-  height: calc(var(--devices-scale) * 2px);
-  left: 50%;
-  margin-left: calc(var(--devices-scale) * -22px);
-  position: absolute;
-  width: calc(var(--devices-scale) * 44px);
-}
-
-.device-google-pixel-6-pro .device-stripe::before {
-  background: #cbcbc8;
-  bottom: 0;
-  content: "";
-  height: calc(var(--devices-scale) * 9px);
-  left: 50%;
-  margin-left: calc(var(--devices-scale) * 40px);
-  position: absolute;
-  width: calc(var(--devices-scale) * 11px);
-}
-
-.device-google-pixel-6-pro .device-sensors {
-  background: #121212;
-  border-radius: 50%;
-  height: calc(var(--devices-scale) * 22px);
-  left: 50%;
-  margin-left: calc(var(--devices-scale) * -11px);
-  margin-top: calc(var(--devices-scale) * -11px);
-  position: absolute;
-  top: calc(var(--devices-scale) * 39px);
-  width: calc(var(--devices-scale) * 22px);
-}
-
-.device-google-pixel-6-pro .device-sensors::after,
-.device-google-pixel-6-pro .device-sensors::before {
-  content: "";
-  position: absolute;
-}
-
-.device-google-pixel-6-pro .device-sensors::after {
-  background: linear-gradient(to bottom, #121212, #666661);
-  border-radius: 0 0 calc(var(--devices-scale) * 50px)
-    calc(var(--devices-scale) * 50px);
-  height: calc(var(--devices-scale) * 4px);
-  left: 50%;
-  margin-left: calc(var(--devices-scale) * -103px);
-  top: calc(var(--devices-scale) * -18px);
-  width: calc(var(--devices-scale) * 206px);
-}
-
-.device-google-pixel-6-pro .device-sensors::before {
-  background: radial-gradient(
-      farthest-corner at 20% 20%,
-      #6074bf 0,
-      transparent 40%
-    ),
-    radial-gradient(
-      farthest-corner at 80% 80%,
-      #513785 0,
-      #24555e 20%,
-      transparent 50%
-    );
-  border-radius: 50%;
-  box-shadow: 0 0 calc(var(--devices-scale) * 1px)
-    calc(var(--devices-scale) * 1px) rgba(255, 255, 255, 0.05);
-  height: calc(var(--devices-scale) * 8px);
-  left: calc(var(--devices-scale) * 7px);
-  top: calc(var(--devices-scale) * 7px);
-  width: calc(var(--devices-scale) * 8px);
-}
-
-.device-google-pixel-6-pro .device-btns {
-  background: #b2b2ae;
-  height: calc(var(--devices-scale) * 102px);
-  position: absolute;
-  right: 0;
-  top: calc(var(--devices-scale) * 306px);
-  width: calc(var(--devices-scale) * 3px);
-}
-
-.device-google-pixel-6-pro .device-power {
-  background: #b2b2ae;
-  height: calc(var(--devices-scale) * 58px);
-  position: absolute;
-  right: 0;
-  top: calc(var(--devices-scale) * 194px);
-  width: calc(var(--devices-scale) * 3px);
-}
-
-.device-google-pixel-6-pro.device-gold .device-frame {
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) #ff962e,
-    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
-      white,
-    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
-      white;
-}
-
-.device-google-pixel-6-pro.device-gold .device-header {
-  background: linear-gradient(to bottom, #ff962e 0, #ffd6ad 30%, #ffd6ad 100%);
-}
-
-.device-google-pixel-6-pro.device-gold .device-stripe::after {
-  background: linear-gradient(to top, #121212, #e07000);
-}
-
-.device-google-pixel-6-pro.device-gold .device-stripe::before {
-  background: #ffd6ad;
-}
-
-.device-google-pixel-6-pro.device-gold .device-btns {
-  background: #ffbd7a;
-}
-
-.device-google-pixel-6-pro.device-gold .device-power {
-  background: #ffbd7a;
-}
-
-.device-google-pixel-6-pro.device-black .device-frame {
-  box-shadow:
-    inset 0 0 calc(var(--devices-scale) * 12px) black,
-    inset 0 calc(var(--devices-scale) * 7px) 0 calc(var(--devices-scale) * 3px)
-      #646668,
-    inset 0 calc(var(--devices-scale) * -6px) 0 calc(var(--devices-scale) * 3px)
-      #646668;
-}
-
-.device-google-pixel-6-pro.device-black .device-header {
-  background: linear-gradient(to bottom, black 0, #323334 30%, #323334 100%);
-}
-
-.device-google-pixel-6-pro.device-black .device-stripe::after {
-  background: linear-gradient(to top, #121212, black);
-}
-
-.device-google-pixel-6-pro.device-black .device-stripe::before {
-  background: #323334;
-}
-
-.device-google-pixel-6-pro.device-black .device-btns {
-  background: #191a1a;
-}
-
-.device-google-pixel-6-pro.device-black .device-power {
-  background: #191a1a;
-}
-</style>

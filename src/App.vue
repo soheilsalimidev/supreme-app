@@ -85,7 +85,7 @@
     </header>
     <main class="-mt-24">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="sr-only">Page title</h1>
+        <h1 class="sr-only">Create the app</h1>
         <div
           ref="grid"
           class="gap-4 items-start grid"
@@ -99,45 +99,79 @@
                 : 'lg:col-span-2 sm:col-span-5',
             ]"
           >
-            <section aria-labelledby="section-1-title">
+            <section aria-labelledby="section-1-title" class="flex flex-col">
               <h2 id="section-1-title" class="sr-only">Steps</h2>
-              <div class="rounded-lg bg-white dark:bg-slate-800 shadow">
+              <div class="rounded-lg bg-white dark:bg-slate-800 shadow grow">
                 <div class="p-6">
                   <steps />
                 </div>
               </div>
+              <div ref="sectionOne"></div>
             </section>
           </div>
 
-          <!-- Right column -->
           <div class="gap-4 hidden lg:grid col-span-1">
-            <Transition
-              :enter-active-class="
-                locale !== 'fa'
-                  ? 'animate__animated animate__fadeInRightBig'
-                  : 'animate__animated animate__fadeInLeftBig'
-              "
-              :leave-active-class="
-                locale !== 'fa'
-                  ? 'animate__animated animate__fadeOutRight'
-                  : 'animate__animated animate__fadeOutLeft'
-              "
-              :duration="{ enter: 1000, leave: 2000 }"
+            <section
+              v-if="activeComponentFrame"
+              aria-labelledby="section-2-title"
+              class="h-96"
             >
-              <section
-                v-if="activeComponentFrame"
-                aria-labelledby="section-2-title"
-              >
-                <h2 id="section-2-title" class="sr-only">
-                  Phone frame preview
-                </h2>
-                <div class="rounded-lg bg-transparent overflow-hidden">
-                  <div class="p-6 flex items-center justify-center">
-                    <frame />
-                  </div>
+              <h2 id="section-2-title" class="sr-only">Phone frame preview</h2>
+              <div class="rounded-lg bg-transparent overflow-hidden">
+                <div class="flex items-center justify-center">
+                  <Transition
+                    :enter-from-class="
+                      locale === 'en'
+                        ? 'translate-x-[100%] '
+                        : '-translate-x-[100%]'
+                    "
+                    appear
+                    enter-active-class="transition duration-1000"
+                  >
+                    <div
+                      class="flex items-center justify-center flex-col h-full w-full"
+                    >
+                      <frame />
+                      <Teleport
+                        :to="$refs.sectionOne as RendererElement"
+                        :disabled="isXL"
+                      >
+                        <Transition
+                          enter-active-class="animate__animated animate__bounceIn"
+                          leave-active-class="animate__animated animate__bounceOut"
+                        >
+                          <div
+                            v-if="previewWaring"
+                            class="bg-yellow-50 border-s-4 border-yellow-400 p-4 m-4"
+                          >
+                            <div class="flex">
+                              <div class="flex-shrink-0">
+                                <ExclamationTriangleIcon
+                                  class="h-5 w-5 text-yellow-400"
+                                  aria-hidden="true"
+                                >
+                                </ExclamationTriangleIcon>
+                              </div>
+                              <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                  {{ $t("frame.be_aware_that_this_just_pr")
+                                  }}<a
+                                    href="#"
+                                    class="font-medium underline text-yellow-700 hover:text-yellow-600"
+                                  >
+                                    {{ $t("frame.and_what_you_see_on_render") }}
+                                  </a>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </Transition>
+                      </Teleport>
+                    </div>
+                  </Transition>
                 </div>
-              </section>
-            </Transition>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -287,13 +321,14 @@
 
 <script setup lang="ts">
 import LineMdHeart from "~icons/line-md/heart";
+import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 import { useDark, useToggle } from "@vueuse/core";
 import { Notification, NotificationGroup, notify } from "notiwind";
 import { useMagicKeys, whenever } from "@vueuse/core";
 import { invoke } from "@tauri-apps/api/core";
 import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
-import { ref, unref } from "vue";
+import { RendererElement, ref, unref } from "vue";
 import { save } from "@tauri-apps/plugin-dialog";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
@@ -301,6 +336,10 @@ import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid"
 import { useNavigationStore } from "@/stores/navigation";
 import { wrapGrid } from "animate-css-grid";
 import { useI18n } from "vue-i18n";
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const isXL = breakpoints.greaterOrEqual("2xl");
 const { t } = useI18n();
 const refreshHeart = ref(1);
 const { appInfo, savePath } = storeToRefs(useAppSettingStore());
@@ -314,6 +353,8 @@ const langs = {
   en: "english",
 };
 const grid = ref<HTMLElement | null>();
+const previewWaring = ref(true);
+
 whenever(keys.Ctrl_s, async () => {
   try {
     if (!savePath.value) {
@@ -359,12 +400,14 @@ whenever(keys.Ctrl_s, async () => {
 setInterval(() => {
   refreshHeart.value++;
 }, 10000);
+setInterval(() => {
+  previewWaring.value = !previewWaring.value;
+}, 360000);
 
 onMounted(async () => {
   wrapGrid(grid.value!, { duration: 600 });
   try {
     if (await invoke<string>("check_java")) return;
-  console.log(await invoke<string>("check_java"))
   } catch (error) {}
   noJavaModal.value = true;
 });

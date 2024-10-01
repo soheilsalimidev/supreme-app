@@ -4,39 +4,7 @@
       data-tauri-drag-region
       class="h-6 select-none flex justify-end w-full bg-indigo-700 px-2 gap-3 items-center"
     >
-      <div
-        class="inline-flex justify-center items-center h-4 w-4 bg-red-800 rounded-full group hover:scale-125 transition"
-        @click="appWindow.close()"
-      >
-        <SolarCloseCircleBroken
-          class="text-red-100 p-[1px] hidden group-hover:block"
-        />
-      </div>
-
-      <div
-        class="inline-flex justify-center items-center h-4 w-4 bg-blue-800 rounded-full group hover:scale-125 transition"
-        @click="appWindow.minimize()"
-      >
-        <SolarMinusCircleBroken
-          class="text-blue-100 p-[2px] hidden group-hover:block"
-        />
-      </div>
-      <div
-        class="inline-flex justify-center items-center h-4 w-4 bg-amber-600 rounded-full group hover:scale-125 transition"
-        @click="
-          () => {
-            appWindow.toggleMaximize();
-            isMax = !isMax;
-          }
-        "
-      >
-        <component
-          :is="!isMax ? SolarMaximizeBroken : SolarMinimizeBroken"
-          class="text-amber-100 p-[2px] hidden group-hover:block"
-        />
-      </div>
-
-      <Menu as="div" class="relative inline-block ms-auto" v-slot="{ open }">
+      <Menu as="div" class="relative inline-block me-auto" v-slot="{ open }">
         <div
           v-element-hover="[
             (handler) => (openMenu = handler),
@@ -65,7 +33,7 @@
               { delayLeave: 200 },
             ]"
             static
-            class="absolute end-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50"
+            class="absolute start-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50"
           >
             <div class="px-1 py-1">
               <MenuItem v-slot="{ active }">
@@ -110,6 +78,40 @@
           </MenuItems>
         </transition>
       </Menu>
+
+      <div class="flex gap-2">
+        <div
+          class="inline-flex justify-center items-center h-4 w-4 bg-amber-700 rounded-full group hover:scale-125 transition"
+          @click="appWindow.minimize()"
+        >
+          <SolarMinusCircleBroken
+            class="text-orange-200 p-[2px] hidden group-hover:block"
+          />
+        </div>
+
+        <div
+          class="inline-flex justify-center items-center h-4 w-4 bg-blue-600 rounded-full group hover:scale-125 transition"
+          @click="
+            () => {
+              appWindow.toggleMaximize();
+              isMax = !isMax;
+            }
+          "
+        >
+          <component
+            :is="!isMax ? SolarMaximizeBroken : SolarMinimizeBroken"
+            class="text-blue-100 p-[2px] hidden group-hover:block"
+          />
+        </div>
+        <div
+          class="inline-flex justify-center items-center h-4 w-4 bg-red-800 rounded-full group hover:scale-125 transition"
+          @click="appWindow.close()"
+        >
+          <SolarCloseCircleBroken
+            class="text-red-100 p-[1px] hidden group-hover:block"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
