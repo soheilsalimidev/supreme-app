@@ -32,7 +32,7 @@
         </div>
         <div
           class="inline-flex justify-center items-center h-4 w-4 bg-red-800 rounded-full group hover:scale-125 transition"
-          @click="appWindow.close()"
+          @click="checkBeforeTheClose"
         >
           <SolarCloseCircleBroken
             class="text-red-100 p-[1px] hidden group-hover:block"
@@ -41,6 +41,23 @@
       </div>
     </div>
   </div>
+  <modal
+    v-model="openSaveModel"
+    color="error"
+    ok-text="Exit anyway"
+    cancel-text="Save"
+    title="You have unsaved changes !"
+    :cancel="saveAppAsFile"
+    :ok="appWindow.close"
+  >
+    <template #default>
+      You Have unsaved changes, if you exit without saving you're going to lose
+      it all
+    </template>
+    <template #icon>
+      <LineMdAlertLoop />
+    </template>
+  </modal>
 </template>
 
 <script lang="ts" setup>
@@ -49,11 +66,15 @@ import SolarCloseCircleBroken from "~icons/solar/close-circle-broken";
 import SolarMaximizeBroken from "~icons/solar/maximize-broken";
 import SolarMinusCircleBroken from "~icons/solar/minus-circle-broken";
 import SolarMinimizeBroken from "~icons/solar/minimize-broken";
+import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import { ref } from "vue";
 import { importFromTheAppFile, saveAppAsFile } from "@/utils/save";
 import { useDark, useToggle } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
+import { useAppSettingStore } from "@/stores/appSetting";
 
+const openSaveModel = ref(false);
+const appDate = useAppSettingStore();
 const { locale } = useI18n({ useScope: "global" });
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -93,4 +114,12 @@ const isMax = ref(false);
 appWindow.listen("tauri://resize", async () => {
   isMax.value = await appWindow.isMaximized();
 });
+
+const checkBeforeTheClose = async () => {
+  if (JSON.stringify(appDate.appInfo) === appDate.lastUpdateFile) {
+    await appWindow.close();
+    return;
+  }
+  openSaveModel.value = true;
+};
 </script>

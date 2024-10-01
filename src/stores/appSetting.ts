@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 export const useAppSettingStore = defineStore("appSetting", () => {
   const savePath = ref();
-  const openedPageIndexIntro = ref(0)
+  const openedPageIndexIntro = ref(0);
   const selectedWebPageSetting = ref([
     false,
     false,
@@ -132,9 +132,15 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     },
   );
 
-  watch(appInfo, () => console.log(appInfo.value));
+  let lastUpdateFile = JSON.stringify(appInfo.value);
 
-  return { appInfo, savePath, selectedWebPageSetting , openedPageIndexIntro };
+  return {
+    appInfo,
+    savePath,
+    selectedWebPageSetting,
+    openedPageIndexIntro,
+    lastUpdateFile,
+  };
 });
 
 export interface AppInfo {

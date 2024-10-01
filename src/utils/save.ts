@@ -26,6 +26,7 @@ export const saveAppAsFile = async () => {
       config: appDate.appInfo,
       path: savePath,
     });
+    appDate.lastUpdateFile = JSON.stringify(appDate.appInfo);
     notify(
       {
         group: "generic",
@@ -71,6 +72,7 @@ export const importFromTheAppFile = async () => {
     appDate.appInfo.paths.forEach((val, index) => {
       appDate.appInfo.paths[index].path = config[1] + "/" + val.path;
     });
+    appDate.lastUpdateFile = JSON.stringify(appDate.appInfo);
     notify(
       {
         group: "generic",
