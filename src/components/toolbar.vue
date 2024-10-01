@@ -36,7 +36,7 @@
             class="absolute start-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50"
           >
             <div class="px-1 py-1">
-              <MenuItem v-slot="{ active }">
+              <MenuItem v-slot="{ active }" @click="saveAppAsFile">
                 <button
                   :class="[
                     active ? 'bg-indigo-500 text-white' : 'text-gray-900',
@@ -56,7 +56,7 @@
                   Save
                 </button>
               </MenuItem>
-              <MenuItem v-slot="{ active }">
+              <MenuItem v-slot="{ active }" @click="importFromTheAppFile()">
                 <button
                   :class="[
                     active ? 'bg-indigo-500 text-white' : 'text-gray-900',
@@ -128,6 +128,7 @@ import SolarFileDownloadBroken from "~icons/solar/file-download-broken";
 import SolarMinimizeBroken from "~icons/solar/minimize-broken";
 import { vElementHover } from "@vueuse/components";
 import { ref } from "vue";
+import { importFromTheAppFile, saveAppAsFile } from "@/utils/save";
 const openMenuHover = ref(false);
 const appWindow = getCurrentWindow();
 const openMenu = ref(false);

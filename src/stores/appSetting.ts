@@ -15,121 +15,121 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     false,
   ]);
 
-  const test: AppInfo = {
-    name: "asdf adsfasd",
-    package_name: "asdf.adsfasd",
-    icon_path: "/home/arthur/projects/web2app/src/assets/vue.svg",
-    app_setting: {
-      googleService: undefined,
-      site_url:
-        "https://docs.rs/tokio/latest/tokio/sync/mpsc/struct.Sender.html",
-      splash_screen: {
-        type: 0,
-      },
-      cache_mode: 0,
-      no_internet_layout: {
-        type: 1,
-      },
-      toolbar: {
-        type: 0,
-      },
-      toolbar_custom_icon: {
-        enable: false,
-      },
-      swipe_refresh: false,
-      sidebar_menu: {
-        enable: true,
-        sidebar_menu_header: {
+  // const test: AppInfo = {
+  //   name: "asdf adsfasd",
+  //   package_name: "asdf.adsfasd",
+  //   icon_path: "C:\\Users\\sohei\\OneDrive\\Desktop\\supreme-app\\src\\assets\\no_internet.png",
+  //   app_setting: {
+  //     googleService: undefined,
+  //     site_url:
+  //       "https://docs.rs/tokio/latest/tokio/sync/mpsc/struct.Sender.html",
+  //     splash_screen: {
+  //       type: 0,
+  //     },
+  //     cache_mode: 0,
+  //     no_internet_layout: {
+  //       type: 1,
+  //     },
+  //     toolbar: {
+  //       type: 0,
+  //     },
+  //     toolbar_custom_icon: {
+  //       enable: false,
+  //     },
+  //     swipe_refresh: false,
+  //     sidebar_menu: {
+  //       enable: true,
+  //       sidebar_menu_header: {
+  //         type: 0,
+  //       },
+  //       sidebar_menu_footer: {
+  //         type: 1,
+  //         text: "sadfsda",
+  //       },
+  //       item_menu: [
+  //         {
+  //           Kind: 2,
+  //         },
+  //         {
+  //           Pair: {
+  //             first: "asdf",
+  //             second: "sadf",
+  //           },
+  //         },
+  //       ],
+  //     },
+  //     admob: 0,
+  //     admob_banner: 0,
+  //     floating_action_button: {
+  //       enable: false,
+  //       item_fab: [],
+  //     },
+  //     introPage: {
+  //       enable: false,
+  //       pages: [],
+  //     },
+  //     aboutUs: {
+  //       enable: false,
+  //       text: "",
+  //     },
+  //   },
+  //   paths: [
+  //     {
+  //       path: "C:\\Users\\sohei\\OneDrive\\Desktop\\supreme-app\\src\\assets\\no_internet.png",
+  //       name: "logo.png",
+  //     },
+  //   ],
+  // };
+  const appInfo = ref<AppInfo>(
+    // test,
+    {
+      name: "",
+      package_name: "",
+      icon_path: "",
+      app_setting: {
+        site_url: "",
+        splash_screen: {
           type: 0,
         },
-        sidebar_menu_footer: {
+        cache_mode: 0,
+        no_internet_layout: {
           type: 1,
-          text: "sadfsda",
         },
-        item_menu: [
-          {
-            Kind: 2,
+        toolbar: {
+          type: 0,
+        },
+        toolbar_custom_icon: {
+          enable: false,
+        },
+        swipe_refresh: false,
+        sidebar_menu: {
+          enable: false,
+          sidebar_menu_header: {
+            type: 0,
           },
-          {
-            Pair: {
-              first: "asdf",
-              second: "sadf",
-            },
+          sidebar_menu_footer: {
+            type: 0,
           },
-        ],
+          item_menu: [],
+        },
+        admob: 0,
+        admob_banner: 0,
+        floating_action_button: {
+          enable: false,
+          item_fab: [],
+        },
+        googleService: undefined,
+        introPage: {
+          enable: false,
+          pages: [],
+        },
+        aboutUs: {
+          enable: false,
+          text: "",
+        },
       },
-      admob: 0,
-      admob_banner: 0,
-      floating_action_button: {
-        enable: false,
-        item_fab: [],
-      },
-      introPage: {
-        enable: false,
-        pages: [],
-      },
-      aboutUs: {
-        enable: false,
-        text: "",
-      },
+      paths: [],
     },
-    paths: [
-      {
-        path: "/home/arthur/Downloads/wallpaper_1.jpg",
-        name: "logo.png",
-      },
-    ],
-  };
-  const appInfo = ref<AppInfo>(
-    test,
-    // {
-    //   name: "",
-    //   package_name: "",
-    //   icon_path: "",
-    //   app_setting: {
-    //     site_url: "",
-    //     splash_screen: {
-    //       type: 0,
-    //     },
-    //     cache_mode: 0,
-    //     no_internet_layout: {
-    //       type: 1,
-    //     },
-    //     toolbar: {
-    //       type: 0,
-    //     },
-    //     toolbar_custom_icon: {
-    //       enable: false,
-    //     },
-    //     swipe_refresh: false,
-    //     sidebar_menu: {
-    //       enable: false,
-    //       sidebar_menu_header: {
-    //         type: 0,
-    //       },
-    //       sidebar_menu_footer: {
-    //         type: 0,
-    //       },
-    //       item_menu: [],
-    //     },
-    //     admob: 0,
-    //     admob_banner: 0,
-    //     floating_action_button: {
-    //       enable: false,
-    //       item_fab: [],
-    //     },
-    //     googleService: undefined,
-    //     introPage: {
-    //       enable: false,
-    //       pages: [],
-    //     },
-    //     aboutUs: {
-    //       enable: false,
-    //       text: "",
-    //     },
-    //   },
-    //   paths: [],
-    // },
   );
 
   watch(appInfo, () => console.log(appInfo.value));

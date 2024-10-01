@@ -133,8 +133,9 @@
                     >
                       <frame />
                       <Teleport
+                        v-if="isSm"
                         :to="$refs.sectionOne as RendererElement"
-                        :disabled="isXL"
+                        :disabled="isXL && isSm"
                       >
                         <Transition
                           enter-active-class="animate__animated animate__bounceIn"
@@ -323,13 +324,11 @@
 import LineMdHeart from "~icons/line-md/heart";
 import ExclamationTriangleIcon from "~icons/heroicons/exclamation-triangle";
 import { useDark, useToggle } from "@vueuse/core";
-import { Notification, NotificationGroup, notify } from "notiwind";
+import { Notification, NotificationGroup } from "notiwind";
 import { useMagicKeys, whenever } from "@vueuse/core";
 import { invoke } from "@tauri-apps/api/core";
-import { useAppSettingStore } from "@/stores/appSetting";
 import { storeToRefs } from "pinia";
-import { RendererElement, ref, unref } from "vue";
-import { save } from "@tauri-apps/plugin-dialog";
+import { RendererElement, ref } from "vue";
 import { onMounted } from "vue";
 import LineMdAlertLoop from "~icons/line-md/alert-loop";
 import HeroiconsChevronDown16Solid from "~icons/heroicons/chevron-down-16-solid";
@@ -337,12 +336,13 @@ import { useNavigationStore } from "@/stores/navigation";
 import { wrapGrid } from "animate-css-grid";
 import { useI18n } from "vue-i18n";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
+import { saveAppAsFile } from "./utils/save";
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isXL = breakpoints.greaterOrEqual("2xl");
+const isSm = breakpoints.isGreater("lg");
 const { t } = useI18n();
 const refreshHeart = ref(1);
-const { appInfo, savePath } = storeToRefs(useAppSettingStore());
 const { activeComponentFrame } = storeToRefs(useNavigationStore());
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
@@ -355,47 +355,7 @@ const langs = {
 const grid = ref<HTMLElement | null>();
 const previewWaring = ref(true);
 
-whenever(keys.Ctrl_s, async () => {
-  try {
-    if (!savePath.value) {
-      const selected = await save({
-        filters: [
-          {
-            name: "iapp",
-            extensions: ["iapp"],
-          },
-        ],
-      });
-      if (!selected) {
-        return;
-      }
-      savePath.value = selected + ".iapp";
-    }
-    await invoke("save_config", {
-      config: unref(appInfo),
-      path: savePath.value,
-    });
-    notify(
-      {
-        group: "generic",
-        title: "settings save",
-        text: "your settings saved in " + savePath.value,
-        type: "info",
-      },
-      3000,
-    );
-  } catch (error) {
-    notify(
-      {
-        group: "generic",
-        title: "settings saving failed",
-        text: "error" + error,
-        type: "warning",
-      },
-      3000,
-    );
-  }
-});
+whenever(keys.Ctrl_s, () => saveAppAsFile());
 
 setInterval(() => {
   refreshHeart.value++;
