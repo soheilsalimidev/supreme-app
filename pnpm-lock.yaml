@@ -29,6 +29,9 @@ importers:
       '@material/list':
         specifier: ^14.0.0
         version: 14.0.0
+      '@material/material-color-utilities':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@tauri-apps/api':
         specifier: 2.0.0-rc.6
         version: 2.0.0-rc.6
@@ -712,6 +715,9 @@ packages:
 
   '@material/list@14.0.0':
     resolution: {integrity: sha512-AFaBGV9vQyfnG8BT2R3UGVdF5w2SigQqBH+qbOSxQhk4BgVvhDfJUIKT415poLNMdnaDtcuYz+ZWvVNoRDaL7w==}
+
+  '@material/material-color-utilities@0.3.0':
+    resolution: {integrity: sha512-ztmtTd6xwnuh2/xu+Vb01btgV8SQWYCaK56CkRK8gEkWe5TuDyBcYJ0wgkMRn+2VcE9KUmhvkz+N9GHrqw/C0g==}
 
   '@material/ripple@14.0.0':
     resolution: {integrity: sha512-9XoGBFd5JhFgELgW7pqtiLy+CnCIcV2s9cQ2BWbOQeA8faX9UZIDUx/g76nHLZ7UzKFtsULJxZTwORmsEt2zvw==}
@@ -3513,6 +3519,8 @@ snapshots:
       '@material/theme': 14.0.0
       '@material/typography': 14.0.0
       tslib: 2.6.2
+
+  '@material/material-color-utilities@0.3.0': {}
 
   '@material/ripple@14.0.0':
     dependencies:

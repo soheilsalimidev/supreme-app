@@ -98,10 +98,39 @@ pub struct AppinviteService {
     #[serde(rename = "other_platform_oauth_client")]
     pub other_platform_oauth_client: Vec<Value>,
 }
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Colors {
+    pub metarial: bool,
+    pub primary: String,
+    pub light: Option<ColorSchema>,
+    pub dark: Option<ColorSchema>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ColorSchema {
+    pub primary: String,
+    pub on_primary: String,
+    pub primary_container: String,
+    pub on_primary_container: String,
+    pub secondary: String,
+    pub on_secondary: String,
+    pub secondary_container: String,
+    pub on_secondary_container: String,
+    pub tertiary: String,
+    pub on_tertiary: String,
+    pub tertiary_container: String,
+    pub on_tertiary_container: String,
+    pub error: String,
+    pub on_error: String,
+    pub error_container: String,
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AppSetting {
+    colors: Colors,
     #[serde(rename = "site_url")]
     pub site_url: String,
     #[serde(rename = "aboutUs")]
@@ -249,6 +278,12 @@ pub struct ImagesPath {
 impl Default for AppSetting {
     fn default() -> Self {
         Self {
+            colors: Colors {
+                metarial: false,
+                primary: "".to_owned(),
+                light: None,
+                dark: None,
+            },
             site_url: "https://docs.rs/passwords/latest/passwords/".to_owned(),
             splash_screen: SplashScreen {
                 type_field: 1,

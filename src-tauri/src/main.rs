@@ -95,7 +95,7 @@ async fn render_app(config: convert::Config, app_handle: tauri::AppHandle) -> Re
 
     let app_handle = app_handle.clone();
     tokio::spawn(async move {
-        match converter.run(&app_handle).await {
+        match converter.run(Some(&app_handle)).await {
             Ok(assets_link) => app_handle.emit("render_fineshed", assets_link),
             Err(e) => app_handle.emit("error", e.to_string()),
         }

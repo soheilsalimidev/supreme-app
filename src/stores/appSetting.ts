@@ -86,6 +86,12 @@ export const useAppSettingStore = defineStore("appSetting", () => {
       name: "",
       package_name: "",
       icon_path: "",
+      colors: {
+        metarial: true,
+        primary: "",
+        light: {},
+        dark: {},
+      },
       app_setting: {
         site_url: "",
         splash_screen: {
@@ -147,8 +153,32 @@ export interface AppInfo {
   name: string;
   package_name: string;
   icon_path: string;
+  colors: {
+    dark: Partial<ISchema>;
+    light: Partial<ISchema>;
+    primary: string;
+    metarial: boolean;
+  };
   app_setting: Setting;
   paths: { name: string; path: string }[];
+}
+
+interface ISchema {
+  primary: string;
+  onPrimary: string;
+  primaryContainer: string;
+  onPrimaryContainer: string;
+  secondary: string;
+  onSecondary: string;
+  secondaryContainer: string;
+  onSecondaryContainer: string;
+  tertiary: string;
+  onTertiary: string;
+  tertiaryContainer: string;
+  onTertiaryContainer: string;
+  error: string;
+  onError: string;
+  errorContainer: string;
 }
 
 export interface Setting {

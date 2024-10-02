@@ -1,8 +1,9 @@
 <template>
   <div class="flex flex-col h-full">
     <div class="px-4 py-5 space-y-6 sm:p-6">
-      <div class="grid grid-cols-3 gap-6">
+      <div class="grid grid-cols-5 gap-6">
         <textInput
+          class="col-span-2"
           v-model="appInfo.name"
           :error="v$.name.$errors.map((e: any) => e.$message).join(',')"
           @blur="v$.name.$touch"
@@ -12,6 +13,17 @@
           ></textInput
         >
         <textInput
+          v-model="url_site"
+          class="col-span-3"
+          :error="
+            v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
+          "
+          @blur="v$.app_setting.site_url.$touch"
+          :placeholder="$t('steps.app_info.https_supermerapp_com')"
+          :label="$t('steps.app_info.website')"
+        ></textInput>
+
+        <textInput
           v-model="packageName"
           class="col-span-2"
           :error="v$.package_name.$errors.map((e: any) => e.$message).join(',')"
@@ -20,16 +32,27 @@
           :label="$t('steps.app_info.app_packagename')"
         >
         </textInput>
-        <textInput
-          v-model="url_site"
-          class="col-span-2"
-          :error="
-            v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
-          "
-          @blur="v$.app_setting.site_url.$touch"
-          :placeholder="$t('steps.app_info.https_supermerapp_com')"
-          :label="$t('steps.app_info.website')"
-        ></textInput>
+
+        <div class="flex gap-2 col-span-3">
+          <VSwitch
+            v-model="appInfo.colors.metarial"
+            :label="
+              appInfo.colors.metarial
+                ? 'Use Materail 3 auto color choosing'
+                : ''
+            "
+          ></VSwitch>
+          <ColorPicker
+            v-if="!appInfo.colors.metarial"
+            v-model="colorPicker"
+            class="grow"
+            :gradient="false"
+            :error="
+              v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
+            "
+            label="App priamry color"
+          ></ColorPicker>
+        </div>
       </div>
     </div>
 
@@ -60,11 +83,83 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { helpers } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
+import {
+  argbFromRgb,
+  themeFromSourceColor,
+  hexFromArgb,
+} from "@material/material-color-utilities";
+
+// Get the theme from a hex color
 
 const { appInfo } = storeToRefs(useAppSettingStore());
 const isPackChangeed = ref(false);
 const { t } = useI18n();
 const { required, url } = useI18nValidators();
+
+const colorPicker = computed({
+  get() {
+    return appInfo.value.colors.primary;
+  },
+  set(value: string) {
+    const [r, g, b] = value
+      .replace("rgb(", "")
+      .replace(")", "")
+      .split(",")
+      .map((val) => parseInt(val.trim()));
+    const theme = themeFromSourceColor(argbFromRgb(r, g, b));
+    appInfo.value.colors.primary = value;
+    appInfo.value.colors.light = Object.fromEntries(
+      Object.entries(
+        Object.values(theme.schemes.light)[0] as { [k in string]: number },
+      )
+        .filter(([k]) =>
+          [
+            "primary",
+            "onPrimary",
+            "primaryContainer",
+            "onPrimaryContainer",
+            "secondary",
+            "onSecondary",
+            "secondaryContainer",
+            "onSecondaryContainer",
+            "tertiary",
+            "onTertiary",
+            "tertiaryContainer",
+            "onTertiaryContainer",
+            "error",
+            "onError",
+            "errorContainer",
+          ].includes(k),
+        )
+        .map(([k, v]) => [k, hexFromArgb(v)]),
+    );
+    appInfo.value.colors.dark = Object.fromEntries(
+      Object.entries(
+        Object.values(theme.schemes.dark)[0] as { [k in string]: number },
+      )
+        .filter(([k]) =>
+          [
+            "primary",
+            "onPrimary",
+            "primaryContainer",
+            "onPrimaryContainer",
+            "secondary",
+            "onSecondary",
+            "secondaryContainer",
+            "onSecondaryContainer",
+            "tertiary",
+            "onTertiary",
+            "tertiaryContainer",
+            "onTertiaryContainer",
+            "error",
+            "onError",
+            "errorContainer",
+          ].includes(k),
+        )
+        .map(([k, v]) => [k, hexFromArgb(v)]),
+    );
+  },
+});
 
 const packageName = computed({
   get() {
@@ -79,7 +174,6 @@ const packageName = computed({
           .join("")
       );
     } else {
-      console.log(appInfo.value.package_name);
       return appInfo.value.package_name.startsWith("com.app.webapp.")
         ? appInfo.value.package_name.substring(15)
         : appInfo.value.package_name;

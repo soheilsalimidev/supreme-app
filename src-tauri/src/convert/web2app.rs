@@ -1,6 +1,4 @@
 use anyhow::{anyhow, Context, Result};
-use tauri_plugin_shell::process::CommandEvent;
-use tauri_plugin_shell::ShellExt;
 use async_recursion::async_recursion;
 use colors_transform::Rgb;
 use futures_util::StreamExt;
@@ -13,6 +11,8 @@ use std::path::{Path, PathBuf};
 use std::pin::Pin;
 use std::process::Stdio;
 use std::sync::Arc;
+use tauri_plugin_shell::process::CommandEvent;
+use tauri_plugin_shell::ShellExt;
 use tokio::fs::{self, File};
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncSeekExt, AsyncWriteExt, BufReader};
 use tokio::process::{ChildStdin, Command};
@@ -84,8 +84,9 @@ impl Web2app {
         })
     }
 
-    pub async fn run(self: Arc<Self>,app: &tauri::AppHandle) -> Result<String> {
+    pub async fn run(self: Arc<Self>, app: Option<&tauri::AppHandle>) -> Result<String> {
         self.clone().decode().await?;
+
         let mut set = JoinSet::new();
         set.spawn(self.clone().change_android_manifest());
         set.spawn(self.clone().change_folders_name());
@@ -97,7 +98,7 @@ impl Web2app {
             res.inspect_err(|e| error!("{:?}", e))?
         }
         self.encode().await?;
-        self.alignzip(&app).await?;
+        self.alignzip(app).await?;
         self.sign_apk().await?;
         self.gen_assetis_link().await
         // Ok("asd".into())
@@ -105,8 +106,8 @@ impl Web2app {
 
     #[instrument(skip(self))]
     async fn decode(self: Arc<Self>) -> Result<()> {
+        info!("Start decoding the APK");
         let apk_tool = self.jar_path.join("apktool.jar");
-
         let args = [
             "-jar",
             &adjust_canonicalization(apk_tool),
@@ -292,7 +293,7 @@ impl Web2app {
     }
 
     #[instrument(skip(self))]
-    async fn alignzip(&self,app:&tauri::AppHandle) -> Result<()> {
+    async fn alignzip(&self, app: Option<&tauri::AppHandle>) -> Result<()> {
         let out_path_apk_in = self.out_path.join("dist/app.apk");
         let out_path_apk_out = self.out_path.join("dist/app-align.apk");
         let args = [
@@ -338,29 +339,30 @@ impl Web2app {
                 info!("{:?}", line)
             }
         }
-
         #[cfg(not(test))]
         {
-            let mut prosses =app.shell().sidecar("zipalign")?.args(args);
+            if let Some(app) = app {
+                let prosses = app.shell().sidecar("zipalign")?.args(args);
 
-            #[cfg(target_os = "linux")]
-            {
-                use std::collections::HashMap;
-                println!("{:?}", self.jar_path);
-                let mut env = HashMap::with_capacity(1);
-                env.insert(
-                    "LD_LIBRARY_PATH".to_string(),
-                    self.jar_path.join("lib64").to_string_lossy().to_string(),
-                );
-                prosses = prosses.envs(env);
-            }
-            let (mut rx, _) = prosses.spawn()?;
-            while let Some(event) = rx.recv().await {
-                if let CommandEvent::Stderr(line) = event {
-                    error!("{:#?}", line);
+                #[cfg(target_os = "linux")]
+                {
+                    use std::collections::HashMap;
+                    println!("{:?}", self.jar_path);
+                    let mut env = HashMap::with_capacity(1);
+                    env.insert(
+                        "LD_LIBRARY_PATH".to_string(),
+                        self.jar_path.join("lib64").to_string_lossy().to_string(),
+                    );
+                    prosses = prosses.envs(env);
                 }
+                let (mut rx, _) = prosses.spawn()?;
+                while let Some(event) = rx.recv().await {
+                    if let CommandEvent::Stderr(line) = event {
+                        error!("{:#?}", line);
+                    }
+                }
+                let _ = self.sender.send("aligning done".into()).await;
             }
-            let _ = self.sender.send("aligning done".into()).await;
         }
         Ok(())
     }
@@ -687,8 +689,9 @@ impl Web2app {
 pub async fn check_java(jar_path: &Path) -> Result<bool> {
     let mut is_java = false;
     run_java_command(&["--version"], &jar_path, |f, _| {
-        dbg!(&f);
-        if is_java == false && (f.starts_with("java version") || f.starts_with("openjdk") || f.starts_with("Java")) {
+        if is_java == false
+            && (f.starts_with("java version") || f.starts_with("openjdk") || f.starts_with("Java"))
+        {
             is_java = true
         }
         Box::pin(async { Ok(()) })
@@ -810,6 +813,7 @@ fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
 mod tests {
     use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
+    use tracing::info;
     use std::path::PathBuf;
     use tracing_test::traced_test;
 
@@ -817,25 +821,25 @@ mod tests {
     #[tokio::test]
     async fn change_app() -> Result<()> {
         let d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        dbg!(&d);
+        info!("{}",env!("CARGO_MANIFEST_DIR"));
         Web2app::new(
             super::Config {
                 name: "giigle".into(),
                 package_name: "com.here.we.go".into(),
-                icon_path: "/home/arthur/Desktop/packages/app/src-tauri/icons/128x128.png".into(),
+                icon_path: "C:\\Users\\sohei\\OneDrive\\Desktop\\supreme-app\\src-tauri\\icons\\128x128.png".into(),
                 app_setting: AppSetting {
                     ..Default::default()
                 },
                 paths: vec![],
             },
-            d.join("../AndroidWebApp/app/build/outputs/apk/debug/app-debug.apk")
+            d.join("resources/app.apk")
                 .canonicalize()?,
-            "/home/arthur/.local/share/com.tauri.dev/out/".into(),
+            "C:\\Users\\sohei\\OneDrive\\Desktop\\out".into(),
             d.join("resources/"),
             tokio::sync::mpsc::channel(10).0,
         )
         .await
-        .run()
+        .run(None)
         .await?;
 
         Ok(())
