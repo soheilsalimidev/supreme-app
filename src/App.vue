@@ -1,6 +1,6 @@
 <template>
   <div class="h-full overflow-hidden flex flex-col">
-    <toolbar></toolbar>
+    <!-- <toolbar v-if="window.__TAURI_INTERNALS__"></toolbar> -->
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="py-5 flex items-center justify-center lg:justify-between">

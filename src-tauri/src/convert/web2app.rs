@@ -342,7 +342,7 @@ impl Web2app {
         #[cfg(not(test))]
         {
             if let Some(app) = app {
-                let prosses = app.shell().sidecar("zipalign")?.args(args);
+                let mut prosses = app.shell().sidecar("zipalign")?.args(args);
 
                 #[cfg(target_os = "linux")]
                 {
@@ -826,7 +826,7 @@ mod tests {
             super::Config {
                 name: "giigle".into(),
                 package_name: "com.here.we.go".into(),
-                icon_path: "C:\\Users\\sohei\\OneDrive\\Desktop\\supreme-app\\src-tauri\\icons\\128x128.png".into(),
+                icon_path: "../../icons/128x128.png".into(),
                 app_setting: AppSetting {
                     ..Default::default()
                 },
@@ -834,7 +834,7 @@ mod tests {
             },
             d.join("resources/app.apk")
                 .canonicalize()?,
-            "C:\\Users\\sohei\\OneDrive\\Desktop\\out".into(),
+            "/home/arthur/projects/web2app/src-tauri/out".into(),
             d.join("resources/"),
             tokio::sync::mpsc::channel(10).0,
         )

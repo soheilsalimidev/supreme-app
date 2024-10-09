@@ -1,18 +1,59 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.WebApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
-        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
-        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+<resources>
+
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorOnPrimary">@color/APP_onPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/APP_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/APP_secondary</item>
+        <item name="colorOnSecondary">@color/APP_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/APP_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/APP_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/APP_tertiary</item>
+        <item name="colorOnTertiary">@color/APP_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/APP_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/APP_onTertiaryContainer</item>
+        <item name="colorError">@color/APP_error</item>
+        <item name="colorOnError">@color/APP_onError</item>
+        <item name="colorErrorContainer">@color/APP_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/APP_onErrorContainer</item>
+        <item name="android:colorBackground">@color/APP_background</item>
+        <item name="colorOnBackground">@color/APP_onBackground</item>
+        <item name="colorSurface">@color/APP_surface</item>
+        <item name="colorOnSurface">@color/APP_onSurface</item>
+        <item name="colorSurfaceVariant">@color/APP_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/APP_onSurfaceVariant</item>
+        <item name="colorOutline">@color/APP_outline</item>
+        <item name="colorOutlineVariant">@color/APP_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/APP_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/APP_inverseOnSurface</item>
+        <item name="colorOnPrimaryFixed">@color/APP_onPrimaryFixed</item>
+        <item name="colorOnPrimaryFixedVariant">@color/APP_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/APP_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/APP_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/APP_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/APP_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/APP_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/APP_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/APP_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/APP_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/APP_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/APP_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/APP_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/APP_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/APP_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/APP_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/APP_surfaceContainerHighest</item>
+        <item name="android:statusBarColor">@color/APP_surface</item>
     </style>
 
     <style name="FontLocalized">
         <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/APP_surface</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
 </resources>

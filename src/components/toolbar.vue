@@ -109,8 +109,8 @@ const settingMenu = ref([
   },
 ]);
 
-const appWindow = getCurrentWindow();
 const isMax = ref(false);
+const appWindow = getCurrentWindow();
 appWindow.listen("tauri://resize", async () => {
   isMax.value = await appWindow.isMaximized();
 });

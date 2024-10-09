@@ -24,7 +24,7 @@ class IntroActivity : AppIntro() {
                     "drawable",
                     this.packageName
                 )
-             val bgID =    this.resources.getIdentifier(
+                val bgID = this.resources.getIdentifier(
                     item.background,
                     "drawable",
                     this.packageName

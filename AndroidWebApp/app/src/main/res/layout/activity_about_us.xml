@@ -31,7 +31,7 @@
             android:layout_height="3dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/colorPrimary" />
+            android:background="@color/APP_primary" />
 
         <View
             android:layout_width="0dp"

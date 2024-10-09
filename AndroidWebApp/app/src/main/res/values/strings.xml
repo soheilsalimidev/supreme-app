@@ -25,6 +25,7 @@
     <string name="image_of_splash_screen" translatable="false">image of splash screen</string>
     <string name="a_powerful_app_with_all_customizations" translatable="false">a powerful app with all customizations</string>
     <string name="menu_footer_text" translatable="false">make with</string>
+    <string name="menu">menu</string>
 
 
 </resources>
