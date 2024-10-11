@@ -5,7 +5,10 @@ import com.google.android.material.color.DynamicColors
 
 class MyApplication : Application() {
     override fun onCreate() {
+        val config = Config(this);
+
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this);
+        if (config.configType.m3Colors)
+            DynamicColors.applyToActivitiesIfAvailable(this);
     }
 }

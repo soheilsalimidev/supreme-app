@@ -4849,6 +4849,7 @@ dependencies = [
  "futures-util",
  "image 0.24.9",
  "passwords",
+ "regex",
  "serde",
  "serde_json",
  "tauri",

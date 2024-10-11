@@ -87,12 +87,11 @@ export const useAppSettingStore = defineStore("appSetting", () => {
       package_name: "",
       icon_path: "",
       colors: {
-        metarial: true,
         primary: "",
-        light: {},
-        dark: {},
+        plates: {},
       },
       app_setting: {
+        m3Colors: true,
         site_url: "",
         splash_screen: {
           type: 0,
@@ -154,10 +153,8 @@ export interface AppInfo {
   package_name: string;
   icon_path: string;
   colors: {
-    dark: Partial<ISchema>;
-    light: Partial<ISchema>;
+    plates: Partial<ISchema>;
     primary: string;
-    metarial: boolean;
   };
   app_setting: Setting;
   paths: { name: string; path: string }[];
@@ -179,9 +176,53 @@ interface ISchema {
   error: string;
   onError: string;
   errorContainer: string;
+  onErrorContainer: string;
+  background: string;
+  onBackground: string;
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
+  outline: string;
+  outlineVariant: string;
+  shadow: string;
+  scrim: string;
+  inverseSurface: string;
+  inverseOnSurface: string;
+  inversePrimary: string;
+  primary_mediumContrast: string;
+  onPrimary_mediumContrast: string;
+  primaryContainer_mediumContrast: string;
+  onPrimaryContainer_mediumContrast: string;
+  secondary_mediumContrast: string;
+  onSecondary_mediumContrast: string;
+  secondaryContainer_mediumContrast: string;
+  onSecondaryContainer_mediumContrast: string;
+  tertiary_mediumContrast: string;
+  onTertiary_mediumContrast: string;
+  tertiaryContainer_mediumContrast: string;
+  onTertiaryContainer_mediumContrast: string;
+  error_mediumContrast: string;
+  onError_mediumContrast: string;
+  errorContainer_mediumContrast: string;
+  onErrorContainer_mediumContrast: string;
+  background_mediumContrast: string;
+  onBackground_mediumContrast: string;
+  surface_mediumContrast: string;
+  onSurface_mediumContrast: string;
+  surfaceVariant_mediumContrast: string;
+  onSurfaceVariant_mediumContrast: string;
+  outline_mediumContrast: string;
+  outlineVariant_mediumContrast: string;
+  shadow_mediumContrast: string;
+  scrim_mediumContrast: string;
+  inverseSurface_mediumContrast: string;
+  inverseOnSurface_mediumContrast: string;
+  inversePrimary_mediumContrast: string;
 }
 
 export interface Setting {
+  m3Colors: boolean;
   site_url: string;
   aboutUs: {
     enable: boolean;

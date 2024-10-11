@@ -33,13 +33,6 @@
         >
         </textInput>
 
-        <VSwitch
-          v-model="appInfo.colors.metarial"
-          :label="
-            appInfo.colors.metarial ? 'Use Materail 3 auto color choosing' : ''
-          "
-          class="col-span-4"
-        ></VSwitch>
         <ColorPicker
           v-model="colorPicker"
           class="col-span-4"
@@ -104,56 +97,17 @@ const colorPicker = computed({
       .map((val) => parseInt(val.trim()));
     const theme = themeFromSourceColor(argbFromRgb(r, g, b));
     appInfo.value.colors.primary = value;
-    appInfo.value.colors.light = Object.fromEntries(
-      Object.entries(
+    appInfo.value.colors.plates = Object.fromEntries([
+      ...Object.entries(
         Object.values(theme.schemes.light)[0] as { [k in string]: number },
-      )
-        .filter(([k]) =>
-          [
-            "primary",
-            "onPrimary",
-            "primaryContainer",
-            "onPrimaryContainer",
-            "secondary",
-            "onSecondary",
-            "secondaryContainer",
-            "onSecondaryContainer",
-            "tertiary",
-            "onTertiary",
-            "tertiaryContainer",
-            "onTertiaryContainer",
-            "error",
-            "onError",
-            "errorContainer",
-          ].includes(k),
-        )
-        .map(([k, v]) => [k, hexFromArgb(v)]),
-    );
-    appInfo.value.colors.dark = Object.fromEntries(
-      Object.entries(
+      ).map(([k, v]) => [k, `#ff${hexFromArgb(v).slice(1)}`]),
+      ...Object.entries(
         Object.values(theme.schemes.dark)[0] as { [k in string]: number },
-      )
-        .filter(([k]) =>
-          [
-            "primary",
-            "onPrimary",
-            "primaryContainer",
-            "onPrimaryContainer",
-            "secondary",
-            "onSecondary",
-            "secondaryContainer",
-            "onSecondaryContainer",
-            "tertiary",
-            "onTertiary",
-            "tertiaryContainer",
-            "onTertiaryContainer",
-            "error",
-            "onError",
-            "errorContainer",
-          ].includes(k),
-        )
-        .map(([k, v]) => [k, hexFromArgb(v)]),
-    );
+      ).map(([k, v]) => [
+        k + "_mediumContrast",
+        `#ff${hexFromArgb(v).slice(1)}`,
+      ]),
+    ]);
   },
 });
 

@@ -175,7 +175,8 @@ open class Config(context: Context) {
         @SerialName("floating_action_button")
         val floatingActionButton: FloatingActionButton,
         val introPage: IntroPage,
-        val aboutUs: AboutUs
+        val aboutUs: AboutUs,
+        val m3Colors:Boolean
     )
 
     @kotlinx.serialization.Serializable

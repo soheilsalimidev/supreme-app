@@ -1,6 +1,7 @@
 use derive_new::new;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 use std::path::PathBuf;
 
 pub mod web2app;
@@ -101,15 +102,13 @@ pub struct AppinviteService {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Colors {
-    pub metarial: bool,
     pub primary: String,
-    pub light: Option<ColorSchema>,
-    pub dark: Option<ColorSchema>,
+    pub plates: HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ColorSchema {
+pub struct Plates {
     pub primary: String,
     pub on_primary: String,
     pub primary_container: String,
@@ -125,12 +124,84 @@ pub struct ColorSchema {
     pub error: String,
     pub on_error: String,
     pub error_container: String,
+    pub on_error_container: String,
+    pub background: String,
+    pub on_background: String,
+    pub surface: String,
+    pub on_surface: String,
+    pub surface_variant: String,
+    pub on_surface_variant: String,
+    pub outline: String,
+    pub outline_variant: String,
+    pub shadow: String,
+    pub scrim: String,
+    pub inverse_surface: String,
+    pub inverse_on_surface: String,
+    pub inverse_primary: String,
+    #[serde(rename = "primary_mediumContrast")]
+    pub primary_medium_contrast: String,
+    #[serde(rename = "onPrimary_mediumContrast")]
+    pub on_primary_medium_contrast: String,
+    #[serde(rename = "primaryContainer_mediumContrast")]
+    pub primary_container_medium_contrast: String,
+    #[serde(rename = "onPrimaryContainer_mediumContrast")]
+    pub on_primary_container_medium_contrast: String,
+    #[serde(rename = "secondary_mediumContrast")]
+    pub secondary_medium_contrast: String,
+    #[serde(rename = "onSecondary_mediumContrast")]
+    pub on_secondary_medium_contrast: String,
+    #[serde(rename = "secondaryContainer_mediumContrast")]
+    pub secondary_container_medium_contrast: String,
+    #[serde(rename = "onSecondaryContainer_mediumContrast")]
+    pub on_secondary_container_medium_contrast: String,
+    #[serde(rename = "tertiary_mediumContrast")]
+    pub tertiary_medium_contrast: String,
+    #[serde(rename = "onTertiary_mediumContrast")]
+    pub on_tertiary_medium_contrast: String,
+    #[serde(rename = "tertiaryContainer_mediumContrast")]
+    pub tertiary_container_medium_contrast: String,
+    #[serde(rename = "onTertiaryContainer_mediumContrast")]
+    pub on_tertiary_container_medium_contrast: String,
+    #[serde(rename = "error_mediumContrast")]
+    pub error_medium_contrast: String,
+    #[serde(rename = "onError_mediumContrast")]
+    pub on_error_medium_contrast: String,
+    #[serde(rename = "errorContainer_mediumContrast")]
+    pub error_container_medium_contrast: String,
+    #[serde(rename = "onErrorContainer_mediumContrast")]
+    pub on_error_container_medium_contrast: String,
+    #[serde(rename = "background_mediumContrast")]
+    pub background_medium_contrast: String,
+    #[serde(rename = "onBackground_mediumContrast")]
+    pub on_background_medium_contrast: String,
+    #[serde(rename = "surface_mediumContrast")]
+    pub surface_medium_contrast: String,
+    #[serde(rename = "onSurface_mediumContrast")]
+    pub on_surface_medium_contrast: String,
+    #[serde(rename = "surfaceVariant_mediumContrast")]
+    pub surface_variant_medium_contrast: String,
+    #[serde(rename = "onSurfaceVariant_mediumContrast")]
+    pub on_surface_variant_medium_contrast: String,
+    #[serde(rename = "outline_mediumContrast")]
+    pub outline_medium_contrast: String,
+    #[serde(rename = "outlineVariant_mediumContrast")]
+    pub outline_variant_medium_contrast: String,
+    #[serde(rename = "shadow_mediumContrast")]
+    pub shadow_medium_contrast: String,
+    #[serde(rename = "scrim_mediumContrast")]
+    pub scrim_medium_contrast: String,
+    #[serde(rename = "inverseSurface_mediumContrast")]
+    pub inverse_surface_medium_contrast: String,
+    #[serde(rename = "inverseOnSurface_mediumContrast")]
+    pub inverse_on_surface_medium_contrast: String,
+    #[serde(rename = "inversePrimary_mediumContrast")]
+    pub inverse_primary_medium_contrast: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AppSetting {
-    colors: Colors,
+    m3_colors: bool,
     #[serde(rename = "site_url")]
     pub site_url: String,
     #[serde(rename = "aboutUs")]
@@ -278,12 +349,7 @@ pub struct ImagesPath {
 impl Default for AppSetting {
     fn default() -> Self {
         Self {
-            colors: Colors {
-                metarial: false,
-                primary: "".to_owned(),
-                light: None,
-                dark: None,
-            },
+            m3_colors: true,
             site_url: "https://docs.rs/passwords/latest/passwords/".to_owned(),
             splash_screen: SplashScreen {
                 type_field: 1,
@@ -366,6 +432,7 @@ pub struct Config {
     package_name: String,
     icon_path: PathBuf,
     app_setting: AppSetting,
+    colors: Colors,
     pub paths: Vec<Paths>,
 }
 

@@ -4,6 +4,7 @@ use colors_transform::Rgb;
 use futures_util::StreamExt;
 use image::io::Reader as ImageReader;
 use passwords::PasswordGenerator;
+use regex::Regex;
 use std::env;
 use std::future::Future;
 use std::io::ErrorKind;
@@ -11,8 +12,6 @@ use std::path::{Path, PathBuf};
 use std::pin::Pin;
 use std::process::Stdio;
 use std::sync::Arc;
-use tauri_plugin_shell::process::CommandEvent;
-use tauri_plugin_shell::ShellExt;
 use tokio::fs::{self, File};
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncSeekExt, AsyncWriteExt, BufReader};
 use tokio::process::{ChildStdin, Command};
@@ -89,6 +88,7 @@ impl Web2app {
 
         let mut set = JoinSet::new();
         set.spawn(self.clone().change_android_manifest());
+        set.spawn(self.clone().change_app_colors());
         set.spawn(self.clone().change_folders_name());
         set.spawn(self.clone().change_name_string_xml());
         set.spawn(self.clone().move_resourses());
@@ -101,7 +101,6 @@ impl Web2app {
         self.alignzip(app).await?;
         self.sign_apk().await?;
         self.gen_assetis_link().await
-        // Ok("asd".into())
     }
 
     #[instrument(skip(self))]
@@ -341,6 +340,9 @@ impl Web2app {
         }
         #[cfg(not(test))]
         {
+            use tauri_plugin_shell::process::CommandEvent;
+            use tauri_plugin_shell::ShellExt;
+
             if let Some(app) = app {
                 let mut prosses = app.shell().sidecar("zipalign")?.args(args);
 
@@ -684,6 +686,35 @@ impl Web2app {
 
         Ok(())
     }
+
+    #[instrument(skip(self))]
+    async fn change_app_colors(self: Arc<Self>) -> Result<()> {
+        info!("Start chaning the colors");
+        let colors = fs::read_to_string(self.out_path.join("res/values/colors.xml")).await?;
+        let color_configs = &self.config.colors.plates;
+        let re =
+            Regex::new(r#"(^<color name="APP_(?P<name>[A-z]+)">(?P<color>#[0-f]{8})</color>)"#)?;
+        let new_colors: String = colors
+            .lines()
+            .map(|f| {
+                let line = f.trim().to_owned();
+                if let Some(matches) = re.captures(&line) {
+                    let line = line.replace(
+                        matches.name("color").unwrap().as_str(),
+                        &color_configs
+                            .get(&matches["name"])
+                            .unwrap_or(&matches["color"].to_owned()),
+                    );
+                    return line;
+                }
+                line
+            })
+            .collect();
+        fs::write(self.out_path.join("res/values/colors.xml"), new_colors).await?;
+        let _ = self.sender.send("applaying the setting".into()).await;
+        info!("colors changed");
+        Ok(())
+    }
 }
 
 pub async fn check_java(jar_path: &Path) -> Result<bool> {
@@ -811,29 +842,35 @@ fn adjust_canonicalization<P: AsRef<Path>>(p: P) -> String {
 
 #[cfg(test)]
 mod tests {
+    use crate::convert::Colors;
     use crate::convert::{web2app::Web2app, AppSetting};
     use anyhow::Result;
-    use tracing::info;
     use std::path::PathBuf;
+    use tracing::info;
     use tracing_test::traced_test;
+
+    const TEST: &str = r##"{"primary":"#835500","onPrimary":"#ffffff","primaryContainer":"#ffddb4","onPrimaryContainer":"#291800","secondary":"#705b40","onSecondary":"#ffffff","secondaryContainer":"#fbdebc","onSecondaryContainer":"#271905","tertiary":"#52643f","onTertiary":"#ffffff","tertiaryContainer":"#d5eabb","onTertiaryContainer":"#111f03","error":"#ba1a1a","onError":"#ffffff","errorContainer":"#ffdad6","onErrorContainer":"#410002","background":"#fffbff","onBackground":"#1f1b16","surface":"#fffbff","onSurface":"#1f1b16","surfaceVariant":"#f0e0d0","onSurfaceVariant":"#4f4539","outline":"#817567","outlineVariant":"#d3c4b4","shadow":"#000000","scrim":"#000000","inverseSurface":"#34302a","inverseOnSurface":"#f9efe7","inversePrimary":"#ffb955","primary_mediumContrast":"#ffb955","onPrimary_mediumContrast":"#452b00","primaryContainer_mediumContrast":"#633f00","onPrimaryContainer_mediumContrast":"#ffddb4","secondary_mediumContrast":"#dec2a2","onSecondary_mediumContrast":"#3e2d16","secondaryContainer_mediumContrast":"#56432b","onSecondaryContainer_mediumContrast":"#fbdebc","tertiary_mediumContrast":"#b9cda0","onTertiary_mediumContrast":"#253515","tertiaryContainer_mediumContrast":"#3b4c29","onTertiaryContainer_mediumContrast":"#d5eabb","error_mediumContrast":"#ffb4ab","onError_mediumContrast":"#690005","errorContainer_mediumContrast":"#93000a","onErrorContainer_mediumContrast":"#ffb4ab","background_mediumContrast":"#1f1b16","onBackground_mediumContrast":"#eae1d9","surface_mediumContrast":"#1f1b16","onSurface_mediumContrast":"#eae1d9","surfaceVariant_mediumContrast":"#4f4539","onSurfaceVariant_mediumContrast":"#d3c4b4","outline_mediumContrast":"#9c8f80","outlineVariant_mediumContrast":"#4f4539","shadow_mediumContrast":"#000000","scrim_mediumContrast":"#000000","inverseSurface_mediumContrast":"#eae1d9","inverseOnSurface_mediumContrast":"#34302a","inversePrimary_mediumContrast":"#835500"}"##;
 
     #[traced_test]
     #[tokio::test]
     async fn change_app() -> Result<()> {
         let d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        info!("{}",env!("CARGO_MANIFEST_DIR"));
+        info!("{}", env!("CARGO_MANIFEST_DIR"));
         Web2app::new(
             super::Config {
                 name: "giigle".into(),
                 package_name: "com.here.we.go".into(),
                 icon_path: "../../icons/128x128.png".into(),
+                colors: Colors {
+                    primary: "".to_owned(),
+                    plates: serde_json::from_str(TEST).expect("some thing worng with colors"),
+                },
                 app_setting: AppSetting {
                     ..Default::default()
                 },
                 paths: vec![],
             },
-            d.join("resources/app.apk")
-                .canonicalize()?,
+            d.join("resources/app.apk").canonicalize()?,
             "/home/arthur/projects/web2app/src-tauri/out".into(),
             d.join("resources/"),
             tokio::sync::mpsc::channel(10).0,
