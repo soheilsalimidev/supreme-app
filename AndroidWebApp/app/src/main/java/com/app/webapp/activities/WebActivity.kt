@@ -64,7 +64,7 @@ class WebActivity : AppCompatActivity() {
         setContentView(binding.root)
         config = Config.getInstance(this);
         val data: String? = intent?.data?.host
-        Log.i("TAG", "onCreate: $data")
+
         binding.webView.loadUrl((data ?: config.configType.siteUrl).toString())
 
         layoutSetting()
@@ -107,10 +107,9 @@ class WebActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun layoutSetting() {
 
-        if (config.configType.toolbar.type == 1) {
-//            binding.topAppBar.visibility = View.VISIBLE
-//            setSupportActionBar(binding.toolbar)
-        } else binding.customToolbar.visibility = View.VISIBLE
+        if (config.configType.toolbar.type == 0) {
+            binding.topAppBar.visibility = View.VISIBLE
+        }
 
 
         if (config.configType.sidebarMenu.enable) menuSetup()
@@ -205,7 +204,7 @@ class WebActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_home_24
                     typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                         this@WebActivity,
-                        R.font.iransansmobile
+                        R.font.vazir
                     ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
 
@@ -214,7 +213,7 @@ class WebActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_groups_24
                     typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                         this@WebActivity,
-                        R.font.iransansmobile
+                        R.font.vazir
                     ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
 
@@ -223,7 +222,7 @@ class WebActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_star_rate_24
                     typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                         this@WebActivity,
-                        R.font.iransansmobile
+                        R.font.vazir
                     ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
 
@@ -232,7 +231,7 @@ class WebActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_share_24
                     typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                         this@WebActivity,
-                        R.font.iransansmobile
+                        R.font.vazir
                     ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
 
@@ -241,7 +240,7 @@ class WebActivity : AppCompatActivity() {
                     R.drawable.ic_baseline_exit_to_app_24
                     typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                         this@WebActivity,
-                        R.font.iransansmobile
+                        R.font.vazir
                     ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                 })
 
@@ -253,7 +252,7 @@ class WebActivity : AppCompatActivity() {
                         typeface =
                             if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                                 this@WebActivity,
-                                R.font.iransansmobile
+                                R.font.vazir
                             ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
                         onDrawerItemClickListener = { _, _, _ ->
                             binding.webView.loadUrl(pair?.second.toString())
@@ -280,7 +279,7 @@ class WebActivity : AppCompatActivity() {
                 nameRes = R.string.menu_footer_text
                 typeface = if (Locale.getDefault().language == "fa") ResourcesCompat.getFont(
                     this@WebActivity,
-                    R.font.iransansmobile
+                    R.font.vazir
                 ) else ResourcesCompat.getFont(this@WebActivity, R.font.roboto_regular)
             })
         binding.slider.onDrawerItemClickListener = { _, _, itemPosition ->
@@ -320,8 +319,16 @@ class WebActivity : AppCompatActivity() {
 //            binding.slider.drawerLayout?.openDrawer(binding.slider)
 //        }
 
-        binding.menu.setOnClickListener {
-            binding.slider.drawerLayout?.openDrawer(binding.slider)
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu -> {
+                    binding.slider.drawerLayout?.openDrawer(binding.slider)
+
+                    true
+                }
+
+                else -> false
+            }
         }
 
     }

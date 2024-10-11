@@ -57,7 +57,7 @@
   "introPage": {
     "enable": true,
     "pages": [{
-      "background": 1,
+      "background": "bg_gradient_slide1",
       "description": "asdfasdf",
       "image_name": "logo",
       "title": "dasfads"

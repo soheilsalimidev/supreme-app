@@ -12,85 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="0dp"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.AppBarLayout
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="2dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:minHeight="?attr/actionBarSize"
+                app:menu="@menu/top_app_bar"
+                app:titleCentered="true"
+                app:title="@string/app_name" />
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="@drawable/ic_baseline_menu_24"
-                    app:title="@string/app_name" />
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/custom_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                android:elevation="2dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-
-                <ImageView
-                    android:layout_width="250dp"
-                    android:layout_height="45dp"
-                    android:contentDescription="logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/custom"
-                    app:layout_constraintHorizontal_bias="0.454"
-                    app:layout_constraintStart_toEndOf="@+id/menu"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.545"
-                    tools:ignore="HardcodedText" />
-
-                <ImageView
-                    android:id="@+id/menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:src="@drawable/ic_baseline_menu_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-                <ImageView
-                    android:id="@+id/custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/ic_baseline_shopping_cart_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
@@ -99,7 +38,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
             <WebView
                 android:id="@+id/webView"
@@ -153,7 +92,7 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/whooops"
                 android:textAllCaps="true"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/APP_primary"
                 android:textSize="35sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/no_internet_lottieView"
@@ -168,8 +107,8 @@
                 android:layout_marginTop="18dp"
                 android:text="@string/no_internet_connection"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                android:textColor="@color/colorPrimary"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/APP_primary"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/whooops"
                 app:layout_constraintStart_toStartOf="@+id/whooops"
@@ -183,7 +122,7 @@
                 android:background="@drawable/btn_round"
                 android:padding="15dp"
                 android:text="@string/try_again"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -194,16 +133,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--        <com.google.android.gms.ads.AdView-->
-<!--            android:id="@+id/adView"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:adSize="BANNER"-->
-<!--            android:visibility="gone"-->
-<!--            app:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+        <!--        <com.google.android.gms.ads.AdView-->
+        <!--            android:id="@+id/adView"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:adSize="BANNER"-->
+        <!--            android:visibility="gone"-->
+        <!--            app:adUnitId="ca-app-pub-3940256099942544/6300978111"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
         <com.nambimobile.widgets.efab.ExpandableFabLayout
             android:id="@+id/fab_layout"

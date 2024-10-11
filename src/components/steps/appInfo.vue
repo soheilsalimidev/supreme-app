@@ -33,26 +33,22 @@
         >
         </textInput>
 
-        <div class="flex gap-2 col-span-3">
-          <VSwitch
-            v-model="appInfo.colors.metarial"
-            :label="
-              appInfo.colors.metarial
-                ? 'Use Materail 3 auto color choosing'
-                : ''
-            "
-          ></VSwitch>
-          <ColorPicker
-            v-if="!appInfo.colors.metarial"
-            v-model="colorPicker"
-            class="grow"
-            :gradient="false"
-            :error="
-              v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
-            "
-            label="App priamry color"
-          ></ColorPicker>
-        </div>
+        <VSwitch
+          v-model="appInfo.colors.metarial"
+          :label="
+            appInfo.colors.metarial ? 'Use Materail 3 auto color choosing' : ''
+          "
+          class="col-span-4"
+        ></VSwitch>
+        <ColorPicker
+          v-model="colorPicker"
+          class="col-span-4"
+          :gradient="false"
+          :error="
+            v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
+          "
+          label="App priamry color"
+        ></ColorPicker>
       </div>
     </div>
 

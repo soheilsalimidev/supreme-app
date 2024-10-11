@@ -1,13 +1,46 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.WebApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
-        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorOnPrimary">@color/APP_onPrimary_mediumContrast</item>
+        <item name="colorOnPrimaryContainer">@color/APP_onPrimaryContainer_mediumContrast</item>
+        <item name="colorSecondary">@color/APP_secondary_mediumContrast</item>
+        <item name="colorOnSecondary">@color/APP_onSecondary_mediumContrast</item>
+        <item name="colorSecondaryContainer">@color/APP_secondaryContainer_mediumContrast</item>
+        <item name="colorOnSecondaryContainer">@color/APP_onSecondaryContainer_mediumContrast</item>
+        <item name="colorTertiary">@color/APP_tertiary_mediumContrast</item>
+        <item name="colorOnTertiary">@color/APP_onTertiary_mediumContrast</item>
+        <item name="colorTertiaryContainer">@color/APP_tertiaryContainer_mediumContrast</item>
+        <item name="colorOnTertiaryContainer">@color/APP_onTertiaryContainer_mediumContrast</item>
+        <item name="colorError">@color/APP_error_mediumContrast</item>
+        <item name="colorOnError">@color/APP_onError_mediumContrast</item>
+        <item name="colorErrorContainer">@color/APP_errorContainer_mediumContrast</item>
+        <item name="colorOnErrorContainer">@color/APP_onErrorContainer_mediumContrast</item>
+        <item name="android:colorBackground">@color/APP_background_mediumContrast</item>
+        <item name="colorOnBackground">@color/APP_onBackground_mediumContrast</item>
+        <item name="colorSurface">@color/APP_surface_mediumContrast</item>
+        <item name="colorOnSurface">@color/APP_onSurface_mediumContrast</item>
+        <item name="colorSurfaceVariant">@color/APP_surfaceVariant_mediumContrast</item>
+        <item name="colorOnSurfaceVariant">@color/APP_onSurfaceVariant_mediumContrast</item>
+        <item name="colorOutline">@color/APP_outline_mediumContrast</item>
+        <item name="colorOutlineVariant">@color/APP_outlineVariant_mediumContrast</item>
+        <item name="colorSurfaceInverse">@color/APP_inverseSurface_mediumContrast</item>
+        <item name="colorOnSurfaceInverse">@color/APP_inverseOnSurface_mediumContrast</item>
+        <item name="colorOnPrimaryFixed">@color/APP_onPrimaryFixed_mediumContrast</item>
+        <item name="colorOnPrimaryFixedVariant">@color/APP_onPrimaryFixedVariant_mediumContrast</item>
+        <item name="colorSecondaryFixed">@color/APP_secondaryFixed_mediumContrast</item>
+        <item name="colorOnSecondaryFixed">@color/APP_onSecondaryFixed_mediumContrast</item>
+        <item name="colorSecondaryFixedDim">@color/APP_secondaryFixedDim_mediumContrast</item>
+        <item name="colorOnSecondaryFixedVariant">@color/APP_onSecondaryFixedVariant_mediumContrast</item>
+        <item name="colorTertiaryFixed">@color/APP_tertiaryFixed_mediumContrast</item>
+        <item name="colorOnTertiaryFixed">@color/APP_onTertiaryFixed_mediumContrast</item>
+        <item name="colorTertiaryFixedDim">@color/APP_tertiaryFixedDim_mediumContrast</item>
+        <item name="colorOnTertiaryFixedVariant">@color/APP_onTertiaryFixedVariant_mediumContrast</item>
+        <item name="colorSurfaceDim">@color/APP_surfaceDim_mediumContrast</item>
+        <item name="colorSurfaceBright">@color/APP_surfaceBright_mediumContrast</item>
+        <item name="colorSurfaceContainerLowest">@color/APP_surfaceContainerLowest_mediumContrast</item>
+        <item name="colorSurfaceContainerLow">@color/APP_surfaceContainerLow_mediumContrast</item>
+        <item name="colorSurfaceContainer">@color/APP_surfaceContainer_mediumContrast</item>
+        <item name="colorSurfaceContainerHigh">@color/APP_surfaceContainerHigh_mediumContrast</item>
+        <item name="colorSurfaceContainerHighest">@color/APP_surfaceContainerHighest_mediumContrast</item>
+        <item name="android:statusBarColor">@color/APP_surface</item>
     </style>
 </resources>
