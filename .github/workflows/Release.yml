@@ -8,7 +8,6 @@ on:
 jobs:
   build_android:
     runs-on: ubuntu-latest
-    working-directory: ./AndroidWebApp
     steps:
       - uses: actions/checkout@v4
 
@@ -26,17 +25,21 @@ jobs:
           cache: "gradle"
 
       - name: Change wrapper permissions
+        working-directory: ./AndroidWebApp
         run: chmod +x ./gradlew
 
       # Run Build Project
       - name: Build gradle project
+        working-directory: ./AndroidWebApp
         run: ./gradlew build
 
       # Create APK Release
       - name: Build apk release project (APK)
+        working-directory: ./AndroidWebApp
         run: ./gradlew assemble
 
       - name: Upload APK Release
+        working-directory: ./AndroidWebApp
         uses: actions/upload-artifact@v4
         with:
           name: app
