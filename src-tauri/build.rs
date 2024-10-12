@@ -1,4 +1,4 @@
-// use std::fs;
+use std::fs;
 
 fn main() {
     #[cfg(not(debug_assertions))]
