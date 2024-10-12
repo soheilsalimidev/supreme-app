@@ -13,7 +13,11 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "resources": ["./resources/*.jar", "./resources/lib64-linux/*"],
+    "resources": [
+      "./resources/*.jar",
+      "./resources/lib64/*",
+      "./resources/app.apk"
+    ],
     "externalBin": ["./binaries/zipalign"],
     "active": true,
     "targets": ["deb", "msi", "nsis", "app", "dmg"],
@@ -52,4 +56,3 @@
     }
   }
 }
-
