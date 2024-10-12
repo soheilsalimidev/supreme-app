@@ -95,7 +95,12 @@ const changeLocal = () => {
   settingMenu.value[1].name = langs[locale.value as keyof typeof langs];
 };
 
-const settingMenu = ref([
+const settingMenu = ref<
+  {
+    name: string;
+    click: () => void;
+  }[]
+>([
   {
     name: `change theme to ${!isDark.value ? "dark" : "light"}`,
     click: () => {

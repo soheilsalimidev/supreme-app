@@ -56,7 +56,7 @@ const openMenuHover = ref(false);
 const openMenu = ref(false);
 
 defineProps<{
-  menuItems: { name: string; click: () => {} }[];
+  menuItems: { name: string; click: () => void }[];
   name: string;
 }>();
 </script>
