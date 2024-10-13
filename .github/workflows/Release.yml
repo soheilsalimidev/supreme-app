@@ -71,8 +71,13 @@ jobs:
         uses: actions/checkout@v4
         
       - name: remove app
+        if: matrix.platform != 'windows-latest'
         run: rm -f ./src-tauri/resources/app.apk
-        
+
+      - name: remove appW
+        if: matrix.platform == 'windows-latest'
+        run: Remove-Item -Path .\\src-tauri\\resources\\app.apk -Force 
+
       - uses: actions/download-artifact@v4
         with:
           path: ./src-tauri/resources
@@ -124,7 +129,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-1
-          releaseName: "App 1"
-          releaseId: 1
           args: ${{ matrix.args }}
