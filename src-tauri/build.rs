@@ -1,8 +1,7 @@
-use std::fs;
-
 fn main() {
     #[cfg(not(debug_assertions))]
     {
+        use std::fs;
         let _ = fs::remove_dir_all("./resources/lib64/");
         let _ = fs::create_dir("./resources/lib64/");
     }
@@ -10,6 +9,8 @@ fn main() {
     #[cfg(not(target_os = "macos"))]
     #[cfg(not(debug_assertions))]
     {
+        use std::fs;
+
         let _ = fs::copy(
             "./resources/lib64-linux/libbcc.so",
             "./resources/lib64/libbcc.so",
@@ -35,6 +36,7 @@ fn main() {
     #[cfg(target_os = "macos")]
     #[cfg(not(debug_assertions))]
     {
+        use std::fs;
         let _ = fs::copy(
             "./resources/lib64-mac/libbcc.dylib",
             "./resources/lib64/libbcc.dylib",

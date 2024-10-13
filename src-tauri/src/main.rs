@@ -1,6 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use anyhow::Context;
 use std::{
     fs::{self, File},
     io::{self, Read, Write},
