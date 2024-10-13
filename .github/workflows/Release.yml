@@ -55,28 +55,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
+          - platform: "macos-latest"
             args: "--target aarch64-apple-darwin"
-          - platform: "macos-latest" # for Intel based macs.
+            path: ./src-tauri/target/aarch64-apple-darwin/release/bundle/macos/web2app.app
+          - platform: "macos-latest"
             args: "--target x86_64-apple-darwin"
-          - platform: "ubuntu-22.04" # for Tauri v1 you could replace this with ubuntu-20.04.
+            path: ./src-tauri/target/x86_64-apple-darwin/release/bundle/macos/web2app.app
+          - platform: "ubuntu-22.04"
             args: ""
+            path: ./src-tauri/target/release/bundle/deb/web2app_0.0.0_amd64.deb
           - platform: "windows-latest"
             args: ""
+            path: .\src-tauri\target\release\bundle\msi\web2app_0.0.0_x64_en-US.msi
 
     runs-on: ${{ matrix.platform }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: remove app
         if: matrix.platform != 'windows-latest'
         run: rm -f ./src-tauri/resources/app.apk
 
       - name: remove appW
         if: matrix.platform == 'windows-latest'
-        run: Remove-Item -Path .\\src-tauri\\resources\\app.apk -Force 
+        run: Remove-Item -Path .\\src-tauri\\resources\\app.apk -Force
 
       - uses: actions/download-artifact@v4
         with:
@@ -132,12 +136,10 @@ jobs:
         with:
           args: ${{ matrix.args }}
 
-      - name: Upload the app 
+      - name: Upload the app
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0
-          path: ${{ steps.tauri-build.outputs.artifactPaths }}
+          path: ${{ matrix.path }}
           name: binary-${{ matrix.platform }}
           if-no-files-found: ignore
-
-
