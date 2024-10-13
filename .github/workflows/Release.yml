@@ -56,16 +56,20 @@ jobs:
       matrix:
         include:
           - platform: "macos-latest"
+            artName: "macos arm"
             args: "--target aarch64-apple-darwin"
             path: ./src-tauri/target/aarch64-apple-darwin/release/bundle/macos/web2app.app
           - platform: "macos-latest"
             args: "--target x86_64-apple-darwin"
+            artName: "macos"
             path: ./src-tauri/target/x86_64-apple-darwin/release/bundle/macos/web2app.app
           - platform: "ubuntu-22.04"
+            artName: "linux"
             args: ""
             path: ./src-tauri/target/release/bundle/deb/web2app_0.0.0_amd64.deb
           - platform: "windows-latest"
             args: ""
+            artName: "windows"
             path: .\src-tauri\target\release\bundle\msi\web2app_0.0.0_x64_en-US.msi
 
     runs-on: ${{ matrix.platform }}
@@ -140,6 +144,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           compression-level: 0
-          path: ${{ matrix.path }}
+          path: ${{ matrix.artName }}
           name: binary-${{ matrix.platform }}
           if-no-files-found: ignore
