@@ -13,7 +13,10 @@ const page = computed<IntroPage | undefined>(
 const getImage = computed(() => {
   try {
     return convertFileSrc(page.value?.imageName ?? "");
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
+  return "";
 });
 </script>
 
@@ -54,8 +57,9 @@ const getImage = computed(() => {
       class="mt-auto flex flex-row-reverse justify-center items-center absolute w-full gap-2 mb-2 bottom-2"
     >
       <span
-        class="h-2 w-2 border-white border rounded-full transition duration-300"
         v-for="(_, index) in appInfo.app_setting.introPage.pages"
+        :key="index"
+        class="h-2 w-2 border-white border rounded-full transition duration-300"
         :class="index === openedPageIndexIntro && 'bg-white'"
       ></span>
       <span class="start-2 text-white p-3 font-medium absolute cursor-pointer"

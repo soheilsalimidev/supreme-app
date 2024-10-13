@@ -47,7 +47,11 @@
           ]"
         >
           <component
-            :is="defaultItemsIcons[defaultItems.findIndex((it) => it.value === item.Kind)]"
+            :is="
+              defaultItemsIcons[
+                defaultItems.findIndex((it) => it.value === item.Kind)
+              ]
+            "
             class="mr-2 h-5 w-5 text-violet-400"
             aria-hidden="true"
           >
@@ -88,8 +92,8 @@
         >
           <div
             v-for="(item, index) in defaultItems.filter((item) => !item.added)"
-            class="px-1 py-1"
             :key="index"
+            class="px-1 py-1"
           >
             <MenuItem
               v-slot="{ active }"
@@ -125,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ItemMenu } from "@/stores/appSetting";
+import type { ItemMenu, Pair } from "@/stores/appSetting";
 import ChevronDownIcon from "~icons/heroicons/chevron-down-solid";
 import LineMdPlusCircle from "~icons/line-md/plus-circle";
 import LineMdHomeMd from "~icons/line-md/home-md";
@@ -133,7 +137,6 @@ import LineMdPhone from "~icons/line-md/phone";
 import LineMdStarAltFilled from "~icons/line-md/star-alt-filled";
 import LineMdExternalLink from "~icons/line-md/external-link";
 import LineMdExternalLinkRounded from "~icons/line-md/external-link-rounded";
-
 import { useI18n } from "vue-i18n";
 import useVuelidate from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
@@ -148,7 +151,7 @@ const defaultItemsIcons = [
   LineMdStarAltFilled,
   LineMdExternalLink,
   LineMdExternalLinkRounded,
-  LineMdPlusCircle
+  LineMdPlusCircle,
 ];
 
 const defaultItems = ref([
@@ -192,6 +195,7 @@ function isUrl(urlStr: string) {
     new URL(urlStr);
     return true;
   } catch (e) {
+    console.error(e);
     return false;
   }
 }
@@ -203,14 +207,13 @@ const v$ = useVuelidate(
         Pair: {
           requiredSec: helpers.withMessage(
             t("validations.required"),
-            (value: any) => value.second,
+            (value: Pair) => !!value.second,
           ),
           requiredFirs: helpers.withMessage(
             t("validations.required"),
-            (value: any) => value.first,
+            (value: Pair) => !!value.first,
           ),
-
-          url: helpers.withMessage(t("validations.url"), (value: any) =>
+          url: helpers.withMessage(t("validations.url"), (value: Pair) =>
             isUrl(value.second),
           ),
         },
@@ -220,4 +223,3 @@ const v$ = useVuelidate(
   { sortedDate },
 );
 </script>
-

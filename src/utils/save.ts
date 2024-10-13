@@ -51,7 +51,7 @@ export const saveAppAsFile = async () => {
 
 export const importFromTheAppFile = async () => {
   const appDate = useAppSettingStore();
-  let savePath = appDate.savePath;
+  const savePath = appDate.savePath;
   try {
     const selected = await open({
       multiple: false,

@@ -2,12 +2,12 @@
   <checkboxItem
     disable-checkbox
     :open="openedPageIndexIntro === index"
-    @update:open="
-      $event ? (openedPageIndexIntro = index) : (openedPageIndexIntro = -1)
-    "
     :error="v$.$error ? t('error') : ''"
     class="w-full h-fit"
     :label="t('page', { page: index + 1 })"
+    @update:open="
+      $event ? (openedPageIndexIntro = index) : (openedPageIndexIntro = -1)
+    "
   >
     <template #end="">
       <HeroiconsXMark
@@ -43,18 +43,18 @@
         </textInput>
 
         <color-picker
+          v-model="page.background"
           label-class="dark:!bg-slate-700"
           input-class="dark:!bg-slate-700"
           class="col-span-9"
-          v-model="page.background"
           :error="v$.background.$errors.map((e) => e.$message).join(',')"
           :label="$t('steps.splash_screeen_setting.select_your_color')"
         >
         </color-picker>
 
         <FileSelect
-          class="col-span-12 h-40"
           v-model="page.imageName"
+          class="col-span-12 h-40"
           :error="v$.imageName.$errors.map((e) => e.$message).join(',')"
           :file-name="`pageImage${index}`"
           :label="$t('steps.splash_screeen_setting.image')"
@@ -76,8 +76,9 @@ const { required } = useI18nValidators();
 const { t } = useI18n();
 const { appInfo, openedPageIndexIntro } = storeToRefs(useAppSettingStore());
 
-const props = defineProps<{
-  page: IntroPage;
+const page = defineModel<IntroPage>("page", { required: true });
+
+defineProps<{
   index: number;
 }>();
 
@@ -102,7 +103,7 @@ const rules = {
   },
 };
 
-const v$ = useVuelidate(rules, props.page);
+const v$ = useVuelidate(rules, page);
 </script>
 
 <i18n>

@@ -3,12 +3,12 @@
     <div class="px-4 py-5 space-y-6 sm:p-6">
       <div class="grid grid-cols-5 gap-6">
         <textInput
-          class="col-span-2"
           v-model="appInfo.name"
+          class="col-span-2"
           :error="v$.name.$errors.map((e: any) => e.$message).join(',')"
-          @blur="v$.name.$touch"
           :placeholder="$t('steps.app_info.my_amazing_app')"
           :label="$t('steps.app_info.app_name')"
+          @blur="v$.name.$touch"
         >
           ></textInput
         >
@@ -18,18 +18,18 @@
           :error="
             v$.app_setting.site_url.$errors.map((e) => e.$message).join(',')
           "
-          @blur="v$.app_setting.site_url.$touch"
           :placeholder="$t('steps.app_info.https_supermerapp_com')"
           :label="$t('steps.app_info.website')"
+          @blur="v$.app_setting.site_url.$touch"
         ></textInput>
 
         <textInput
           v-model="packageName"
           class="col-span-2"
           :error="v$.package_name.$errors.map((e: any) => e.$message).join(',')"
-          @blur="v$.package_name.$touch"
           :placeholder="$t('steps.app_info.com_app_webapp')"
           :label="$t('steps.app_info.app_packagename')"
+          @blur="v$.package_name.$touch"
         >
         </textInput>
 

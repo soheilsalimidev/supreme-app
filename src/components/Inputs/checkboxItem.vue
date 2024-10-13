@@ -21,7 +21,7 @@
           class="items-start relative flex"
           :class="[modelValue ? 'border-transparent' : 'border-gray-300']"
         >
-          <div class="min-w-0 flex text-sm w-full ">
+          <div class="min-w-0 flex text-sm w-full">
             <div
               class="w-fit grow"
               @click="slots.default ? (open = !open) : ''"
@@ -40,7 +40,7 @@
                 </slot>
               </p>
             </div>
-            <div >
+            <div>
               <slot name="end" />
             </div>
           </div>
@@ -90,6 +90,6 @@ withDefaults(
     error?: string;
     disableCheckbox?: boolean;
   }>(),
-  { disableCheckbox: false },
+  { disableCheckbox: false, description: undefined, error: undefined },
 );
 </script>

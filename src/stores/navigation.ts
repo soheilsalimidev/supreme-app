@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import appInfo from "@/components/steps/appInfo.vue";
 import splashScreeenSetting from "@/components/steps/splashScreeenSetting.vue";
 import webPageSetting from "@/components/steps/webPageSetting.vue";
-import compile from "@/components/steps/compile.vue";
+import compile from "@/components/steps/compileApp.vue";
 import introPage from "@/components/steps/introPage.vue";
 import spashScreenFrame from "@/components/frames/spashScreenFrame.vue";
 import introFrame from "@/components/frames/introFrame.vue";
@@ -25,8 +25,8 @@ export const useNavigationStore = defineStore("navigation", () => {
     introFrame,
   };
 
-  const activeTabIndex = ref(1);
-  const currentTab = ref(0);
+  const activeTabIndex = ref(5);
+  const currentTab = ref(4);
 
   const steps = ref<
     {
@@ -74,8 +74,7 @@ export const useNavigationStore = defineStore("navigation", () => {
 
   const activeComponentFrame = computed(() => {
     return steps.value[currentTab.value].componentFrame
-      ? //@ts-ignore
-        componentsFrame[steps.value[currentTab.value]!.componentFrame]
+      ? componentsFrame[steps.value[currentTab.value]!.componentFrame!]
       : undefined;
   });
 

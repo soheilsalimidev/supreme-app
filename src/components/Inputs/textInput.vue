@@ -11,9 +11,9 @@
       >
       <input
         :id="label"
+        v-model="modelValue"
         type="text"
         :name="label"
-        v-model="modelValue"
         :disabled="disabled"
         :class="[
           error &&

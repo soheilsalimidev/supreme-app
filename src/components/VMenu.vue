@@ -1,5 +1,5 @@
 <template>
-  <Menu as="div" class="relative inline-block" v-slot="{ open }">
+  <Menu v-slot="{ open }" as="div" class="relative inline-block">
     <div
       v-element-hover="[(handler) => (openMenu = handler), { delayLeave: 200 }]"
     >

@@ -21,9 +21,9 @@
           ></div>
 
           <div class="relative">
-            <template v-if="step.status === 'complete'" class="group">
+            <template v-if="step.status === 'complete'">
               <div
-                class="absolute inset-0 flex items-center"
+                class="absolute inset-0 flex items-center group"
                 aria-hidden="true"
               >
                 <div class="h-0.5 w-full bg-indigo-600" />
@@ -60,9 +60,9 @@
                 >
               </a>
             </template>
-            <template v-else class="group">
+            <template v-else >
               <div
-                class="absolute inset-0 flex items-center"
+                class="absolute inset-0 flex items-center group"
                 aria-hidden="true"
               >
                 <div class="h-0.5 w-full bg-gray-200 dark:bg-gray-700" />

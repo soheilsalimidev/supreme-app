@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-col space-y-2">
-    <label class="font-bold text-gray-500 tracking-wide font-display text-base h-fit">{{
-      label
-    }}</label>
+    <label
+      class="font-bold text-gray-500 tracking-wide font-display text-base h-fit"
+      >{{ label }}</label
+    >
     <div ref="dropZoneRef" class="flex items-center justify-center w-full grow">
       <label
         v-if="!preview"
-        class="flex flex-col rounded-lg border-4 border-dashed w-full  group text-center h-full"
+        class="flex flex-col rounded-lg border-4 border-dashed w-full group text-center h-full"
       >
         <div
           class="h-full w-full text-center flex flex-col items-center justify-center"
@@ -22,9 +23,11 @@
             }}</span>
             {{ $t("inputs.file_select.files_here") }} <br />
             {{ $t("inputs.file_select.or") }}
-            <a class="text-indigo-600 hover:underline font-display font-bold" @click="selectFile">{{
-              $t("inputs.file_select.select_a_file")
-            }}</a>
+            <a
+              class="text-indigo-600 hover:underline font-display font-bold"
+              @click="selectFile"
+              >{{ $t("inputs.file_select.select_a_file") }}</a
+            >
             {{ $t("inputs.file_select.from_your_computer") }}
           </p>
           <p v-if="error" class="mt-2 text-sm text-red-600">
@@ -78,7 +81,13 @@ let props = withDefaults(
     filterWarningTitle?: string;
     filterCondition?: (width: number, height: number) => boolean;
   }>(),
-  { filterCondition: () => true, accept: () => ["jpeg", "png", "jpg"] },
+  {
+    filterCondition: () => true,
+    accept: () => ["jpeg", "png", "jpg"],
+    error: undefined,
+    filterWarningText: undefined,
+    filterWarningTitle: undefined,
+  },
 );
 
 listen<string[]>("tauri://file-drop", (event) => onDrop(event.payload));
@@ -98,6 +107,7 @@ const preview = computed(() => {
     } catch (error) {
       console.error(error);
     }
+    return undefined;
   } else return undefined;
 });
 
@@ -189,14 +199,14 @@ const { isOverDropZone } = useDropZone(dropZoneRef, {
 </script>
 
 <i18n lang="json">
-  {
-  "en":{
-    "wrong_format":"wrong format",
-    "please_drop_currect_format":"please drop currect format"
+{
+  "en": {
+    "wrong_format": "wrong format",
+    "please_drop_currect_format": "please drop currect format"
   },
-  "fa":{
-   "wrong_format":"فرمت اشتباه است",          
-   "please_drop_currect_format":"لطفا از فرمت jpg یا png استفاده کنید." 
+  "fa": {
+    "wrong_format": "فرمت اشتباه است",
+    "please_drop_currect_format": "لطفا از فرمت jpg یا png استفاده کنید."
   }
 }
 </i18n>

@@ -1,5 +1,7 @@
 <template>
-  <div class="w-full h-full flex flex-col items-center justify-center overflow-x-clip">
+  <div
+    class="w-full h-full flex flex-col items-center justify-center overflow-x-clip"
+  >
     <Transition name="fade">
       <div
         v-if="!appInfo.app_setting.introPage.enable"
@@ -18,9 +20,11 @@
           >
           <input
             id="pageIntro"
+            v-model="appInfo.app_setting.introPage.enable"
             type="checkbox"
             value=""
-            v-model="appInfo.app_setting.introPage.enable"
+            class="w-5 h-5 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+            required
             @change="
               appInfo.app_setting.introPage.pages.push({
                 title: '',
@@ -30,8 +34,6 @@
                 imageName: '',
               })
             "
-            class="w-5 h-5 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-            required
           />
         </div>
       </div>
@@ -45,8 +47,9 @@
             leave-active-class="transition duration-300"
           >
             <IntroPageItem
-              v-for="(page, index) in appInfo.app_setting.introPage.pages"
-              :page
+              v-for="(_, index) in appInfo.app_setting.introPage.pages"
+              :key="index"
+              v-model:page="appInfo.app_setting.introPage.pages[index]"
               :index
             />
           </TransitionGroup>

@@ -137,7 +137,7 @@ export const useAppSettingStore = defineStore("appSetting", () => {
     },
   );
 
-  let lastUpdateFile = JSON.stringify(appInfo.value);
+  const lastUpdateFile = JSON.stringify(appInfo.value);
 
   return {
     appInfo,
@@ -259,7 +259,7 @@ export interface Setting {
   swipe_refresh: boolean;
   admob: number;
   admob_banner: number;
-  googleService: any;
+  googleService: unknown;
   loading?: string;
   floating_action_button: {
     enable: boolean;

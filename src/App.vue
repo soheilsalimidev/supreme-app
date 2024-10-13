@@ -1,6 +1,6 @@
 <template>
   <div class="h-full overflow-hidden flex flex-col">
-    <!-- <toolbar v-if="window.__TAURI_INTERNALS__"></toolbar> -->
+    <VToolbar></VToolbar>
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="py-5 flex items-center justify-center lg:justify-between">
@@ -33,7 +33,7 @@
               <h2 id="section-1-title" class="sr-only">Steps</h2>
               <div class="rounded-lg bg-white dark:bg-slate-800 shadow grow">
                 <div class="p-6">
-                  <steps />
+                  <VSteps />
                 </div>
               </div>
               <div ref="sectionOne"></div>
@@ -61,7 +61,7 @@
                     <div
                       class="flex items-center justify-center flex-col h-full w-full"
                     >
-                      <frame />
+                      <VFrame />
                       <Teleport
                         v-if="isSm"
                         :to="$refs.sectionOne as RendererElement"
@@ -128,7 +128,7 @@
     </footer>
   </div>
 
-  <modal
+  <VModal
     v-model="noJavaModal"
     color="error"
     :ok-text="t('okDown')"
@@ -170,7 +170,7 @@
     <template #icon>
       <LineMdAlertLoop />
     </template>
-  </modal>
+  </Vmodal>
   <NotificationGroup group="generic">
     <div
       class="fixed inset-0 flex items-end justify-start p-6 px-4 py-6 pointer-events-none"
@@ -290,7 +290,9 @@ onMounted(async () => {
   wrapGrid(grid.value!, { duration: 600 });
   try {
     if (await invoke<string>("check_java")) return;
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
   noJavaModal.value = true;
 });
 const { locale } = useI18n({ useScope: "global" });

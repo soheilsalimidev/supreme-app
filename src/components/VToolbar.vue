@@ -4,8 +4,8 @@
       data-tauri-drag-region
       class="h-6 select-none flex justify-end w-full bg-indigo-700 px-2 gap-3 items-center"
     >
-      <VMenu name="Files" :menuItems="fileMenu"></VMenu>
-      <VMenu name="Settings" :menuItems="settingMenu"></VMenu>
+      <VMenu name="Files" :menu-items="fileMenu"></VMenu>
+      <VMenu name="Settings" :menu-items="settingMenu"></VMenu>
       <div class="flex gap-2 ms-auto">
         <div
           class="inline-flex justify-center items-center h-4 w-4 bg-amber-700 rounded-full group hover:scale-125 transition"
@@ -41,7 +41,7 @@
       </div>
     </div>
   </div>
-  <modal
+  <VModal
     v-model="openSaveModel"
     color="error"
     ok-text="Exit anyway"
@@ -57,7 +57,7 @@
     <template #icon>
       <LineMdAlertLoop />
     </template>
-  </modal>
+  </VModal>
 </template>
 
 <script lang="ts" setup>

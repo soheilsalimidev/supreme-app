@@ -36,7 +36,7 @@
         "
         enter-active-class="transition duration-1000"
       >
-        <div class="absolute inset-0" :key="activeTabIndex">
+        <div :key="activeTabIndex" class="absolute inset-0">
           <component
             :is="activeComponentFrame"
             class="min-w-full overflow-hidden"

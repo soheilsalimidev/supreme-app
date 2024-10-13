@@ -18,8 +18,8 @@
       >
       <div style="direction: ltr">
         <ColorPicker
-          v-model:gradientColor="data"
-          v-model:pureColor="data"
+          v-model:gradient-color="data"
+          v-model:pure-color="data"
           lang="En"
           :use-type="gradient ? 'gradient' : 'pure'"
           :theme="isDark ? 'black' : 'white'"
@@ -42,14 +42,20 @@ const isDark = useDark();
 withDefaults(
   defineProps<{
     label: string;
-    isTextColor?: string;
     modelValue: string;
+    isTextColor?: string;
     labelClass?: string;
     inputClass?: string;
     error?: string;
     gradient?: boolean;
   }>(),
-  { gradient: true },
+  {
+    gradient: true,
+    isTextColor: undefined,
+    labelClass: undefined,
+    inputClass: undefined,
+    error: undefined,
+  },
 );
 
 const data = defineModel<string>();

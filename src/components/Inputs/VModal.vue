@@ -25,7 +25,7 @@
                 leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
                 <DialogPanel
-                  class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 dark:bg-slate-600"
+                  class="relative transform w-fit overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 dark:bg-slate-600"
                 >
                   <div
                     class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-slate-800"
@@ -48,8 +48,8 @@
                         </DialogTitle>
                         <div class="mt-2">
                           <p
-                            class="text-sm text-gray-500 dark:text-slate-400"
                             v-if="!$slots.text"
+                            class="text-sm text-gray-500 dark:text-slate-400"
                           >
                             <slot> </slot>
                           </p>

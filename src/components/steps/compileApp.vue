@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <modal
+    <VModal
       v-model="isErr"
       :ok-text="t('ok')"
       color="error"
@@ -52,9 +52,9 @@
       <template #icon>
         <LineMdAlertLoop />
       </template>
-    </modal>
+    </VModal>
 
-    <modal
+    <VModal
       v-model="complieFinish"
       :ok-text="t('save')"
       color="info"
@@ -64,19 +64,70 @@
       :cancel="() => {}"
     >
       <div class="w-full flex flex-col">
-        <h3>the code for asstes digital</h3>
-        <div class="w-full">
-          <div
-            class="whitespace-pre-wrap bg-gray-100 p-2 m-2 dark:bg-gray-700 rounded-md"
-            style="direction: ltr"
-            v-html="assetes"
-          ></div>
+        <div class="mb-2 flex justify-between items-center">
+          <p class="text-xl text-gray-900 dark:text-white">
+            the code for assets digital
+          </p>
+        </div>
+        <div class="relative rounded-lg">
+          <div class="overflow-scroll max-h-full">
+            <pre><code id="code-block" class="whitespace-pre" style="direction:ltr" v-html="assetes"></code></pre>
+          </div>
+          <div class="absolute top-2 right-2" v-if="isSupported">
+            <button
+              class="text-gray-900 dark:text-gray-400 m-0.5 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border"
+            >
+              <span
+                @click="copy(source)"
+                class="inline-flex items-center"
+                v-if="!copied"
+              >
+                <svg
+                  class="w-3 h-3 me-1.5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 20"
+                >
+                  <path
+                    d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"
+                  />
+                </svg>
+                <span class="text-xs font-semibold">Copy code</span>
+              </span>
+              <span
+                id="success-message"
+                class="inline-flex items-center"
+                v-else
+              >
+                <svg
+                  class="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 16 12"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M1 5.917 5.724 10.5 15 1.5"
+                  />
+                </svg>
+                <span
+                  class="text-xs font-semibold text-blue-700 dark:text-blue-500"
+                  >Copied</span
+                >
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       <template #icon>
         <LineMdDownloadLoop />
       </template>
-    </modal>
+    </VModal>
   </div>
 </template>
 
@@ -93,13 +144,14 @@ import { useScroll } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import LineMdDownloadLoop from "~icons/line-md/download-loop";
 import anime from "animejs/lib/anime.es.js";
-import hljs from "highlight.js/lib/core";
-import json from "highlight.js/lib/languages/json";
-import "highlight.js/styles/github-dark.css";
 // import LineMdClipboardPlus from "~icons/line-md/clipboard-plus";
-hljs.registerLanguage("json", json);
+import { highlighter } from "@/utils/shiki";
+import { useClipboard } from "@vueuse/core";
 
-const complieFinish = ref(false);
+const source = ref("");
+const { copy, copied, isSupported } = useClipboard();
+
+const complieFinish = ref(true);
 const logsDiv = ref<HTMLElement | null>(null);
 const progressDiv = ref<HTMLElement | null>(null);
 const { y } = useScroll(logsDiv, { behavior: "smooth" });
@@ -113,7 +165,7 @@ const assetes = ref("");
 let progressBarObject = {
   progressBarStartValue: 0,
   progressBarEndValue: 100,
-  progressBarAnimationValue: 0 * 3.6, 
+  progressBarAnimationValue: 0 * 3.6,
 };
 
 const updateProgressBar = (percentage: number, color = "#6366f1") => {
@@ -193,13 +245,12 @@ const startRender = async () => {
     try {
       let steps = 1;
       const totalSteps = 10;
-      console.log(appInfo.value)
       await invoke("render_app", { config: unref(appInfo) });
-      setTimeout(()=>{
+      setTimeout(() => {
         updateProgressBar((steps * 100) / totalSteps);
-      } , 750)
+      }, 750);
 
-      await listen<string>("error", (_) => {
+      await listen<string>("error", () => {
         updateProgressBar((steps * 100) / totalSteps, "#ef4444");
         logs.value.push("Failed to produce the apk");
         y.value = logsDiv.value!.scrollHeight;
@@ -213,14 +264,14 @@ const startRender = async () => {
         y.value = logsDiv.value!.scrollHeight;
       });
 
-      await listen<string>("render_fineshed", (event) => {
+      await listen<string>("render_fineshed", async (event) => {
         complieFinish.value = true;
-        assetes.value = hljs.highlight(
-          JSON.stringify(JSON.parse(event.payload), null, 4),
-          {
-            language: "json",
-          },
-        ).value;
+        const jsonCode = JSON.stringify(JSON.parse(event.payload), null, 4);
+        source.value = jsonCode;
+        assetes.value = (await highlighter).codeToHtml(jsonCode, {
+          lang: "json",
+          theme: "tokyo-night",
+        });
       });
     } catch (error) {
       console.error(error);

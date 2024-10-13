@@ -4,7 +4,6 @@ import App from "./App.vue";
 import { createPinia } from "pinia";
 import Notifications from "notiwind";
 import { createI18n } from "vue-i18n";
-import "animate.css";
 import messages from '@intlify/unplugin-vue-i18n/messages'
 
 const i18n = createI18n({

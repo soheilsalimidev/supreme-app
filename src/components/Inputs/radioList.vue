@@ -36,7 +36,7 @@
   </fieldset>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" >
 defineProps<{
   items: {
     title: string;
@@ -47,5 +47,5 @@ defineProps<{
   error?: string;
   defaultValue: string | number;
 }>();
-const modelValue = defineModel();
+const modelValue = defineModel<string | number>();
 </script>

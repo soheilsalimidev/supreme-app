@@ -75,8 +75,8 @@ const defaultItems = ref([
     >
       <aside class="mdc-drawer !w-56">
         <div
-          class="mdc-drawer__header !p-0 !m-0 h-24"
           v-if="appInfo.app_setting.sidebar_menu.sidebar_menu_header.type === 1"
+          class="mdc-drawer__header !p-0 !m-0 h-24"
           :style="{
             'background-image':
               appInfo.app_setting.sidebar_menu.sidebar_menu_header.color,
@@ -227,12 +227,12 @@ const defaultItems = ref([
             class="p-0 m-2 w-10 h-10 bg-indigo-500 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none flex justify-center items-center"
           >
             <component
-              v-if="item.Kind"
               :is="defaultItemsIcons[item.Kind - 1]"
+              v-if="item.Kind"
               class="text-white text-xl"
             >
             </component>
-            <LineMdExternalLinkRounded class="text-white text-xl" v-else>
+            <LineMdExternalLinkRounded v-else class="text-white text-xl">
             </LineMdExternalLinkRounded>
           </button>
         </TransitionGroup>
@@ -245,10 +245,10 @@ const defaultItems = ref([
         </button>
       </div>
       <div
-        class="bg-black/20 w-full h-full absolute top-0 start-0 transition"
         v-if="
           appInfo.app_setting.sidebar_menu.enable && selectedWebPageSetting[5]
         "
+        class="bg-black/20 w-full h-full absolute top-0 start-0 transition"
       ></div>
     </div>
   </div>

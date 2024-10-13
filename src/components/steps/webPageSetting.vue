@@ -3,8 +3,8 @@
     <checkboxItem
       v-model="appInfo.app_setting.swipe_refresh"
       :open="items[0]"
-      @update:open="openNew(0)"
       :label="$t('steps.web_page_setting.swipe_refresh')"
+      @update:open="openNew(0)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.you_can_have_swipe_refresh") }}
@@ -13,8 +13,8 @@
     <checkboxItem
       disable-checkbox
       :open="items[1]"
-      @update:open="openNew(1)"
       :label="$t('steps.web_page_setting.cache_mode')"
+      @update:open="openNew(1)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.there_are_multi_type_of_ca") }}
@@ -33,8 +33,8 @@
     <checkboxItem
       disable-checkbox
       :open="items[2]"
-      @update:open="openNew(2)"
       :label="$t('steps.web_page_setting.no_internet_layout')"
+      @update:open="openNew(2)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.there_are_multi_layout_of") }}
@@ -99,8 +99,8 @@
       disable-checkbox
       :open="items[3]"
       :error="v$.app_setting.toolbar.$errors.map((e) => e.$message).join(',')"
-      @update:open="openNew(3)"
       :label="$t('steps.web_page_setting.toolbar')"
+      @update:open="openNew(3)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.you_can_have_different_typ") }}
@@ -140,8 +140,8 @@
           .map((e) => e.$message)
           .join(',')
       "
-      @update:open="openNew(4)"
       :label="$t('steps.web_page_setting.toolbar_custom_icon')"
+      @update:open="openNew(4)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.you_can_have_icon_that_sho") }}
@@ -182,8 +182,8 @@
       :error="
         v$.app_setting.sidebar_menu.$errors.map((e) => e.$message).join(',')
       "
-      @update:open="openNew(5)"
       :label="$t('steps.web_page_setting.sidebar_menu')"
+      @update:open="openNew(5)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.you_can_have_sidebar_menu") }}</template
@@ -265,8 +265,8 @@
           .map((e) => e.$message)
           .join(',')
       "
-      @update:open="openNew(6)"
       :label="$t('steps.web_page_setting.floating_action_button')"
+      @update:open="openNew(6)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.floating_action_button_men") }}
@@ -286,8 +286,8 @@
     <checkboxItem
       :open="items[7]"
       disable-checkbox
-      @update:open="openNew(7)"
       :label="$t('steps.web_page_setting.loading')"
+      @update:open="openNew(7)"
     >
       <template #description="">
         {{ $t("steps.web_page_setting.loading_lottie") }}
