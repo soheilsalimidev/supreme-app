@@ -130,3 +130,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: ${{ matrix.args }}
+
+      - name: Upload the app 
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./src-tauri/target/release/bundle
+
