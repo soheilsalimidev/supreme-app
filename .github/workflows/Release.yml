@@ -125,7 +125,8 @@ jobs:
       - name: install frontend dependencies
         run: pnpm install
 
-      - uses: tauri-apps/tauri-action@v0
+      - name: tauri-build
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -134,5 +135,9 @@ jobs:
       - name: Upload the app 
         uses: actions/upload-artifact@v4
         with:
-          path: ./src-tauri/target/release/bundle
+          compression-level: 0
+          path: ${{ steps.tauri-build.outputs.artifactPaths }}
+          name: binary-${{ matrix.platform }}
+          if-no-files-found: ignore
+
 
