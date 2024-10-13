@@ -69,7 +69,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        
+      - name: remove app
+        run: rm -f ./src-tauri/resources/app.apk
+        
       - uses: actions/download-artifact@v4
         with:
           path: ./src-tauri/resources
