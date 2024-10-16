@@ -1,36 +1,38 @@
 {
   "frames": {
-    "spash_screen_frame": {
+    "splash_screen_frame": {
       "select_your_image": "تصویر خود را انتخاب کنید"
     },
     "web_page_frame": {
-      "w_h_o_o_o_p_s": "وای وای",
+      "11_11": "11:11",
+      "w_h_o_o_o_p_s": "اوف",
       "your_site_content": "محتوای سایت شما"
     }
   },
   "frame": {
-    "be_aware_that_this_just_pr": "آگاه باشید که این فقط پیش نمایش است",
-    "and_what_you_see_on_render": "و آنچه در برنامه رندر شده می بینید ممکن است متفاوت باشد"
+    "be_aware_that_this_just_preview": "توجه داشته باشید که این فقط یک پیش نمایش است",
+    "and_what_you_see_on_rendered": "و آنچه در برنامه رندر شده می بینید ممکن است متفاوت باشد"
   },
   "inputs": {
     "file_select": {
       "drop_your_icon_here": "نماد خود را اینجا رها کنید",
-      "drag_and_drop": "کشیدن و انداختن",
-      "files_here": "فایل های اینجا",
+      "drag_and_drop": "بکشید و رها کنید",
+      "files_here": "فایل ها اینجا",
       "or": "یا",
       "select_a_file": "یک فایل را انتخاب کنید",
       "from_your_computer": "از کامپیوتر شما",
-      "reset": "تنظیم مجدد",
+      "reset": "بازنشانی کنید",
       "logo": "لوگو"
     }
   },
   "list_item_maker": {
-    "add": "اضافه کردن",
+    "add": "اضافه کنید",
     "open_the_website": "وب سایت را باز کنید",
     "mywebsite_com_hereigo": "mywebsite.com/hereIGo",
     "name_of_item": "نام مورد",
-    "url_that_should_be_opened": "آدرس اینترنتی که باید باز شود"
+    "url_that_should_be_opened": "URL که باید باز شود"
   },
+  "step": "مراحل",
   "steps": {
     "app_info": {
       "my_amazing_app": "برنامه شگفت انگیز من",
@@ -38,7 +40,7 @@
       "https_supermerapp_com": "https://supermerapp.com",
       "app_name": "نام برنامه",
       "app_packagename": "نام بسته برنامه",
-      "website": "سایت اینترنتی",
+      "website": "وب سایت",
       "app_icon": "نماد برنامه"
     },
     "compile": {
@@ -51,52 +53,144 @@
       "select_your_color": "رنگ خود را انتخاب کنید"
     },
     "previous": "قبلی",
-    "next": "بعد",
+    "next": "بعدی",
+
     "web_page_setting": {
-      "you_can_have_swipe_refresh": "می توانید صفحه بازخوانی Swipe را داشته باشید",
-      "there_are_multi_type_of_ca": "چند نوع cacheMode وجود دارد که می توانید انتخاب کنید",
-      "there_are_multi_layout_of": "چند طرح بدون اینترنت وجود دارد",
-      "if_you_don_t_select_anythi": "اگر چیزی را انتخاب نکنید",
-      "it_will_you_the_default_on": "آن را به شما یک پیش فرض برای شما",
-      "you_can_have_different_typ": "شما می توانید انواع مختلف نوار ابزار را داشته باشید",
-      "you_can_have_icon_that_sho": "می‌توانید نمادی داشته باشید که وقتی روی آن کلیک می‌کنید نشانی وب را در نمای وب نشان می‌دهد",
-      "you_can_have_sidebar_menu": "شما می توانید منوی نوار کناری داشته باشید (اگر می خواهید منو داشته باشید بهتر است که داشته باشید",
-      "sidebar_menu_header_color": "sidebar_menu_header_color",
-      "sidebar_menu_footer": "sidebar_menu_footer",
+      "swipe_refresh": "تند کشیدن به روزرسانی",
+      "cache_mode": "حالت کش",
+      "floating_action_button": "دکمه اکشن شناور",
+      "you_can_have_swipe_refresh": "می توانید صفحه بازخوانی Swipe داشته باشید",
+      "there_are_multi_type_of_cache_mode": "انواع مختلفی از حالت کش وجود دارد که می توانید انتخاب کنید",
+      "there_are_multi_layout_of_no_internet": "چندین طرح بندی بدون اینترنت وجود دارد",
+      "if_you_don_t_select_anything": "اگر چیزی را انتخاب نکنید، از پیش فرض برای شما استفاده می کند",
+      "it_will_you_the_default_one_for_you": "از پیش فرض برای شما استفاده خواهد کرد",
+      "you_can_have_different_type_of_toolbar": "شما می توانید انواع مختلفی از نوار ابزار داشته باشید",
+      "you_can_have_icon_that_show_url_in_web_view": "می توانید نمادی داشته باشید که وقتی روی آن کلیک می کنید URL را در نمای وب نشان می دهد",
+      "you_can_have_sidebar_menu": "می توانید یک منوی نوار کناری داشته باشید (اگر می خواهید منو داشته باشید، بهتر است داشته باشید",
+      "sidebar_menu_header_color": "رنگ هدر منوی نوار کناری",
+      "sidebar_menu_footer": "فوتر منوی نوار کناری",
       "items": "موارد",
-      "floating_action_button_men": "منوی دکمه اکشن شناور",
+      "floating_action_button_menu": "منوی دکمه اکشن شناور",
       "loading_lottie": "در حال بارگیری قرعه کشی",
-      "the_default_one_will_be_se": "پیش فرض انتخاب خواهد شد",
+      "the_default_one_will_be_selected": "پیش فرض انتخاب خواهد شد",
       "my_amazing_app": "برنامه شگفت انگیز من",
       "myapp_com": "myapp.com",
-      "swipe_refresh": "swipe_refresh",
-      "cache_mode": "cache_mode",
-      "no_internet_layout": "no_internet_layout",
+      "no_internet_layout": "بدون طرح اینترنت",
       "no_internet_layout2": "بدون طرح اینترنت",
       "select_your_lottie_file": "فایل قرعه کشی خود را انتخاب کنید",
       "select_your_image": "تصویر خود را انتخاب کنید",
       "toolbar": "نوار ابزار",
-      "the_text_to_be_dispalyed": "متنی که باید نمایش شود",
-      "toolbar_custom_icon": "toolbar_custom_icon",
-      "icon_to_be_dispalyed": "نمادی که باید از بین برود",
-      "link_to_be_open": "لینک باز شود",
-      "sidebar_menu": "نوار_منوی",
+      "the_text_to_be_dispalyed": "متنی که قرار است نمایش داده شود",
+      "toolbar_custom_icon": "نماد سفارشی نوار ابزار",
+      "icon_to_be_dispalyed": "نماد نمایش داده شود",
+      "link_to_be_open": "لینک باز میشه",
+      "sidebar_menu": "منوی نوار کناری",
       "select_your_colors": "رنگ های خود را انتخاب کنید",
-      "you_can_change_footer_on_s": "می توانید فوتر را روی نوار لغزنده تغییر دهید",
-      "floating_action_button": "floating_action_button",
-      "loading": "بارگذاری"
+      "you_can_change_footer_on_slider": "می توانید فوتر را روی نوار لغزنده تغییر دهید",
+      "loading": "در حال بارگذاری"
     }
   },
   "validations": {
-    "required": "این بخش را باید وارد کنید",
-    "url": "لطفا یک ادرس صحیح وارد کنید",
-    "requiredIf": "این بخش را باید وارد کنید"
+    "required": "شما باید وارد این قسمت شوید",
+    "url": "لطفاً یک URL معتبر وارد کنید",
+    "requiredIf": "شما باید وارد این قسمت شوید"
   },
   "stepsLabel": {
-    "splashScreen": "صفحه معرفی",
+    "splashScreen": "صفحه نمایش اسپلش",
     "webPageSettings": "تنظیمات صفحه وب",
-    "render": "ارائه دادن",
+    "render": "رندر کنید",
     "appInfo": "اطلاعات برنامه",
-    "intro": "خوش امدگویی"
+    "intro": "مرحله 4"
+  },
+  "items": {
+    "home_page": "صفحه اصلی",
+    "about_us": "درباره ما",
+    "rate_us": "به ما امتیاز دهید",
+    "share_app": "برنامه را به اشتراک بگذارید",
+    "exit": "خارج شوید",
+    "custom": "سفارشی"
+  },
+  "the_minimum_version_required_is_17": "حداقل نسخه مورد نیاز 17 است",
+  "phone_frame_preview": "پیش نمایش قاب تلفن",
+  "create_the_app": "برنامه را ایجاد کنید",
+  "logo": "لوگو",
+  "buildWith": "ساخت با",
+  "by": "توسط",
+  "soheil": "سهیل سلیمی",
+  "noJavaFound": "جاوا JDK پیدا نشد. ",
+  "noJava": "جاوا JDK پیدا نشد",
+  "okDown": "باشه دانلود کردم",
+  "ok": "باشه",
+  "lang": "لنگ",
+  "pageInfo": "صفحه با عنوان \"{title}\" و توضیحات \"{description}\"",
+  "pageTitleHint": "عنوان صفحه را وارد کنید",
+  "CopyLogFile": "کپی",
+  "cancel": "لغو",
+  "pageTitle": "عنوان صفحه",
+  "pageDescriptionHint": "توضیحات صفحه را وارد کنید",
+  "pageDescription": "توضیحات صفحه",
+  "page": "صفحه {page}",
+  "error": "در این مورد خطایی وجود دارد",
+  "app_preview": "پیش نمایش برنامه",
+  "progress": "پیشرفت",
+  "change_theme_to_is_dark_value_dark_light_0": "تغییر طرح زمینه به {0}",
+  "change_theme_to_is_dark_value_dark_light": "تغییر طرح زمینه به {0}",
+  "change_language_to_english": "تغییر زبان به انگلیسی",
+  "tayyr_zban_bh_farsy": "تعییر زبان به فارسی",
+  "you_have_unsaved_changes_if_you_exit_without_saving_you_re_going_to_lose_it_all": "شما تغییرات ذخیره نشده ای دارید. ",
+  "you_have_unsaved_changes": "شما تغییرات ذخیره نشده ای دارید!",
+  "selectPage": "لطفاً صفحه ای را برای پیش نمایش انتخاب کنید",
+  "next": "بعدی",
+  "key": ")",
+  "app_priamry_color": "رنگ اصلی برنامه",
+  "packname": "یک نام بسته معتبر وارد کنید",
+  "failed_to_produce_the_apk": "APK تولید نشد",
+  "start_rendering": "شروع به رندر کنید",
+  "copied": "کپی شده است",
+  "copy_code": "کد را کپی کنید",
+  "the_code_for_assets_digital": "کد دارایی های دیجیتال",
+  "save": "برنامه را ذخیره کنید",
+  "finishedCom": "رندر تمام شده",
+  "seeLogs": "برای اطلاعات بیشتر به گزارش ها مراجعه کنید",
+  "ErrorRendering": "خطا در ارائه",
+  "LogsCopyed": "گزارش ها کپی شدند",
+  "copyed": "گزارش ها در کلیپ بورد شما کپی شدند",
+  "errorRec": "با خطا مواجه شدیم",
+  "saveFailed": "ذخیره برنامه انجام نشد",
+  "introExplain": "مقدمه، مختصر «معرفی»، بخشی در ابتدای برنامه است که به طور مختصر هدف، ویژگی ها و کاربرد آن را برای کاربر توضیح می دهد. ",
+  "needIntro": "من نیاز به معرفی دارم",
+  "saveDesk": "این برنامه اکنون در دسکتاپ شما است",
+  "add_more": "بیشتر اضافه کنید",
+  "save": "ذخیره کنید",
+  "import": "بازگذاری",
+  "files": "فایل ها",
+  "settings": "تنظیمات",
+  "splashType": {
+    "justIconAndAppName": "فقط نماد و نام برنامه",
+    "IconWithAnimation": "نماد با انیمیشن",
+    "fullScreenImage": "تصویر تمام صفحه",
+    "iconAndAppNameWithGradientColor": "نماد و نام برنامه با رنگ گرادیان"
+  },
+  "cacheModes": {
+    "loadDefault": "LOAD_DEFAULT",
+    "defaultCacheUsageMode": "حالت پیش فرض استفاده از حافظه پنهان. ",
+    "loadCacheElseNetwork": "بارگیری شبکه دیگر کش",
+    "useCachedResourcesWhenTheyAreAvailable": "از منابع ذخیره شده در زمان در دسترس بودن استفاده کنید، حتی اگر منقضی شده باشند. "
+  },
+  "toolbarsModes": {
+    "noToolbar": "بدون نوار ابزار",
+    "toolbarWithText": "نوار ابزار با متن"
+  },
+  "sidebarMenuFooterModes": {
+    "noFooter": "بدون پاورقی",
+    "withFooter": "با پاورقی"
+  },
+  "sidebarMenuHeaderModes": {
+    "noHeader": "بدون سربرگ",
+    "headerWithGradient": "هدر با گرادیان"
+  },
+  "noNetLayouts": {
+    "simpleWithImageAndAText": "ساده با تصویر و متن",
+    "withLottieAnimationAndAText": "با انیمیشن Lottie و متن"
   }
 }

@@ -66,7 +66,7 @@
       <div class="w-full flex flex-col">
         <div class="mb-2 flex justify-between items-center">
           <p class="text-xl text-gray-900 dark:text-white">
-            the code for assets digital
+            {{ $t("the-code-for-assets-digital") }}
           </p>
         </div>
         <div class="relative rounded-lg">
@@ -93,7 +93,7 @@
                     d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"
                   />
                 </svg>
-                <span class="text-xs font-semibold">Copy code</span>
+                <span class="text-xs font-semibold">{{ $t("copy-code") }}</span>
               </span>
               <span
                 id="success-message"
@@ -117,7 +117,7 @@
                 </svg>
                 <span
                   class="text-xs font-semibold text-blue-700 dark:text-blue-500"
-                  >Copied</span
+                  >{{ $t("copied") }}</span
                 >
               </span>
             </button>
@@ -141,22 +141,21 @@ import { listen } from "@tauri-apps/api/event";
 import { save } from "@tauri-apps/plugin-dialog";
 import { notify } from "notiwind";
 import { useScroll } from "@vueuse/core";
-import { useI18n } from "vue-i18n";
 import LineMdDownloadLoop from "~icons/line-md/download-loop";
 import anime from "animejs/lib/anime.es.js";
 // import LineMdClipboardPlus from "~icons/line-md/clipboard-plus";
 import { highlighter } from "@/utils/shiki";
 import { useClipboard } from "@vueuse/core";
-
+import { useI18n } from "vue-i18n";
 const source = ref("");
 const { copy, copied, isSupported } = useClipboard();
 
-const complieFinish = ref(true);
+const complieFinish = ref(false);
 const logsDiv = ref<HTMLElement | null>(null);
 const progressDiv = ref<HTMLElement | null>(null);
 const { y } = useScroll(logsDiv, { behavior: "smooth" });
 const { t } = useI18n();
-const logs = ref<string[]>(["start rendering"]);
+const logs = ref<string[]>(["start_rendering"]);
 const { appInfo } = storeToRefs(useAppSettingStore());
 const state = ref<"start" | "running" | "finished">("start");
 const isErr = ref(false);
@@ -252,7 +251,7 @@ const startRender = async () => {
 
       await listen<string>("error", () => {
         updateProgressBar((steps * 100) / totalSteps, "#ef4444");
-        logs.value.push("Failed to produce the apk");
+        logs.value.push(t("failed-to-produce-the-apk"));
         y.value = logsDiv.value!.scrollHeight;
         isErr.value = true;
       });
@@ -280,26 +279,6 @@ const startRender = async () => {
 };
 </script>
 
-<i18n>
-  {
-  "en":{
-    "save":"save the app",
-    "finishedCom":"finshed rendering",
-    "seeLogs":"see the logs for more info",
-    "ErrorRendering":"Error rendering",
-    "LogsCopyed":"Logs copyed",
-    "copyed":"The logs copyed to your clipboard",
-    "errorRec":"we encorech an error",
-    "saveFailed":"saving app failed" ,
-    "saveDesk":"the app is in your desktop now"
-  },
-  "fa":{
-    "save":"save the app",
-    "finishedCom":"finshed rendering"
-  }
-}
-</i18n>
-
 <style scoped>
 .btn:before,
 .btn:after {
@@ -313,48 +292,58 @@ const startRender = async () => {
   border-radius: 50%;
   background-color: #6366f1;
 }
+
 .btn:hover:before {
   animation: collisionLeft 1s both;
   animation-direction: alternate;
 }
+
 .btn:hover:after {
   animation: collisionRight 1s both;
   animation-direction: alternate;
 }
+
 .btn:before {
   left: -30%;
 }
+
 .btn:after {
   left: 125%;
 }
+
 @keyframes collisionLeft {
   0% {
     left: -30%;
     width: 20px;
     height: 20px;
   }
+
   50% {
     left: 50%;
     width: 40px;
     height: 40px;
   }
+
   100% {
     left: 50%;
     width: 300px;
     height: 300px;
   }
 }
+
 @keyframes collisionRight {
   0% {
     left: 125%;
     width: 20px;
     height: 20px;
   }
+
   50% {
     left: 50%;
     width: 40px;
     height: 40px;
   }
+
   100% {
     left: 50%;
     width: 300px;
@@ -366,6 +355,7 @@ const startRender = async () => {
 .list-leave-active {
   transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;

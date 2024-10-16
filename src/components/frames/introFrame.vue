@@ -63,7 +63,7 @@ const getImage = computed(() => {
         :class="index === openedPageIndexIntro && 'bg-white'"
       ></span>
       <span class="start-2 text-white p-3 font-medium absolute cursor-pointer"
-        >Next</span
+        >{{ t('next') }}</span
       >
     </div>
   </div>
@@ -72,7 +72,7 @@ const getImage = computed(() => {
 <i18n>
   {
   "en":{
-  "selectPage":"Please select page to preview"
+  
   }
   }
 </i18n>

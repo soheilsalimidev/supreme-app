@@ -4,7 +4,7 @@
     role="img"
     class="mx-auto max-w-[70%] 2xl:max-w-[85%] drop-shadow-xl"
   >
-    <title>App Preview</title>
+    <title>{{ $t('app_preview') }}</title>
     <defs>
       <clipPath id="2ade4387-9c63-4fc4-b754-10e687a0d332">
         <rect width="316" height="684" rx="36" />

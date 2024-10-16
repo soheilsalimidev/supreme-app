@@ -1,45 +1,45 @@
 {
   "frames": {
-    "spash_screen_frame": {
+    "splash_screen_frame": {
       "select_your_image": "Select your image"
     },
     "web_page_frame": {
       "11_11": "11:11",
-      "w_h_o_o_o_p_s": "W h o o o p s !",
-      "your_site_content": "your site content"
+      "w_h_o_o_o_p_s": "Whoops!",
+      "your_site_content": "Your site content"
     }
   },
   "frame": {
-    "be_aware_that_this_just_pr": "be aware that this just preview",
-    "and_what_you_see_on_render": "and what you see on rendered app may be differnt"
+    "be_aware_that_this_just_preview": "Be aware that this is just a preview",
+    "and_what_you_see_on_rendered": "And what you see on the rendered app may be different"
   },
   "inputs": {
     "file_select": {
       "drop_your_icon_here": "Drop your icon here",
       "drag_and_drop": "Drag and drop",
-      "files_here": "files here",
-      "or": "or",
-      "select_a_file": "select a file",
-      "from_your_computer": "from your computer",
-      "reset": "reset",
-      "logo": "logo"
+      "files_here": "Files here",
+      "or": "Or",
+      "select_a_file": "Select a file",
+      "from_your_computer": "From your computer",
+      "reset": "Reset",
+      "logo": "Logo"
     }
   },
   "list_item_maker": {
     "add": "Add",
-    "open_the_website": "open the website",
+    "open_the_website": "Open the website",
     "mywebsite_com_hereigo": "mywebsite.com/hereIGo",
-    "name_of_item": "name of item",
-    "url_that_should_be_opened": "url that should be opened"
+    "name_of_item": "Name of item",
+    "url_that_should_be_opened": "URL that should be opened"
   },
   "steps": {
     "app_info": {
-      "my_amazing_app": "my amazing app",
+      "my_amazing_app": "My amazing app",
       "com_app_webapp": "com.app.webapp",
       "https_supermerapp_com": "https://supermerapp.com",
       "app_name": "App name",
       "app_packagename": "App packagename",
-      "website": "website",
+      "website": "Website",
       "app_icon": "App icon"
     },
     "compile": {
@@ -48,64 +48,154 @@
     "splash_screeen_setting": {
       "server_size": "Server size",
       "select_a_splash_screen": "Select a splash screen",
-      "image": "image",
-      "select_your_color": "select your color"
+      "image": "Image",
+      "select_your_color": "Select your color"
     },
     "previous": "Previous",
     "next": "Next",
     "web_page_setting": {
-      "you_can_have_swipe_refresh": "you can have Swipe Refresh page",
-      "there_are_multi_type_of_ca": "There are multi type of cacheMode you can select",
-      "there_are_multi_layout_of": "There are multi layout of no Internet",
-      "if_you_don_t_select_anythi": "if you don't select anything",
-      "it_will_you_the_default_on": "it will you the default one for you",
-      "you_can_have_different_typ": "You can have different type of toolbar",
-      "you_can_have_icon_that_sho": "You can have icon that show url in web view when you click on it",
-      "you_can_have_sidebar_menu": "you can have sidebar menu (if you want to have menu its better to have",
-      "sidebar_menu_header_color": "sidebar_menu_header_color",
-      "sidebar_menu_footer": "sidebar_menu_footer",
-      "items": "items",
-      "floating_action_button_men": "floating action button menu",
-      "loading_lottie": "loading lottie",
-      "the_default_one_will_be_se": "the default one will be selected",
-      "my_amazing_app": "my amazing app",
+      "swipe_refresh": "Swipe Refresh",
+      "cache_mode": "Cache Mode",
+      "floating_action_button": "Floating Action Button",
+      "you_can_have_swipe_refresh": "You can have Swipe Refresh page",
+      "there_are_multi_type_of_cache_mode": "There are multiple types of cache mode you can select",
+      "there_are_multi_layout_of_no_internet": "There are multiple layouts of no Internet",
+      "if_you_don_t_select_anything": "If you don't select anything, it will use the default one for you",
+      "it_will_you_the_default_one_for_you": "It will use the default one for you",
+      "you_can_have_different_type_of_toolbar": "You can have different types of toolbar",
+      "you_can_have_icon_that_show_url_in_web_view": "You can have an icon that shows the URL in the web view when you click on it",
+      "you_can_have_sidebar_menu": "You can have a sidebar menu (if you want to have a menu, it's better to have",
+      "sidebar_menu_header_color": "Sidebar menu header color",
+      "sidebar_menu_footer": "Sidebar menu footer",
+      "sidebar_menu_header_color": "Sidebar menu header color",
+      "sidebar_menu_footer": "Sidebar menu footer",
+      "items": "Items",
+      "floating_action_button_menu": "Floating action button menu",
+      "loading_lottie": "Loading lottie",
+      "the_default_one_will_be_selected": "The default one will be selected",
+      "my_amazing_app": "My amazing app",
       "myapp_com": "myapp.com",
-      "swipe_refresh": "swipe_refresh",
-      "cache_mode": "cache_mode",
-      "no_internet_layout": "no_internet_layout",
-      "no_internet_layout2": "no internet layout",
-      "select_your_lottie_file": "select your lottie file",
-      "select_your_image": "select your image",
-      "toolbar": "toolbar",
-      "the_text_to_be_dispalyed": "the text to be dispalyed",
-      "toolbar_custom_icon": "toolbar_custom_icon",
-      "icon_to_be_dispalyed": "icon to be dispalyed",
-      "link_to_be_open": "link to be open",
-      "sidebar_menu": "sidebar_menu",
-      "select_your_colors": "select your colors",
-      "you_can_change_footer_on_s": "you can change footer on slider",
-      "floating_action_button": "floating_action_button",
-      "loading": "loading"
+      "swipe_refresh": "Swipe refresh",
+      "cache_mode": "Cache mode",
+      "no_internet_layout": "No internet layout",
+      "no_internet_layout2": "No internet layout",
+      "select_your_lottie_file": "Select your lottie file",
+      "select_your_image": "Select your image",
+      "toolbar": "Toolbar",
+      "the_text_to_be_dispalyed": "The text to be displayed",
+      "toolbar_custom_icon": "Toolbar custom icon",
+      "icon_to_be_dispalyed": "Icon to be displayed",
+      "link_to_be_open": "Link to be opened",
+      "sidebar_menu": "Sidebar menu",
+      "select_your_colors": "Select your colors",
+      "you_can_change_footer_on_slider": "You can change the footer on the slider",
+      "floating_action_button": "Floating action button",
+      "loading": "Loading"
     }
   },
   "validations": {
-    "required": "you should enter this filed",
-    "url": "please enter valid url",
-    "requiredIf": "you should enter this filed"
+    "required": "You should enter this field",
+    "url": "Please enter a valid URL",
+    "requiredIf": "You should enter this field"
   },
   "stepsLabel": {
-    "splashScreen": "splash screen",
-    "webPageSettings": "web page settings",
-    "render": "render",
-    "appInfo": "app info",
+    "splashScreen": "Splash screen",
+    "webPageSettings": "Web page settings",
+    "render": "Render",
+    "appInfo": "App info",
     "intro": "Step 4"
   },
-  "items":{
-    "home_page":"home_page",
-    "about_us":"about_us",
-    "rate_us":"rate_us",
-    "share_app": "share_app",
-    "exit": "exit",
-    "custom": "custom"
-  }
+  "items": {
+    "home_page": "Home page",
+    "about_us": "About us",
+    "rate_us": "Rate us",
+    "share_app": "Share app",
+    "exit": "Exit",
+    "custom": "Custom"
+  },
+  "the_minimum_version_required_is_17": "The minimum version required is 17",
+  "phone_frame_preview": "Phone frame preview",
+  "create_the_app": "Create the app",
+  "logo": "Logo",
+  "buildWith": "Build with",
+  "by": "By",
+  "step": "steps",
+  "soheil": "Soheil Salimi",
+  "noJavaFound": "No Java JDK found. You can download it from any of the following links",
+  "noJava": "No Java JDK found",
+  "okDown": "Ok, I downloaded",
+  "ok": "Ok",
+  "lang": "Lang",
+  "pageInfo": "Page with title '{title}' and description of '{description}'",
+  "pageTitleHint": "Enter the page title",
+  "pageTitle": "Page title",
+  "pageDescriptionHint": "Enter the page description",
+  "pageDescription": "Page description",
+  "page": "Page {page}",
+  "error": "There is an error in this item",
+  "app_preview": "App Preview",
+  "progress": "Progress",
+  "change_theme_to_is_dark_value_dark_light_0": "Change theme to {0}",
+  "change_theme_to_is_dark_value_dark_light": "Change theme to {0}",
+  "change_language_to_english": "Change language to English",
+  "tayyr_zban_bh_farsy": "تعییر زبان به فارسی",
+  "you_have_unsaved_changes_if_you_exit_without_saving_you_re_going_to_lose_it_all": "You have unsaved changes. If you exit without saving, you're going to lose it all",
+  "you_have_unsaved_changes": "You have unsaved changes!",
+  "selectPage": "Please select a page to preview",
+  "next": "Next",
+  "key": ")",
+  "app_priamry_color": "App primary color",
+  "packname": "Enter a valid package name",
+  "failed_to_produce_the_apk": "Failed to produce the APK",
+  "conic_gradient_color_progressbar_object_progressbar_animation_value_deg_color_5_rgba_99_102_241_progressbar_object_progressbar_animation_value_transparent_transparent_progressbar_object_progressbar_animation_value_10_deg": "conic-gradient( {0} {1}deg, {2} 5%, rgba(99, 102, 241, {3}), transparent, transparent {4}deg)",
+  "start_rendering": "Start rendering",
+  "copied": "Copied",
+  "copy_code": "Copy code",
+  "the_code_for_assets_digital": "The code for assets digital",
+  "save": "Save the app",
+  "finishedCom": "Finshed rendering",
+  "seeLogs": "See the logs for more info",
+  "ErrorRendering": "Error rendering",
+  "LogsCopyed": "Logs copied",
+  "copyed": "The logs copied to your clipboard",
+  "CopyLogFile": "Copy",
+  "cancel": "Cancel",
+  "errorRec": "We encountered an error",
+  "saveFailed": "Saving app failed",
+  "introExplain": "An intro, short for \"introduction\", is a section at the beginning of an application that briefly explains its purpose, features, and usage to the user. It's a onboarding process that helps new users understand how to navigate and utilize the app. The intro is usually displayed once, after which it is skipped to prevent repetition. Its goal is to provide a smooth and engaging user experience, setting the stage for the user's interaction with the app. It's often visual, interactive, and concise.",
+  "needIntro": "I need intro",
+  "saveDesk": "The app is in your desktop now",
+  "add_more": "Add more",
+  "splashType": {
+    "justIconAndAppName": "Just icon and app name",
+    "IconWithAnimation": "Icon with animation",
+    "fullScreenImage": "Full screen image",
+    "iconAndAppNameWithGradientColor": "Icon and app name with gradient color"
+  },
+  "cacheModes": {
+    "loadDefault": "LOAD_DEFAULT",
+    "defaultCacheUsageMode": "Default cache usage mode. If the navigation type doesn't impose any specific behavior, use cached resources when they are available and not expired, otherwise load resources from the network",
+    "loadCacheElseNetwork": "LOAD CACHE ELSE NETWORK",
+    "useCachedResourcesWhenTheyAreAvailable": "Use cached resources when they are available, even if they have expired. Otherwise load resources from the network."
+  },
+  "toolbarsModes": {
+    "noToolbar": "No toolbar",
+    "toolbarWithText": "Toolbar with text"
+  },
+  "sidebarMenuFooterModes": {
+    "noFooter": "No footer",
+    "withFooter": "With footer"
+  },
+  "sidebarMenuHeaderModes": {
+    "noHeader": "No header",
+    "headerWithGradient": "Header with gradient"
+  },
+  "noNetLayouts": {
+    "simpleWithImageAndAText": "Simple with image and a text",
+    "withLottieAnimationAndAText": "With Lottie animation and a text"
+  },
+  "save": "Save",
+  "import": "Import",
+  "files": "Files",
+  "settings": "Settings"
 }

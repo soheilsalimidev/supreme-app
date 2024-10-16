@@ -68,7 +68,7 @@
             })
           "
         >
-          <span class="group-hover:block hidden min-w-20"> Add more </span>
+          <span class="group-hover:block hidden min-w-20"> {{ t('add-more') }} </span>
           <HeroiconsPlus16Solid class="w-8 h-8" />
         </button>
       </div>
@@ -91,8 +91,7 @@ const { t } = useI18n();
 <i18n>
   {
   "en":{
-    "introExplain":"An intro, short for \"introduction\", is a section at the beginning of an application that briefly explains its purpose, features, and usage to the user. It's a onboarding process that helps new users understand how to navigate and utilize the app. The intro is usually displayed once, after which it is skipped to prevent repetition. Its goal is to provide a smooth and engaging user experience, setting the stage for the user's interaction with the app. It's often visual, interactive, and concise.",
-    "needIntro":"I need intro",
+   
   }
 }
 </i18n>

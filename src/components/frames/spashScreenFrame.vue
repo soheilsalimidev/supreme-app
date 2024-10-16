@@ -44,7 +44,7 @@ const getLogo = computed(() => {
         class="h-full w-full"
       />
       <p v-else>
-        {{ $t("frames.spash_screen_frame.select_your_image") }}
+        {{ $t("frames.splash_screen_frame.select_your_image") }}
       </p>
     </div>
     <div

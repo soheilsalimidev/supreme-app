@@ -4,8 +4,8 @@
       data-tauri-drag-region
       class="h-6 select-none flex justify-end w-full bg-indigo-700 px-2 gap-3 items-center"
     >
-      <VMenu name="Files" :menu-items="fileMenu"></VMenu>
-      <VMenu name="Settings" :menu-items="settingMenu"></VMenu>
+      <VMenu :name="t('files')" :menu-items="fileMenu"></VMenu>
+      <VMenu :name="t('settings')" :menu-items="settingMenu"></VMenu>
       <div class="flex gap-2 ms-auto">
         <div
           class="inline-flex justify-center items-center h-4 w-4 bg-amber-700 rounded-full group hover:scale-125 transition"
@@ -46,13 +46,16 @@
     color="error"
     ok-text="Exit anyway"
     cancel-text="Save"
-    title="You have unsaved changes !"
+    :title="t('you_have_unsaved_changes')"
     :cancel="saveAppAsFile"
     :ok="appWindow.close"
   >
     <template #default>
-      You Have unsaved changes, if you exit without saving you're going to lose
-      it all
+      {{
+        t(
+          "you-have-unsaved-changes-if-you-exit-without-saving-youre-going-to-lose-it-all",
+        )
+      }}
     </template>
     <template #icon>
       <LineMdAlertLoop />
@@ -72,20 +75,20 @@ import { importFromTheAppFile, saveAppAsFile } from "@/utils/save";
 import { useDark, useToggle } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { useAppSettingStore } from "@/stores/appSetting";
-
+const { t } = useI18n();
 const openSaveModel = ref(false);
 const appDate = useAppSettingStore();
 const { locale } = useI18n({ useScope: "global" });
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const langs = {
-  en: "تعییر زبان به فارسی",
-  fa: "Change language to English",
+  en: t("tayyr_zban_bh_farsy"),
+  fa: t("change_language_to_english"),
 };
 
 const fileMenu = [
-  { name: "save", click: saveAppAsFile },
-  { name: "import", click: importFromTheAppFile },
+  { name: t("save"), click: saveAppAsFile },
+  { name: t("import"), click: importFromTheAppFile },
 ];
 
 const changeLocal = () => {
@@ -102,10 +105,15 @@ const settingMenu = ref<
   }[]
 >([
   {
-    name: `change theme to ${!isDark.value ? "dark" : "light"}`,
+    name: t("change_theme_to_is_dark_value_dark_light", [
+      !isDark.value ? "dark" : "light",
+    ]),
     click: () => {
       toggleDark();
-      settingMenu.value[0].name = `change theme to ${!isDark.value ? "dark" : "light"}`;
+      settingMenu.value[0].name = t(
+        "change_theme_to_is_dark_value_dark_light",
+        [!isDark.value ? "dark" : "light"],
+      );
     },
   },
   {

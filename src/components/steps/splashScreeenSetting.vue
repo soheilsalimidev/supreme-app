@@ -148,23 +148,3 @@ const rules = {
 const v$ = useVuelidate(rules, appInfo);
 </script>
 
-<i18n lang="json">
-{
-  "en": {
-    "splashType": {
-      "justIconAndAppName": "Just icon and app name",
-      "IconWithAnimation": "Icon with animation",
-      "fullScreenImage": "full screen image",
-      "iconAndAppNameWithGradientColor": "icon and app name with gradient color"
-    }
-  },
-  "fa": {
-    "splashType": {
-      "justIconAndAppName": "فقط نماد و نام برنامه",
-      "IconWithAnimation": "آیکون با انیمیشن",
-      "fullScreenImage": "تصویر تمام صفحه",
-      "iconAndAppNameWithGradientColor": "نماد و نام برنامه با رنگ گرادیان"
-    }
-  }
-}
-</i18n>

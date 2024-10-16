@@ -48,7 +48,7 @@
           input-class="dark:!bg-slate-700"
           class="col-span-9"
           :error="v$.background.$errors.map((e) => e.$message).join(',')"
-          :label="$t('steps.splash_screeen_setting.select_your_color')"
+          :label="t('steps.splash_screeen_setting.select_your_color')"
         >
         </color-picker>
 
@@ -57,7 +57,7 @@
           class="col-span-12 h-40"
           :error="v$.imageName.$errors.map((e) => e.$message).join(',')"
           :file-name="`pageImage${index}`"
-          :label="$t('steps.splash_screeen_setting.image')"
+          :label="t('steps.splash_screeen_setting.image')"
         >
         </FileSelect>
       </div>
@@ -105,17 +105,3 @@ const rules = {
 
 const v$ = useVuelidate(rules, page);
 </script>
-
-<i18n>
-  {
-  "en":{
-    "pageInfo":"Page with title '{title}' and description of '{description}'",
-    "pageTitleHint":"Enter the page title",
-    "pageTitle":"Page title",
-    "pageDescriptionHint":"Enter the page description",
-    "pageDescription":"Page description",
-    "page":"Page {page}",
-  "error":"there is error in this item"
-  }
-}
-</i18n>

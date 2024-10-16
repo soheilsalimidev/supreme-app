@@ -25,8 +25,8 @@ export const useNavigationStore = defineStore("navigation", () => {
     introFrame,
   };
 
-  const activeTabIndex = ref(5);
-  const currentTab = ref(4);
+  const activeTabIndex = ref(4);
+  const currentTab = ref(0);
 
   const steps = ref<
     {

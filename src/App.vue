@@ -3,19 +3,19 @@
     <VToolbar></VToolbar>
     <header class="pb-24 bg-indigo-600">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div class="py-5 flex items-center justify-center lg:justify-between">
-          <div class="">
-            <a href="#">
-              <span class="sr-only">Logo</span>
-              <img class="h-8 w-auto" src="/icon.svg" />
-            </a>
+        <div class="py-5 flex items-center justify-center text-center">
+          <div class="loader text-4xl font-display" style="direction: ltr">
+            <span :class="[playAnimtion && 'anim']">I</span>
+            <span :class="[playAnimtion && 'anim']">A</span>
+            <span :class="[playAnimtion && 'anim']">P</span>
+            <span :class="[playAnimtion && 'anim']">P</span>
           </div>
         </div>
       </div>
     </header>
     <main class="-mt-24">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 class="sr-only">Create the app</h1>
+        <h1 class="sr-only">{{ $t("create_the_app") }}</h1>
         <div
           ref="grid"
           class="gap-4 items-start grid"
@@ -30,7 +30,7 @@
             ]"
           >
             <section aria-labelledby="section-1-title" class="flex flex-col">
-              <h2 id="section-1-title" class="sr-only">Steps</h2>
+              <h2 id="section-1-title" class="sr-only">{{ $t("step") }}</h2>
               <div class="rounded-lg bg-white dark:bg-slate-800 shadow grow">
                 <div class="p-6">
                   <VSteps />
@@ -46,7 +46,9 @@
               aria-labelledby="section-2-title"
               class="h-96"
             >
-              <h2 id="section-2-title" class="sr-only">Phone frame preview</h2>
+              <h2 id="section-2-title" class="sr-only">
+                {{ $t("phone_frame_preview") }}
+              </h2>
               <div class="rounded-lg bg-transparent overflow-hidden">
                 <div class="flex items-center justify-center">
                   <Transition
@@ -85,12 +87,17 @@
                               </div>
                               <div class="ml-3">
                                 <p class="text-sm text-yellow-700">
-                                  {{ $t("frame.be_aware_that_this_just_pr")
+                                  {{
+                                    $t("frame.be_aware_that_this_just_preview")
                                   }}<a
                                     href="#"
                                     class="font-medium underline text-yellow-700 hover:text-yellow-600"
                                   >
-                                    {{ $t("frame.and_what_you_see_on_render") }}
+                                    {{
+                                      $t(
+                                        "frame.and_what_you_see_on_rendered",
+                                      )
+                                    }}
                                   </a>
                                 </p>
                               </div>
@@ -142,7 +149,7 @@
         {{ t("noJavaFound") }}
       </h2>
       <p class="text-sm text-gray-500 dark:text-slate-300">
-        The minimum version required is 17
+        {{ $t("the-minimum-version-required-is-17") }}
       </p>
       <ul
         class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400"
@@ -170,7 +177,7 @@
     <template #icon>
       <LineMdAlertLoop />
     </template>
-  </Vmodal>
+  </VModal>
   <NotificationGroup group="generic">
     <div
       class="fixed inset-0 flex items-end justify-start p-6 px-4 py-6 pointer-events-none"
@@ -266,6 +273,7 @@ import { useI18n } from "vue-i18n";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { saveAppAsFile } from "./utils/save";
 
+const playAnimtion = ref(true);
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const isXL = breakpoints.greaterOrEqual("2xl");
 const isSm = breakpoints.isGreater("lg");
@@ -284,6 +292,8 @@ setInterval(() => {
 }, 10000);
 setInterval(() => {
   previewWaring.value = !previewWaring.value;
+  playAnimtion.value = true;
+  setTimeout(() => (playAnimtion.value = false), 4000);
 }, 360000);
 
 onMounted(async () => {
@@ -298,24 +308,31 @@ onMounted(async () => {
 const { locale } = useI18n({ useScope: "global" });
 </script>
 
-<i18n>
-{
-  "en": {
-    "buildWith": "build with",
-    "by": "by",
-    "soheil": "soheil salimi",
-  "noJavaFound":"No Java JDK found, You can download it from the any  of following links",
-  "noJava":"No Java JDK found",
-  "okDown":"ok, i download" , "ok":"ok",
-  "lang":"lang"
-  },
-  "fa": {
-  "buildWith": "ساخته شده با",
-  "by": "توسط",
-    "soheil": "سهیل سلیمی",
-  "noJavaFound":"try to download from the following sources:",
-  "noJava":"No Java JDK found",
-  "okDown":"ok, i download" , "ok":"ok",  "lang":"زبان"
+<style scoped>
+.loader > span {
+  display: inline-block;
+  color: #fff;
+  transform-style: preserve-3d;
+  transform-origin: 0 100%;
+}
+.anim {
+  animation: anim 3s 1 linear;
+}
+.loader > span:nth-child(even) {
+  color: #00ed64;
+}
+.loader > span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader > span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes anim {
+  35% {
+    transform: rotateX(360deg);
+  }
+  100% {
+    transform: rotateX(360deg);
   }
 }
-</i18n>
+</style>

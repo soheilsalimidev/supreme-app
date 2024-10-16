@@ -17,7 +17,7 @@
       @update:open="openNew(1)"
     >
       <template #description="">
-        {{ $t("steps.web_page_setting.there_are_multi_type_of_ca") }}
+        {{ $t("steps.web_page_setting.there_are_multi_type_of_cache_mode") }}
       </template>
 
       <template #default>
@@ -37,7 +37,7 @@
       @update:open="openNew(2)"
     >
       <template #description="">
-        {{ $t("steps.web_page_setting.there_are_multi_layout_of") }}
+        {{ $t("steps.web_page_setting.there_are_multi_layout_of_no_internet") }}
       </template>
       <template #default="">
         <radioList
@@ -82,12 +82,12 @@
             </div>
             <div class="ml-3">
               <p class="text-sm text-yellow-700">
-                {{ $t("steps.web_page_setting.if_you_don_t_select_anythi")
+                {{ $t("steps.web_page_setting.if_you_don_t_select_anything")
                 }}<a
                   href="#"
                   class="font-medium underline text-yellow-700 hover:text-yellow-600"
                 >
-                  {{ $t("steps.web_page_setting.it_will_you_the_default_on") }}
+                  {{ $t("steps.web_page_setting.it_will_you_the_default_one_for_you") }}
                 </a>
               </p>
             </div>
@@ -103,14 +103,14 @@
       @update:open="openNew(3)"
     >
       <template #description="">
-        {{ $t("steps.web_page_setting.you_can_have_different_typ") }}
+        {{ $t("steps.web_page_setting.you_can_have_different_type_of_toolbar") }}
       </template>
       <template #default="">
         <radioList
           v-model="appInfo.app_setting.toolbar.type"
           :items="toolbarsModes"
           :default-value="0"
-          :label="$t('steps.web_page_setting.you_can_have_different_typ')"
+          :label="$t('steps.web_page_setting.you_can_have_different_type_of_toolbar')"
         >
         </radioList>
         <div v-if="appInfo.app_setting.toolbar.type === 1" class="mt-4">
@@ -144,7 +144,7 @@
       @update:open="openNew(4)"
     >
       <template #description="">
-        {{ $t("steps.web_page_setting.you_can_have_icon_that_sho") }}
+        {{ $t("steps.web_page_setting.you_can_have_icon_that_show_url_in_web_view") }}
       </template>
       <template #default="">
         <div class="gap-6 flex flex-col">
@@ -227,7 +227,7 @@
             v-model="appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type"
             :items="sidebarMenuFooterModes"
             :default-value="0"
-            :label="$t('steps.web_page_setting.you_can_change_footer_on_s')"
+            :label="$t('steps.web_page_setting.you_can_change_footer_on_slider')"
           >
           </radioList>
           <div>
@@ -269,7 +269,7 @@
       @update:open="openNew(6)"
     >
       <template #description="">
-        {{ $t("steps.web_page_setting.floating_action_button_men") }}
+        {{ $t("steps.web_page_setting.floating_action_button_menu") }}
       </template>
       <template #default="">
         <div class="flex flex-col gap-6">
@@ -310,7 +310,7 @@
               </div>
               <div class="ml-3">
                 <p class="text-sm text-yellow-700">
-                  {{ $t("steps.web_page_setting.if_you_don_t_select_anythi")
+                  {{ $t("steps.web_page_setting.if_you_don_t_select_anything")
                   }}<a
                     href="#"
                     class="font-medium underline text-yellow-700 hover:text-yellow-600"
@@ -457,12 +457,12 @@ const toolbarsModes = [
 const cacheModes = [
   {
     title: t("cacheModes.loadDefault"),
-    description: t("cacheModes.DefaultCacheUsageMode"),
+    description: t("cacheModes.defaultCacheUsageMode"),
     value: 1,
   },
   {
-    title: t("cacheModes.LoadCacheElseNetwork"),
-    description: t("cacheModes.UseCachedResourcesWhenTheyAreAvailable"),
+    title: t("cacheModes.loadCacheElseNetwork"),
+    description: t("cacheModes.useCachedResourcesWhenTheyAreAvailable"),
     value: 2,
   },
 ];
@@ -471,56 +471,3 @@ useVuelidate({})
 
 </script>
 
-<i18n lang="json">
-{
-  "en": {
-    "cacheModes": {
-      "loadDefault": "LOAD_DEFAULT",
-      "DefaultCacheUsageMode": "Default cache usage mode. If the navigation type doesn't impose any specific behavior, use cached resources when they are available and not expired, otherwise load resources from the network",
-      "LoadCacheElseNetwork": "LOAD CACHE ELSE NETWORK",
-      "UseCachedResourcesWhenTheyAreAvailable": "Use cached resources when they are available, even if they have expired. Otherwise load resources from the network."
-    },
-    "toolbarsModes": {
-      "noToolbar": "no toolbar",
-      "toolbarWithText": "toolbar with text"
-    },
-
-    "sidebarMenuFooterModes": {
-      "noFooter": "no footer",
-      "withFooter": "with footer"
-    },
-    "sidebarMenuHeaderModes": {
-      "noHeader": "no header",
-      "headerWithGradient": "header with gradient"
-    },
-    "noNetLayouts": {
-      "simpleWithImageAndAText": "simple with image and a text",
-      "withLottieAnimationAndAText": "with lottie animation and a text"
-    }
-  },
-  "fa": {
-    "cacheModes": {
-      "loadDefault": "حالت عادی",
-      "DefaultCacheUsageMode": "حالت پیش‌فرض استفاده از حافظه پنهان. ",
-      "LoadCacheElseNetwork": "بارگیری شبکه دیگر کش",
-      "UseCachedResourcesWhenTheyAreAvailable": "از منابع ذخیره شده در هنگام در دسترس بودن استفاده کنید، حتی اگر منقضی شده باشند. "
-    },
-    "toolbarsModes": {
-      "noToolbar": "بدون نوار ابزار",
-      "toolbarWithText": "نوار ابزار با متن"
-    },
-    "sidebarMenuFooterModes": {
-      "noFooter": "بدون پاورقی",
-      "withFooter": "با پاورقی"
-    },
-    "sidebarMenuHeaderModes": {
-      "noHeader": "بدون سربرگ",
-      "headerWithGradient": "هدر با گرادیان"
-    },
-    "noNetLayouts": {
-      "simpleWithImageAndAText": "ساده با تصویر و متن",
-      "withLottieAnimationAndAText": "با انیمیشن قرعه کشی و متن"
-    }
-  }
-}
-</i18n>

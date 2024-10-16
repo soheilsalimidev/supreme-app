@@ -33,7 +33,7 @@
               .map((e: any) => e.$message)
               .join(',')
           "
-          :placeholder="$t('list_item_maker.mywebsite_com_hereigo')"
+          :placeholder="$t('list_item_maker.my_website_url_here')"
           :label="$t('list_item_maker.url_that_should_be_opened')"
         >
           <!-- TODO:ADD icon select -->

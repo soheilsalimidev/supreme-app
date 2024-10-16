@@ -56,12 +56,12 @@ const defaultItemsIcons = [
 ];
 
 const defaultItems = ref([
-  t("item.home_page"),
-  t("item.about_us"),
-  t("item.rate_us"),
-  t("item.share_app"),
-  t("item.exit"),
-  t("item.custom"),
+  t("items.home_page"),
+  t("items.about_us"),
+  t("items.rate_us"),
+  t("items.share_app"),
+  t("items.exit"),
+  t("items.custom"),
 ]);
 </script>
 
