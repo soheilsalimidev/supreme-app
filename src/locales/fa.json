@@ -54,7 +54,6 @@
     },
     "previous": "قبلی",
     "next": "بعدی",
-
     "web_page_setting": {
       "swipe_refresh": "تند کشیدن به روزرسانی",
       "cache_mode": "حالت کش",
@@ -71,7 +70,6 @@
       "sidebar_menu_footer": "فوتر منوی نوار کناری",
       "items": "موارد",
       "floating_action_button_menu": "منوی دکمه اکشن شناور",
-      keyu
       "the_default_one_will_be_selected": "پیش فرض انتخاب خواهد شد",
       "my_amazing_app": "برنامه شگفت انگیز من",
       "myapp_com": "myapp.com",
@@ -116,7 +114,7 @@
   "logo": "لوگو",
   "buildWith": "ساخت با",
   "by": "توسط",
-  "soheil": "سهیل سلیمی",
+  "soheil": "تیم IAPP",
   "noJavaFound": "جاوا JDK پیدا نشد. ",
   "noJava": "جاوا JDK پیدا نشد",
   "okDown": "باشه دانلود کردم",
