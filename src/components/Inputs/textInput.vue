@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 flex"
+      class="relative border border-gray-300 rounded-md px-3 py-2 shadow-xs focus-within:ring-1 focus-within:ring-indigo-600 focus-within:border-indigo-600 flex"
     >
       <label
         :for="label"
@@ -17,7 +17,7 @@
         :disabled="disabled"
         :class="[
           error &&
-            'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 dark:placeholder-red-600 me-5',
+            'border-red-300 text-red-900 placeholder-red-300 focus:outline-hidden focus:ring-red-500 focus:border-red-500 dark:placeholder-red-600 me-5',
           inputClass,
         ]"
         style="text-align: start; unicode-bidi: plaintext"

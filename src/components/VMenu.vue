@@ -4,7 +4,7 @@
       v-element-hover="[(handler) => (openMenu = handler), { delayLeave: 200 }]"
     >
       <MenuButton
-        class="inline-flex w-full justify-center rounded-md p-1 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+        class="inline-flex w-full justify-center rounded-md p-1 text-sm font-medium text-white hover:bg-black/30 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white/75"
       >
         {{ name }}
       </MenuButton>
@@ -25,7 +25,7 @@
           { delayLeave: 200 },
         ]"
         static
-        class="absolute start-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50"
+        class="absolute start-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden z-50"
       >
         <div class="px-1 py-1">
           <MenuItem

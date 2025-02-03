@@ -2,20 +2,20 @@
   <Disclosure
     as="div"
     @click.self="
-      slots.default ? (modelValue = true) : (modelValue = !modelValue)
+      $slots.default ? (modelValue = true) : (modelValue = !modelValue)
     "
   >
     <div
-      class="focus:outline-none dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-sm p-2 cursor-pointer transition-all ease-in-out duration-500"
+      class="focus:outline-hidden dark:bg-slate-700 hover:ring-2 hover:ring-indigo-500 max-w-full border rounded-lg shadow-xs p-2 cursor-pointer transition-all ease-in-out duration-500"
       :class="[
         open ? 'ring-2 ring-indigo-500 max-h-[55rem]' : 'max-h-24 mx-5',
-        open && (disableCheckbox || slots.default) ? 'mx-3' : 'mx-7',
+        open && (disableCheckbox || $slots.default) ? 'mx-3' : 'mx-7',
       ]"
     >
       <DisclosureButton
         class="py-2"
         as="div"
-        @click.self="slots.default ? (open = !open) : ''"
+        @click.self="$slots.default ? (open = !open) : ''"
       >
         <div
           class="items-start relative flex"
@@ -24,7 +24,7 @@
           <div class="min-w-0 flex text-sm w-full">
             <div
               class="w-fit grow"
-              @click="slots.default ? (open = !open) : ''"
+              @click="$slots.default ? (open = !open) : ''"
             >
               <label
                 :for="label"
@@ -51,7 +51,7 @@
               :aria-describedby="description"
               :name="label"
               type="checkbox"
-              class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+              class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded-sm"
               @click.stop=""
             />
           </div>
@@ -77,9 +77,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from "vue";
-
-const slots = useSlots();
 const modelValue = defineModel<boolean | undefined>();
 const open = defineModel<boolean>("open", { default: false });
 

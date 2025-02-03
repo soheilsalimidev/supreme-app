@@ -8,8 +8,8 @@
       <div v-if="item.Pair" class="flex flex-row gap-2">
         <textInput
           v-model="item.Pair.first"
-          label-class="dark:!bg-slate-700"
-          input-class="dark:!bg-slate-700"
+          label-class="dark:bg-slate-700!"
+          input-class="dark:bg-slate-700!"
           :error="
             v$.sortedDate.$each.$response.$errors[index].Pair.filter(
               ({ $validator }: any) => $validator === 'requiredFirs',
@@ -23,8 +23,8 @@
         </textInput>
         <textInput
           v-model="item.Pair.second"
-          label-class="dark:!bg-slate-700"
-          input-class="dark:!bg-slate-700"
+          label-class="dark:bg-slate-700!"
+          input-class="dark:bg-slate-700!"
           :error="
             v$.sortedDate.$each.$response.$errors[index].Pair.filter(
               ({ $validator }: any) =>
@@ -75,7 +75,7 @@
     >
       <div>
         <MenuButton
-          class="inline-flex w-full justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+          class="inline-flex w-full justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white/75"
         >
           {{ $t("list_item_maker.add") }}
           <ChevronDownIcon
@@ -88,7 +88,7 @@
 
       <MenuItems>
         <div
-          class="absolute left-1/2 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-gray-700"
+          class="absolute left-1/2 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden dark:bg-gray-700"
         >
           <div
             v-for="(item, index) in defaultItems.filter((item) => !item.added)"

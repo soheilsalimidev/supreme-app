@@ -73,16 +73,16 @@ const defaultItems = ref([
       "
       class="absolute top-[1.7rem] bottom-0 start-0 h-full z-50"
     >
-      <aside class="mdc-drawer !w-56">
+      <aside class="mdc-drawer w-56!">
         <div
           v-if="appInfo.app_setting.sidebar_menu.sidebar_menu_header.type === 1"
-          class="mdc-drawer__header !p-0 !m-0 h-24"
+          class="mdc-drawer__header p-0! m-0! h-24"
           :style="{
             'background-image':
               appInfo.app_setting.sidebar_menu.sidebar_menu_header.color,
           }"
         >
-          <h3 class="mdc-drawer__title !text-white">
+          <h3 class="mdc-drawer__title text-white!">
             {{ appInfo.name }}
           </h3>
         </div>
@@ -116,7 +116,7 @@ const defaultItems = ref([
                   appInfo.app_setting.sidebar_menu.sidebar_menu_footer.type ===
                   1
                 "
-                class="mdc-deprecated-list-item !mt-auto !mb-4"
+                class="mdc-deprecated-list-item mt-auto! mb-4!"
               >
                 <span class="mdc-deprecated-list-item__ripple"></span>
 
@@ -224,7 +224,7 @@ const defaultItems = ref([
           <button
             v-for="(item, index) in getFabItem"
             :key="index"
-            class="p-0 m-2 w-10 h-10 bg-indigo-500 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none flex justify-center items-center"
+            class="p-0 m-2 w-10 h-10 bg-indigo-500 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow-sm transition ease-in duration-200 focus:outline-hidden flex justify-center items-center"
           >
             <component
               :is="defaultItemsIcons[item.Kind - 1]"
@@ -238,7 +238,7 @@ const defaultItems = ref([
         </TransitionGroup>
 
         <button
-          class="p-0 w-14 h-14 bg-indigo-600 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none flex justify-center items-center"
+          class="p-0 w-14 h-14 bg-indigo-600 rounded-full hover:bg-indigo-700 active:shadow-lg mouse shadow-sm transition ease-in duration-200 focus:outline-hidden flex justify-center items-center"
         >
           <HeroiconsPlus20Solid class="text-white text-2xl">
           </HeroiconsPlus20Solid>

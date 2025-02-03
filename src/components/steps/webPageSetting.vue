@@ -73,7 +73,7 @@
         </div>
         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
           <div class="flex">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <ExclamationTriangleIcon
                 class="h-5 w-5 text-yellow-400"
                 aria-hidden="true"
@@ -117,8 +117,8 @@
           <textInput
             v-model="appInfo.app_setting.toolbar.text"
             :value="appInfo.name"
-            label-class="dark:!bg-slate-700"
-            input-class="dark:!bg-slate-700"
+            label-class="dark:bg-slate-700!"
+            input-class="dark:bg-slate-700!"
             :error="
               v$.app_setting.toolbar.text.$errors
                 .map((e) => e.$message)
@@ -166,8 +166,8 @@
                   .map((e) => e.$message)
                   .join(',')
               "
-              label-class="dark:!bg-slate-700"
-              input-class="dark:!bg-slate-700"
+              label-class="dark:bg-slate-700!"
+              input-class="dark:bg-slate-700!"
               :placeholder="$t('steps.web_page_setting.myapp_com')"
               :label="$t('steps.web_page_setting.link_to_be_open')"
             >
@@ -238,8 +238,8 @@
               v-model="
                 appInfo.app_setting.sidebar_menu.sidebar_menu_footer.text
               "
-              label-class="dark:!bg-slate-700"
-              input-class="dark:!bg-slate-700"
+              label-class="dark:bg-slate-700!"
+              input-class="dark:bg-slate-700!"
               :error="
                 v$.app_setting.sidebar_menu.sidebar_menu_footer.text.$errors
                   .map((e) => e.$message)
@@ -301,7 +301,7 @@
         >
           <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 m-4">
             <div class="flex">
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <ExclamationTriangleIcon
                   class="h-5 w-5 text-yellow-400"
                   aria-hidden="true"

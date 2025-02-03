@@ -6,7 +6,7 @@
         <li v-for="(step, stepIdx) in steps" :key="stepIdx" class="flex justify-center items-center"
           :class="stepIdx !== 4 && 'grow'">
           <div v-if="stepIdx !== 4" class="w-full bg-gray-200 h-0.5 dark:bg-gray-700 transition"
-            :class="step.status === 'complete' && 'dark:!bg-indigo-500/90'"></div>
+            :class="step.status === 'complete' && 'dark:bg-indigo-500/90!'"></div>
 
           <div class="relative">
             <template v-if="step.status === 'complete'">
@@ -69,7 +69,7 @@
     <div class="flex w-full" style="direction: rtl">
       <div class="px-4 py-3 text-right sm:px-6 mt-auto me-auto">
         <button v-if="currentTab !== 4"
-          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-xs text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="next">
           {{ t("steps.next") }}
         </button>
@@ -77,7 +77,7 @@
 
       <div class="px-4 py-3 text-right sm:px-6 mt-auto">
         <button v-if="currentTab !== 0"
-          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex font-display justify-center py-2 px-4 border border-transparent shadow-xs text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           @click="previous">
           {{ t("steps.previous") }}
         </button>

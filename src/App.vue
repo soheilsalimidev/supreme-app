@@ -31,7 +31,7 @@
           >
             <section aria-labelledby="section-1-title" class="flex flex-col">
               <h2 id="section-1-title" class="sr-only">{{ $t("step") }}</h2>
-              <div class="rounded-lg bg-white dark:bg-slate-800 shadow grow">
+              <div class="rounded-lg bg-white dark:bg-slate-800 shadow-sm grow">
                 <div class="p-6">
                   <VSteps />
                 </div>
@@ -78,7 +78,7 @@
                             class="bg-yellow-50 border-s-4 border-yellow-400 p-4 m-4"
                           >
                             <div class="flex">
-                              <div class="flex-shrink-0">
+                              <div class="shrink-0">
                                 <ExclamationTriangleIcon
                                   class="h-5 w-5 text-yellow-400"
                                   aria-hidden="true"

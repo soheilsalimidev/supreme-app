@@ -25,8 +25,8 @@
           v-model="page.title"
           class="col-span-5"
           :error="v$.title.$errors.map((e) => e.$message).join(',')"
-          label-class="dark:!bg-slate-700"
-          input-class="dark:!bg-slate-700"
+          label-class="dark:bg-slate-700!"
+          input-class="dark:bg-slate-700!"
           :placeholder="t('pageTitle')"
           :label="t('pageTitleHint')"
         >
@@ -35,8 +35,8 @@
           v-model="page.description"
           class="col-span-7"
           :error="v$.description.$errors.map((e) => e.$message).join(',')"
-          label-class="dark:!bg-slate-700"
-          input-class="dark:!bg-slate-700"
+          label-class="dark:bg-slate-700!"
+          input-class="dark:bg-slate-700!"
           :placeholder="t('pageDescriptionHint')"
           :label="t('pageDescription')"
         >
@@ -44,8 +44,8 @@
 
         <color-picker
           v-model="page.background"
-          label-class="dark:!bg-slate-700"
-          input-class="dark:!bg-slate-700"
+          label-class="dark:bg-slate-700!"
+          input-class="dark:bg-slate-700!"
           class="col-span-9"
           :error="v$.background.$errors.map((e) => e.$message).join(',')"
           :label="t('steps.splash_screeen_setting.select_your_color')"

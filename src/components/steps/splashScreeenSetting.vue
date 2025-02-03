@@ -27,7 +27,7 @@
                   :class="[
                     checked ? 'border-transparent' : 'border-gray-300',
                     active ? 'ring-2 ring-indigo-500' : '',
-                    'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none dark:bg-slate-700',
+                    'relative bg-white border rounded-lg shadow-xs p-4 flex cursor-pointer focus:outline-hidden dark:bg-slate-700',
                   ]"
                 >
                   <div class="flex-1 flex">
